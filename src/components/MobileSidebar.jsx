@@ -7,6 +7,8 @@ import { SignedIn, SignOutButton, useUser } from "@clerk/nextjs";
 import DashboardButton from "./buttons/DashboardButton";
 import { authnticatedLinks, links } from "./data/llinks";
 import AuthButtons from "./buttons/AuthButtons";
+import UploadButton from "./buttons/UploadButton";
+import AuthLogoutButton from "./buttons/AuthLogoutButton";
 
 function MobileSidebar({ onClose }) {
   const { isSignedIn, user } = useUser();
@@ -69,7 +71,7 @@ function MobileSidebar({ onClose }) {
             )}
           </ul>
         </nav>
-        <div className="flex flex-col gap-2 items-start px-4 py-2">
+        <div className="flex flex-row gap-2 items-start px-4 py-2">
           {isSignedIn &&
             (role === "admin" ? (
               <DashboardButton link="admin" />
@@ -78,12 +80,7 @@ function MobileSidebar({ onClose }) {
             ) : (
               <UploadButton />
             ))}
-          <SignedIn>
-            <button className="flex items-center justify-center p-2  text-gray-700 hover:bg-gray-200 rounded">
-              <AiOutlineUser />
-              <span className="ml-2">Sign Out</span>
-            </button>
-          </SignedIn>
+          <AuthLogoutButton />
         </div>
         <div className="flex items-center px-4">
           <AuthButtons />
