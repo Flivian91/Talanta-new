@@ -1,6 +1,6 @@
 "use client";
+import VideoCard from "@/components/cards/VideoCard";
 import { useUser, SignInButton } from "@clerk/nextjs";
-import VideoCard from "@/Components/cards/VideoCard";
 import { motion } from "framer-motion";
 
 export default function SavedVideosPage() {

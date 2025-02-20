@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import VideoCard from "@/Components/cards/VideoCard"; // or TalentCard if you prefer
-import CartegorySection from "@/Components/sections/CartegorySection";
-import { allTalents } from "@/Components/data/talents";
-import { categories } from "@/Components/data/categories";
 import useFilteredTalents from "@/hooks/useFilteredTalents";
+import { allTalents } from "@/components/data/talents";
+import { categories } from "@/components/data/categories";
+import CartegorySection from "@/components/sections/CartegorySection";
 
 export default function DiscoverPage() {
   // State to track the selected category
