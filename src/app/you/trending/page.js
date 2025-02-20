@@ -1,7 +1,6 @@
 "use client";
 
-import VideoCard from "@/components/cards/VideoCard";
-
+import VideoCard from "@/Components/cards/VideoCard";
 
 export default function TrendingPage() {
   // Dummy trending video data (replace with API data later)

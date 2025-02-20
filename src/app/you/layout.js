@@ -1,6 +1,5 @@
-
-import Header from "@/components/Header";
-import YouLayoutGrid from "@/components/layouts/YouLayoutGrid";
+import Header from "@/Components/Header";
+import YouLayoutGrid from "@/Components/layouts/YouLayoutGrid";
 import React from "react";
 
 function YouLayout({ children }) {

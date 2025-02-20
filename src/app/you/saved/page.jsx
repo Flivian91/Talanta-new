@@ -1,5 +1,5 @@
 "use client";
-import VideoCard from "@/components/cards/VideoCard";
+import VideoCard from "@/Components/cards/VideoCard";
 import { useUser, SignInButton } from "@clerk/nextjs";
 import { motion } from "framer-motion";
 
