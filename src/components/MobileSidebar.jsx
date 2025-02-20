@@ -3,9 +3,10 @@ import Link from "next/link";
 import { AiOutlineClose, AiOutlineUser } from "react-icons/ai";
 import { Tooltip } from "react-tooltip";
 import Image from "next/image";
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { SignedIn, SignOutButton, useUser } from "@clerk/nextjs";
 import DashboardButton from "./buttons/DashboardButton";
-import { authnticatedLinks, links } from "./Sidebar";
+import { authnticatedLinks, links } from "./data/llinks";
+import AuthButtons from "./buttons/AuthButtons";
 
 function MobileSidebar({ onClose }) {
   const { isSignedIn, user } = useUser();
@@ -77,12 +78,15 @@ function MobileSidebar({ onClose }) {
             ) : (
               <UploadButton />
             ))}
-            <SignOutButton>
-              <button className="flex items-center justify-center p-2  text-gray-700 hover:bg-gray-200 rounded">
-                <AiOutlineUser />
-                <span className="ml-2">Sign Out</span>
-              </button>
-            </SignOutButton>
+          <SignedIn>
+            <button className="flex items-center justify-center p-2  text-gray-700 hover:bg-gray-200 rounded">
+              <AiOutlineUser />
+              <span className="ml-2">Sign Out</span>
+            </button>
+          </SignedIn>
+        </div>
+        <div className="flex items-center px-4">
+          <AuthButtons />
         </div>
         <Tooltip
           id="sidebar-tooltip"

@@ -6,14 +6,14 @@ function Logo() {
   return (
     <Link
       href="/"
-      className="flex items-center space-x-2 text-red-600 font-bold text-lg"
+      className="flex items-center space-x-2 text-red-600 font-bold"
     >
       <Image
         src={"/talanta.svg"}
         alt="Talanta logo"
         width={100}
         height={100}
-        className="md:-mt-2 -ml-4 transform scale-75 md:scale-100"
+        className="md:-mt-2 -ml-6 sm:-ml-4 transform scale-75 md:scale-100"
       />
     </Link>
   );

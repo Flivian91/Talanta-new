@@ -20,15 +20,15 @@ export default function Header() {
   const role = user?.publicMetadata?.role;
   return (
     <div>
-      <header className="flex items-center justify-between bg-white shadow px-4 py-3 sticky top-0 z-20">
+      <header className="flex items-center justify-between bg-white shadow px-2 sm:px-4 py-3 sticky top-0 z-20">
         {/* Left Section: Sidebar Toggle + Logo */}
         <div className="flex items-center space-x-4">
           {/* Sidebar Toggle Button (Only for Mobile) */}
           <button
             onClick={() => setSidebarOpen(true)}
-            className="text-gray-700 hover:bg-gray-100 p-2 rounded md:hidden inline-block"
+            className="text-gray-700 hover:bg-gray-100 p-2 md:text-xl rounded md:hidden inline-block"
           >
-            <AiOutlineMenu size={24} />
+            <AiOutlineMenu />
           </button>
           <Logo />
         </div>
@@ -59,13 +59,13 @@ export default function Header() {
               <div className="flex items-center gap-2 transition-all duration-300">
                 <Link
                   href="/auth/signup"
-                  className="block-inline ml-2 px-4 py-2 rounded bg-secondary hover:bg-secondary/90 text-white  text-xs md:text-sm font-bold tracking-wider "
+                  className="md:block-inline hidden ml-2 px-4 py-2 rounded bg-secondary hover:bg-secondary/90 text-white  text-xs md:text-sm font-bold tracking-wider "
                 >
                   Sign Up
                 </Link>
                 <Link
                   href="/auth/signin"
-                  className="block-inline ml-2 px-4 py-2 rounded-full border text-sm font-bold tracking-wider border-surface/30 "
+                  className="block-inline ml-2 px-4 py-2 rounded border text-xs sm:text-sm font-bold tracking-wider border-surface/30 "
                 >
                   Sign In
                 </Link>
