@@ -1,10 +1,14 @@
 import Header from "@/components/Header";
-import Image from "next/image";
+import HomeLayoutGrid from "@/components/layouts/HomeLayoutGrid";
 
-export default function Home() {
+// src/app/page.js
+export default function HomePage() {
   return (
-    <div>
-      <Header />
+    <div className="flex flex-col min-h-screen">
+      <div className="fixed top-0 left-0 w-full z-30">
+        <Header />
+      </div>
+      <HomeLayoutGrid />
     </div>
   );
 }

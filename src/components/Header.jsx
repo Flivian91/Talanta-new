@@ -59,13 +59,13 @@ export default function Header() {
               <div className="flex items-center gap-2 transition-all duration-300">
                 <Link
                   href="/auth/signup"
-                  className="md:block-inline hidden ml-2 px-4 py-2 rounded bg-secondary hover:bg-secondary/90 text-white  text-xs md:text-sm font-bold tracking-wider "
+                  className="md:inline-block hidden ml-2 px-4 py-2 rounded bg-secondary hover:bg-secondary/90 text-white  text-xs md:text-sm font-bold tracking-wider "
                 >
                   Sign Up
                 </Link>
                 <Link
                   href="/auth/signin"
-                  className="block-inline ml-2 px-4 py-2 rounded border text-xs sm:text-sm font-bold tracking-wider border-surface/30 "
+                  className="inline-block ml-2 px-4 py-2 rounded border text-xs sm:text-sm font-bold tracking-wider border-surface/30 "
                 >
                   Sign In
                 </Link>
