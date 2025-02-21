@@ -1,5 +1,5 @@
-import Header from "@/Components/Header";
-import HomeLayoutGrid from "@/Components/layouts/HomeLayoutGrid";
+import Header from "@/components/Header";
+import HomeLayoutGrid from "@/components/layouts/HomeLayoutGrid";
 
 // src/app/page.js
 export default function HomePage() {

@@ -1,5 +1,10 @@
 "use client";
 
+import VideoCard from "@/components/cards/VideoCard";
+import { categories } from "@/components/data/categories";
+import { allTalents } from "@/components/data/talents";
+import CartegorySection from "@/components/sections/CartegorySection";
+import useFilteredTalents from "@/hooks/useFilteredTalents";
 import { useState } from "react";
 
 export default function DiscoverPage() {

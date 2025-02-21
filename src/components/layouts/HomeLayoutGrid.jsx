@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import VideoGrid from "./VideoGrid";
 import Sidebar from "../Sidebar";
+import VideoGrid from "./VideoGrid";
 
 function HomeLayoutGrid() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
