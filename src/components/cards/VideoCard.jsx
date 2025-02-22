@@ -61,7 +61,7 @@ export default function VideoCard({ video }) {
               />
             </Link>
             <div className="flex items-center justify-between gap-2">
-              <Link href={`/${video.channel}`} className="text-xs font-medium tracking-wide uppercase">
+              <Link href={`/${video.channel}`} className="text-[10px] font-medium tracking-wide">
                 {video.channel}
               </Link>
               <p className="text-xs text-gray-500">
