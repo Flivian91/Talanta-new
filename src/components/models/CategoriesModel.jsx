@@ -25,6 +25,7 @@ function CategoriesModel({
         </button>
         {categories.map((cat) => (
           <button
+          key={cat}
             onClick={() => handleSelectCatgeory(cat)}
             className={`px-4 py-2  rounded ${
               selectedCategory === cat

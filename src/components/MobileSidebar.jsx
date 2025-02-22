@@ -14,7 +14,7 @@ function MobileSidebar({ onClose }) {
   const { isSignedIn, user } = useUser();
   const role = user?.publicMetadata?.role;
   return (
-    <div className="fixed top-0 z-50 w-64 min-h-screen bg-primary md:hidden">
+    <div className="fixed top-0 z-50 w-64 bg-primary md:hidden">
       <div className="flex flex-col gap-0 min-h-screen ">
         {/* Header part of Mobile */}
         <div className="flex justify-between items-center shadow px-4 py-1">
