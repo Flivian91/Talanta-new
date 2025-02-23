@@ -11,7 +11,7 @@ function UploadLayout() {
         onActiveButton={setActiveButton}
         activeButton={activeButton}
       />
-      <div className="rounded shadow py-3 ">
+      <div className="rounded shadow py-3 flex items-center justify-center ">
         {activeButton === 1 && <UploadVideoInto />}
       </div>
     </div>

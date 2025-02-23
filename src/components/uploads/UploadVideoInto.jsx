@@ -18,7 +18,7 @@ function UploadVideoInto() {
             <FaFileUpload fontSize={32} />
           </button>
         </CldUploadButton>
-        <h2 className="text-sm font-medium tracking-wide text-gray-500">
+        <h2 className="text-sm font-medium tracking-wide text-gray-500 text-center">
           Your Vides will be private untill Admin Approves them.
         </h2>
         <CldUploadButton options={['local']} uploadPreset="Images" className="">
