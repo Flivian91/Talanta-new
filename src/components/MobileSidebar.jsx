@@ -13,6 +13,9 @@ import AuthLogoutButton from "./buttons/AuthLogoutButton";
 function MobileSidebar({ onClose }) {
   const { isSignedIn, user } = useUser();
   const role = user?.publicMetadata?.role;
+  function handleToggleClose() {
+    setTimeout(onClose, 2000);
+  }
   return (
     <div className="fixed top-0 z-50 w-64 bg-primary md:hidden">
       <div className="flex flex-col gap-0 min-h-screen ">
@@ -43,7 +46,7 @@ function MobileSidebar({ onClose }) {
           <ul className="flex flex-col gap-2">
             {links.map((link) => {
               return (
-                <li key={link.name}>
+                <li key={link.name} onClick={handleToggleClose}>
                   <Link
                     href={link.href}
                     className="flex items-center p-2 text-gray-700 hover:bg-gray-200 rounded"
@@ -58,7 +61,7 @@ function MobileSidebar({ onClose }) {
               <>
                 {authnticatedLinks.map((link) => {
                   return (
-                    <li key={link.name}>
+                    <li key={link.name} onClick={handleToggleClose}>
                       <Link
                         href={link.href}
                         className="flex items-center p-2 text-gray-700 hover:bg-gray-200 rounded"
