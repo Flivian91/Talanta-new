@@ -93,32 +93,52 @@ function UploadVideoDetails() {
           </div>
         </div>
         {/* Add Thumbnail Section */}
-        <div>
-          <h3>Thumbnail</h3>
-          <div className="grid grid-cols-2 gap-6">
+        <div className="py-2 border border-gray-300 rounded px-2">
+          <h3 className="text-sm font-medium tracking-wide text-gray-600">
+            Thumbnail
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <CldUploadButton uploadPreset="Images">
-              <div className="flex items-center flex-col gap-2  py-2 border border-dotted">
+              <div className="flex items-center flex-row justify-center py-4 gap-3  border-[3px] border-gray-300 border-dashed rounded">
                 <FaUpload />
                 <span>Add File</span>
               </div>
             </CldUploadButton>
             <CldImage
               width="500"
-              height="500"
-              src="<Public ID>"
+              height="200"
+              src="https://res.cloudinary.com/talanta-mines/image/upload/v1739991327/cld-sample-4.jpg"
               crop="fill"
-              removeBackground
-              tint="70:blue:purple"
-              underlay="<Public ID>"
-              sizes="100vw"
               alt="Description of my image"
-              className="h-20"
             />
           </div>
         </div>
+        <div className="px-2 py-2 border border-gray-300 rounded flex flex-col gap-2">
+          {/* Categories section */}
+          <label
+            htmlFor="category"
+            className="text-sm font-medium tracking-wide text-gray-600"
+          >
+            Category
+          </label>
+          <form className="flex items-center gap-2">
+            <input
+              type="text"
+              id="category"
+              placeholder="Add a category"
+              required
+              className="border outline-none focus:outline-none border-gray-300 rounded px-2 py-1 font-medium w-full"
+            />
+            <button className="bg-secondary text-white rounded px-2 py-1">
+              Add
+            </button>
+          </form>
+        </div>
       </div>
       {/* Video Preview area */}
-      <div></div>
+      <div>
+        
+      </div>
     </div>
   );
 }
