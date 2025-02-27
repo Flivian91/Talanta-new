@@ -107,7 +107,7 @@ function UploadLayout() {
               onClick={() => handleNext()}
               className={`px-4 py-2  tracking-wider bg-accent hover:bg-accent/80 font-semibold rounded  text-white`}
             >
-              Next
+              Next 
             </button>
           )}
         </div>
