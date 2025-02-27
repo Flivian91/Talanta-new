@@ -3,6 +3,7 @@ import { CldUploadButton, CldUploadWidget } from "next-cloudinary";
 import Link from "next/link";
 import React from "react";
 import { FaFileUpload } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function UploadVideoInto({ setVideoInfo, onActiveButton }) {
   return (
@@ -13,6 +14,7 @@ function UploadVideoInto({ setVideoInfo, onActiveButton }) {
           uploadPreset="Images"
           onSuccess={(result, { widget }) => {
             setVideoInfo(result?.info);
+            toast.success("Talent Uploaded Successfully!");
             onActiveButton(2);
           }}
         >
@@ -33,8 +35,10 @@ function UploadVideoInto({ setVideoInfo, onActiveButton }) {
         <CldUploadWidget
           // signatureEndpoint="/api/sign-cloudinary-params"
           uploadPreset="Images"
-          onSuccess={(result) => {
-            console.log(result);
+          onSuccess={(result, { widget }) => {
+            setVideoInfo(result?.info);
+            toast.success("Talent Uploaded Successfully!");
+            onActiveButton(2);
           }}
         >
           {({ open }) => {

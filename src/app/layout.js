@@ -1,6 +1,7 @@
 import "./globals.css";
 import "next-cloudinary/dist/cld-video-player.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import MainRootLayout from "@/components/layouts/MainRootLayout";
 
 export const metadata = {
   title: "Create Next App",
@@ -11,7 +12,9 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`antialiased`}>{children}</body>
+        <body className={`antialiased`}>
+          <MainRootLayout>{children}</MainRootLayout>
+        </body>
       </html>
     </ClerkProvider>
   );

@@ -3,8 +3,9 @@ import { CldImage, CldUploadButton, CldVideoPlayer } from "next-cloudinary";
 import { useEffect, useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
-function UploadVideoDetails() {
-  const [title, setTitle] = useState("This is a dummy title for nowsd");
+function UploadVideoDetails({ videoInfo }) {
+  const { display_name, secure_url, thumbnail_url } = videoInfo;
+  const [title, setTitle] = useState(display_name || "");
   const [description, setDescription] = useState("");
   const inputRef = useRef(null);
 
@@ -107,7 +108,10 @@ function UploadVideoDetails() {
             <CldImage
               width="500"
               height="200"
-              src="https://res.cloudinary.com/talanta-mines/image/upload/v1739991327/cld-sample-4.jpg"
+              src={
+                thumbnail_url ||
+                "https://res.cloudinary.com/talanta-mines/image/upload/v1739991327/cld-sample-4.jpg"
+              }
               crop="fill"
               alt="Description of my image"
             />
@@ -150,7 +154,10 @@ function UploadVideoDetails() {
         <CldVideoPlayer
           width="1920"
           height="1080"
-          src="https://res.cloudinary.com/talanta-mines/video/upload/v1739991321/samples/dance-2.mp4"
+          src={
+            secure_url ||
+            "https://res.cloudinary.com/talanta-mines/video/upload/v1739991321/samples/dance-2.mp4"
+          }
         />
         <div className="space-y-3 px-3">
           <h1 className="text-2xl font-semibold tracking-wider">{title}</h1>
