@@ -1,7 +1,7 @@
 import React from "react";
 function UploadVisibilityTerms() {
   return (
-    <div className="mt-8 p-4 w-1/2 flex items-center flex-col gap-4">
+    <div className="mt-8 p-4 md:4/5 lg:w-1/2 flex items-center flex-col gap-4">
       <p className="text-xl md:text-2xl text-center font-semibold text-gray-800">
         Admin can only see the videos you upload. They will remain private until
         Admin approves them.

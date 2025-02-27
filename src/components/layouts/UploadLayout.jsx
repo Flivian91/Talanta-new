@@ -8,6 +8,7 @@ import UploadVisibilityTerms from "../uploads/UploadVisibilityTerms";
 
 function UploadLayout() {
   const [activeButton, setActiveButton] = useState(1);
+  const [videoInfo, setVideoInfo] = useState({});
   return (
     <div className="flex flex-col gap-5 px-2">
       <UploadNavigation
@@ -17,7 +18,12 @@ function UploadLayout() {
       <div className="rounded shadow py-3">
         <UploadVideoHeading activeButton={activeButton} />
         <div className=" flex items-center justify-center ">
-          {activeButton === 1 && <UploadVideoInto />}
+          {activeButton === 1 && (
+            <UploadVideoInto
+              setVideoInfo={setVideoInfo}
+              onActiveButton={setActiveButton}
+            />
+          )}
           {activeButton === 2 && <UploadVideoDetails />}
           {activeButton === 3 && <UploadVisibilityTerms />}
         </div>
