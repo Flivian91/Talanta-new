@@ -1,5 +1,5 @@
 "use client";
-import { CldImage, CldUploadButton } from "next-cloudinary";
+import { CldImage, CldUploadButton, CldVideoPlayer } from "next-cloudinary";
 import { useEffect, useRef, useState } from "react";
 import { FaUpload } from "react-icons/fa";
 
@@ -117,27 +117,49 @@ function UploadVideoDetails() {
           {/* Categories section */}
           <label
             htmlFor="category"
-            className="text-sm font-medium tracking-wide text-gray-600"
+            className="md:text-sm text-xs  font-medium tracking-wide text-gray-600"
           >
-            Category
+            Category(Maximum of 3)
           </label>
-          <form className="flex items-center gap-2">
-            <input
-              type="text"
-              id="category"
-              placeholder="Add a category"
-              required
-              className="border outline-none focus:outline-none border-gray-300 rounded px-2 py-1 font-medium w-full"
-            />
-            <button className="bg-secondary text-white rounded px-2 py-1">
-              Add
-            </button>
+          <form className="flex flex-col gap-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="text"
+                id="category"
+                placeholder="Add a category"
+                required
+                className="border outline-none focus:outline-none border-gray-300 rounded px-2 py-1 font-medium w-full"
+              />
+              <button
+                type="submit"
+                className="bg-secondary text-white rounded px-2 py-1 text-sm font-medium tracking-wider"
+              >
+                Add
+              </button>
+            </div>
+            <ul className="flex items-center gap-3 text-sm font-medium text-gray-500 list-disc list-inside">
+              <li>Games</li>
+              <li>Travel</li>
+              <li>Technology</li>
+            </ul>
           </form>
         </div>
       </div>
       {/* Video Preview area */}
-      <div>
-        
+      <div className="border rounded flex flex-col gap-4">
+        <CldVideoPlayer
+          width="1920"
+          height="1080"
+          src="https://res.cloudinary.com/talanta-mines/video/upload/v1739991321/samples/dance-2.mp4"
+        />
+        <div className="space-y-3 px-3">
+          <h1 className="text-2xl font-semibold tracking-wider">{title}</h1>
+          <ul className="flex items-center md:items-start flex-col gap-3 text-sm md:text-base font-medium text-gray-500 list-disc list-inside">
+            <li>Games</li>
+            <li>Travel</li>
+            <li>Technology</li>
+          </ul>
+        </div>
       </div>
     </div>
   );
