@@ -33,7 +33,7 @@ function UploadVideoDetails({ videoInfo }) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-5 w-full py-4 px-2">
+    <div className="grid grid-cols-1  gap-2 md:gap-5 w-full py-4 px-2">
       {/* Description area */}
       <div className="flex flex-col gap-4  w-full overflow-y-auto">
         {/* Title Element */}
@@ -127,7 +127,7 @@ function UploadVideoDetails({ videoInfo }) {
                 return (
                   <button
                     onClick={() => open()}
-                    className="flex items-center flex-row justify-center py-4 gap-3  border-[3px] border-gray-300 border-dashed rounded"
+                    className="flex items-center flex-row justify-center py-4 md:py-4 gap-3  border-[3px] border-gray-300 border-dashed rounded"
                   >
                     <FaUpload />
                     <span>Add File</span>
@@ -179,17 +179,15 @@ function UploadVideoDetails({ videoInfo }) {
         </div>
       </div>
       {/* Video Preview area */}
-      <div className="border rounded flex flex-col gap-4 overflow-hidden pointer-events-auto">
-        <div className="relative w-full rounded-t overflow-hidden flex-1">
+      {/* <div className="border rounded flex flex-col gap-4 overflow-hidden pointer-events-auto">
+        <div className="overflow-y-auto pointer-events-auto w-full ">
           <CldVideoPlayer
-            width="1920"
             controls={true}
-            height="1580"
-            className="w-full h-full rounded-t pointer-events-auto"
-            src={
-              url ||
-              "https://res.cloudinary.com/talanta-mines/video/upload/v1740645385/axhru4w5mpkv629wmfkx.mp4"
-            }
+            autoplay={false}
+            height={1040}
+            preload="metadata"
+            className="w-full rounded pointer-events-auto"
+            src={url}
           />
         </div>
 
@@ -207,7 +205,7 @@ function UploadVideoDetails({ videoInfo }) {
             </button>
           </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

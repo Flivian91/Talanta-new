@@ -19,7 +19,7 @@ function UploadLayout() {
       />
       <div className="rounded shadow py-3">
         <UploadVideoHeading activeButton={activeButton} />
-        <div className=" flex items-center justify-center ">
+        <div className=" overflow-y-auto  w-full  ">
           {activeButton === 1 && (
             <UploadVideoInto
               setVideoInfo={setVideoInfo}
@@ -27,7 +27,7 @@ function UploadLayout() {
             />
           )}
           {activeButton === 2 && <UploadVideoDetails videoInfo={videoInfo} />}
-          {activeButton === 3 && <UploadVisibilityTerms />}
+          {activeButton === 3 && <UploadVisibilityTerms  />}
         </div>
         <div className="flex justify-between px-2 py-2 transition-all duration-300 border-t border-gray-200">
           {activeButton === 1 ? (
