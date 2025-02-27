@@ -154,11 +154,7 @@ function UploadVideoDetails() {
         />
         <div className="space-y-3 px-3">
           <h1 className="text-2xl font-semibold tracking-wider">{title}</h1>
-          <ul className="flex items-center md:items-start flex-col gap-3 text-sm md:text-base font-medium text-gray-500 list-disc list-inside">
-            <li>Games</li>
-            <li>Travel</li>
-            <li>Technology</li>
-          </ul>
+          <p></p>
         </div>
       </div>
     </div>
