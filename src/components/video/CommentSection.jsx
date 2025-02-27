@@ -34,7 +34,7 @@ function CommentSection() {
         </div>
 
         {/* Comment Card */}
-        <div className="flex flex-col gap-2 px-2 py-3">
+        <div className="flex flex-col md:gap-2 gap-4 px-2 py-3">
           <CommentCard />
           <CommentCard />
           <CommentCard />

@@ -4,7 +4,7 @@ import React from "react";
 
 function CommentCard() {
   return (
-    <div className="px-2 py-2 shadow rounded flex flex-col gap-2">
+    <div className="px-2 py-2 shadow rounded flex flex-col gap-2 hover:bg-gray-50">
       <div className="flex items-center justify-between gap-2 sm:text-sm text-xs tracking-wide text-gray-600">
         <Link href={"/"} className="flex items-center gap-2">
           <Image
