@@ -2,6 +2,7 @@ import { databases, ID } from "@/utils/appwriteClient";
 import { talentSchema } from "@/validator/talentSchema";
 import { NextResponse } from "next/server";
 
+// Create Talents
 export async function POST(req) {
   try {
     const body = await req.json();
@@ -40,3 +41,4 @@ export async function POST(req) {
     });
   }
 }
+
