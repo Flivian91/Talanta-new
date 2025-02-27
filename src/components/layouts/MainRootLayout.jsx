@@ -8,7 +8,7 @@ export default function MainRootLayout({ children }) {
     <>
       {children}
       <ToastContainer
-        position="top-center"
+        position="top-right"
         autoClose={3000}
         hideProgressBar={false}
         closeOnClick

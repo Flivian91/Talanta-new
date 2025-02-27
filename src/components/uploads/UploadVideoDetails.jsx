@@ -1,12 +1,19 @@
 "use client";
-import { CldImage, CldUploadButton, CldVideoPlayer } from "next-cloudinary";
+import {
+  CldImage,
+  CldUploadButton,
+  CldUploadWidget,
+  CldVideoPlayer,
+} from "next-cloudinary";
 import { useEffect, useRef, useState } from "react";
-import { FaUpload } from "react-icons/fa";
+import { FaCopy, FaUpload } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function UploadVideoDetails({ videoInfo }) {
-  const { display_name, secure_url, thumbnail_url } = videoInfo;
+  const { display_name, url, thumbnail_url } = videoInfo;
   const [title, setTitle] = useState(display_name || "");
   const [description, setDescription] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
   const inputRef = useRef(null);
 
   useEffect(() => {
@@ -14,11 +21,21 @@ function UploadVideoDetails({ videoInfo }) {
       inputRef.current.focus();
     }
   }, []);
+  function handleCopy(text) {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        toast.success("Copied to clipboard!");
+      })
+      .catch((err) => {
+        toast.error("Failed to copy!");
+      });
+  }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full py-4 px-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-5 w-full py-4 px-2">
       {/* Description area */}
-      <div className="flex flex-col gap-4 w-full">
+      <div className="flex flex-col gap-4  w-full overflow-y-auto">
         {/* Title Element */}
         <div
           className={`group rounded  w-full border  flex flex-col px-2 py-2 ${
@@ -95,26 +112,38 @@ function UploadVideoDetails({ videoInfo }) {
         </div>
         {/* Add Thumbnail Section */}
         <div className="py-2 border border-gray-300 rounded px-2">
-          <h3 className="text-sm font-medium tracking-wide text-gray-600">
+          <h3 className="text-sm mb-2 font-medium tracking-wide text-gray-600">
             Thumbnail
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <CldUploadButton uploadPreset="Images">
-              <div className="flex items-center flex-row justify-center py-4 gap-3  border-[3px] border-gray-300 border-dashed rounded">
-                <FaUpload />
-                <span>Add File</span>
-              </div>
-            </CldUploadButton>
-            <CldImage
-              width="500"
-              height="200"
-              src={
-                thumbnail_url ||
-                "https://res.cloudinary.com/talanta-mines/image/upload/v1739991327/cld-sample-4.jpg"
-              }
-              crop="fill"
-              alt="Description of my image"
-            />
+            <CldUploadWidget
+              uploadPreset="Images"
+              onSuccess={(result, { widget }) => {
+                setThumbnail(result?.info?.url);
+                toast.success("Thumbnail Uploaded Successfully!");
+              }}
+            >
+              {({ open }) => {
+                return (
+                  <button
+                    onClick={() => open()}
+                    className="flex items-center flex-row justify-center py-4 gap-3  border-[3px] border-gray-300 border-dashed rounded"
+                  >
+                    <FaUpload />
+                    <span>Add File</span>
+                  </button>
+                );
+              }}
+            </CldUploadWidget>
+            {thumbnail && (
+              <CldImage
+                width="500"
+                height="200"
+                src={thumbnail}
+                crop="fill"
+                alt="Description of my image"
+              />
+            )}
           </div>
         </div>
         <div className="px-2 py-2 border border-gray-300 rounded flex flex-col gap-2">
@@ -150,18 +179,33 @@ function UploadVideoDetails({ videoInfo }) {
         </div>
       </div>
       {/* Video Preview area */}
-      <div className="border rounded flex flex-col gap-4">
-        <CldVideoPlayer
-          width="1920"
-          height="1080"
-          src={
-            secure_url ||
-            "https://res.cloudinary.com/talanta-mines/video/upload/v1739991321/samples/dance-2.mp4"
-          }
-        />
-        <div className="space-y-3 px-3">
-          <h1 className="text-2xl font-semibold tracking-wider">{title}</h1>
-          <p></p>
+      <div className="border rounded flex flex-col gap-4 overflow-hidden pointer-events-auto">
+        <div className="relative w-full rounded-t overflow-hidden flex-1">
+          <CldVideoPlayer
+            width="1920"
+            controls={true}
+            height="1580"
+            className="w-full h-full rounded-t pointer-events-auto"
+            src={
+              url ||
+              "https://res.cloudinary.com/talanta-mines/video/upload/v1740645385/axhru4w5mpkv629wmfkx.mp4"
+            }
+          />
+        </div>
+
+        <div className="flex flex-col gap-3 px-3">
+          <h1 className="text-2xl font-semibold tracking-wider">
+            {display_name || "The Title"}
+          </h1>
+          <div className="flex items-center gap-2">
+            <p className="w-full truncate">{url}</p>
+            <button
+              onClick={() => handleCopy(url)}
+              className="p-2 hover:bg-gray-100 rounded"
+            >
+              <FaCopy />
+            </button>
+          </div>
         </div>
       </div>
     </div>
