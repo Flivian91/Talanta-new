@@ -1,5 +1,5 @@
 import React from "react";
-function UploadVisibilityTerms() {
+function UploadVisibilityTerms({createTalent}) {
   return (
     <div className="flex items-center justify-center">
       <div className="mt-8 p-4 md:4/5 lg:w-1/2 flex items-center  flex-col gap-4 w-full">
@@ -11,7 +11,10 @@ function UploadVisibilityTerms() {
           Please ensure that your video complies with our community guidelines
           and terms of service. Any inappropriate content will be rejected.
         </p>
-        <button className="bg-secondary text-white py-2 px-4 rounded hover:bg-secondary/80 tracking-wider font-semibold transition-all duration-300">
+        <button
+          onClick={() => createTalent()}
+          className="bg-secondary text-white py-2 px-4 rounded hover:bg-secondary/80 tracking-wider font-semibold transition-all duration-300"
+        >
           Complete Upload
         </button>
       </div>

@@ -9,12 +9,25 @@ import { useEffect, useRef, useState } from "react";
 import { FaCopy, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-function UploadVideoDetails({ videoInfo }) {
-  const { display_name, url, thumbnail_url } = videoInfo;
-  const [title, setTitle] = useState(display_name || "");
-  const [description, setDescription] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
+function UploadVideoDetails({
+  description,
+  setDescription,
+  title,
+  setTitle,
+  thumbnail,
+  setThumbnail,
+  categories,
+  setCategories,
+}) {
+  const [category, setCategory] = useState("");
+
   const inputRef = useRef(null);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    categories.length < 3 && setCategories([...categories, category]);
+    setCategory("");
+  }
 
   useEffect(() => {
     if (inputRef.current) {
@@ -146,20 +159,44 @@ function UploadVideoDetails({ videoInfo }) {
             )}
           </div>
         </div>
-        <div className="px-2 py-2 border border-gray-300 rounded flex flex-col gap-2">
-          {/* Categories section */}
+        {/* Categories section */}
+        <div
+          className={`group rounded  w-full border  flex flex-col px-2 py-2 ${
+            categories.length === 3
+              ? "border-red-600 hover:border-red-900"
+              : " hover:border-gray-900 border-gray-400"
+          }: `}
+        >
           <label
             htmlFor="category"
-            className="md:text-sm text-xs  font-medium tracking-wide text-gray-600"
+            className={`text-sm font-medium tracking-wide  ${
+              categories.length === 3 ? "text-red-600" : "text-gray-600"
+            }`}
           >
-            Category(Maximum of 3)
+            {categories.length === 3 ? (
+              <span className="mb-2 inline-block">Maximum categories Reached</span>
+            ) : (
+              <span className="mb-2 inline-block">Category(Maximum of 3)</span>
+            )}
           </label>
-          <form className="flex flex-col gap-2">
+          <form
+            onSubmit={(e) => handleSubmit(e)}
+            className="flex flex-col gap-2"
+          >
             <div className="flex items-center gap-2">
               <input
                 type="text"
                 id="category"
                 placeholder="Add a category"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    setCategories(e.target.value);
+                    setCategory("");
+                  }
+                }}
                 required
                 className="border outline-none focus:outline-none border-gray-300 rounded px-2 py-1 font-medium w-full"
               />
@@ -171,9 +208,11 @@ function UploadVideoDetails({ videoInfo }) {
               </button>
             </div>
             <ul className="flex items-center gap-3 text-sm font-medium text-gray-500 list-disc list-inside">
-              <li>Games</li>
-              <li>Travel</li>
-              <li>Technology</li>
+              {categories.length === 0
+                ? null
+                : categories.map((category, index) => (
+                    <li key={index}>{category}</li>
+                  ))}
             </ul>
           </form>
         </div>
