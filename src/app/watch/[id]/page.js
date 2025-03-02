@@ -12,7 +12,6 @@ function WatchPage() {
         <div className="flex flex-col gap-2">
           <VideoPlayer />
           <VideoInfo />
-          <VideoActions />
         </div>
 
         <div className="hidden md:block">
