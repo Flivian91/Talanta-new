@@ -22,7 +22,7 @@ function VideoDescription() {
           <p className=" tracking-wide font-mono">1,000,000 views</p>
           <span className="tracking-wider">13/03/2025</span>
         </div>
-        <div className="w-4/5">
+        <div className="md:w-4/5">
           <p className="tracking-wide font-medium text-sm leading-relaxed">
             {isOpen === false ? description.slice(0, 200) : description}
             <button

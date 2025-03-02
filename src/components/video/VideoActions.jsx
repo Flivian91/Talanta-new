@@ -7,7 +7,7 @@ import DisLikeButton from "../buttons/DisLikeButton";
 function VideoActions() {
   return (
     <div className="w-full flex items-center justify-between md:justify-center">
-      <div className="flex items-center md:justify-center gap-4 w-full">
+      <div className="flex items-center md:justify-center gap-2 md:gap-4 w-full">
         {/* Like buttom */}
         <LikeButton />
         <DisLikeButton />

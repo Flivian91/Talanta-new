@@ -18,7 +18,7 @@ function VideoProfileView() {
             />
           </div>
           <div className="flex flex-col gap-1 text-sm">
-            <h2 className="">Flivian</h2>
+            <h2 className="font-semibold tracking-wider text-base">Flivian</h2>
             <span className="text-xs">20 Subscribers</span>
           </div>
         </div>
