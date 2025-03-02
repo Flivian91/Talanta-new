@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { IoNotifications } from "react-icons/io5";
+import SubscribeButton from "../buttons/SubscribeButton";
 
 function VideoProfileView() {
   return (
@@ -23,10 +24,7 @@ function VideoProfileView() {
         </div>
       </div>
       <div className="flex flex-row gap-1">
-        <button className="flex items-center gap-1 bg-secondary/25 text-black px-4 py-2 rounded-full text-sm transition-transform transform hover:scale-105 active:scale-95">
-          <IoNotifications />
-          <span>Subscribe</span>
-        </button>
+        <SubscribeButton />
       </div>
     </div>
   );
