@@ -218,7 +218,7 @@ function UploadVideoDetails({
         </div>
       </div>
       {/* Video Preview area */}
-      {/* <div className="border rounded flex flex-col gap-4 overflow-hidden pointer-events-auto">
+      <div className="border rounded flex flex-col gap-4 overflow-hidden pointer-events-auto">
         <div className="overflow-y-auto pointer-events-auto w-full ">
           <CldVideoPlayer
             controls={true}
@@ -244,7 +244,7 @@ function UploadVideoDetails({
             </button>
           </div>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 }

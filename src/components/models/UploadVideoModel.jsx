@@ -13,7 +13,7 @@ function UploadVideoModel() {
     function () {
       if (videoInfo !== null) {
         push(
-          `/you/upload/final?secure_url=${videoInfo?.secure_url}&thumbnail_url=${videoInfo?.thumbnail_url}`
+          `/you/upload/final?public_id=${videoInfo?.public_id}`
         );
       }
     },

@@ -1,21 +1,36 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import UploadVideoDetails from "@/components/uploads/UploadVideoDetails";
 
 function FinalVideoUploadPage() {
   const searchParams = useSearchParams();
-  const secureUrl = searchParams.get("secure_url");
-  const thumbnailUrl = searchParams.get("thumbnail_url");
+  const publicId = searchParams.get("public_id");
+  const [mediaData, setMediaData] = useState(null);
 
   useEffect(
     function () {
-      console.log(secureUrl, thumbnailUrl);
+      getMediaData(publicId);
     },
-    [secureUrl, thumbnailUrl]
+    [publicId]
   );
+  async function getMediaData(id) {
+    // Fetch the media data from the server
+    try {
+      const response = await fetch(`/api/media/${id}`);
+      const data = await response.json();
+      setMediaData(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
-  return <div>This is the final video Upload page.</div>;
+  return (
+    <div>
+      <UploadVideoDetails />
+    </div>
+  );
 }
 
 export default FinalVideoUploadPage;
