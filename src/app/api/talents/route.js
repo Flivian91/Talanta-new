@@ -1,5 +1,6 @@
 import { databases, ID } from "@/utils/appwriteClient";
 import { talentSchema } from "@/validator/talentSchema";
+import { Query } from "appwrite";
 import { NextResponse } from "next/server";
 
 // Create Talents
@@ -42,3 +43,19 @@ export async function POST(req) {
   }
 }
 
+// Get all the document from the databases
+export async function GET(req) {
+  try {
+    const talents = await databases.listDocuments(
+      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
+      process.env.NEXT_PUBLIC_APPWRITE_TALENTS_COLLECTION_ID
+    );
+
+    return new NextResponse(JSON.stringify(talents), { status: 200 });
+  } catch (error) {
+    console.error("Fetch Talents Error:", error);
+    return new NextResponse(JSON.stringify({ message: "Server Error" }), {
+      status: 500,
+    });
+  }
+}
