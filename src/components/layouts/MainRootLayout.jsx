@@ -1,11 +1,12 @@
 "use client";
 
+import { GlobalProvider } from "@/context/GlobalContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function MainRootLayout({ children }) {
   return (
-    <>
+    <GlobalProvider>
       {children}
       <ToastContainer
         position="top-right"
@@ -16,6 +17,6 @@ export default function MainRootLayout({ children }) {
         draggable
         theme="colored"
       />
-    </>
+    </GlobalProvider>
   );
 }

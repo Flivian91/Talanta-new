@@ -1,25 +1,22 @@
 "use client";
-import {
-  CldImage,
-  CldUploadButton,
-  CldUploadWidget,
-  CldVideoPlayer,
-} from "next-cloudinary";
+import { CldImage, CldUploadWidget, CldVideoPlayer } from "next-cloudinary";
 import { useEffect, useRef, useState } from "react";
 import { FaCopy, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-function UploadVideoDetails({
-  description,
-  setDescription,
-  title,
-  setTitle,
-  thumbnail,
-  setThumbnail,
-  categories,
-  setCategories,
-}) {
+function UploadVideoDetails({ data }) {
+  const [categories, setCategories] = useState([]);
+  const [title, setTitle] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
+  const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const {
+    secure_url: secureURL,
+    thumbnail_url: thumbnailURL,
+    display_name: displayName,
+    public_id: publicID,
+  } = data;
+  console.log("this is the uploased " + data);
 
   const inputRef = useRef(null);
 
@@ -32,6 +29,8 @@ function UploadVideoDetails({
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
+      displayName && setTitle(displayName);
+      thumbnailURL && setThumbnail(thumbnailURL);
     }
   }, []);
   function handleCopy(text) {
@@ -174,7 +173,9 @@ function UploadVideoDetails({
             }`}
           >
             {categories.length === 3 ? (
-              <span className="mb-2 inline-block">Maximum categories Reached</span>
+              <span className="mb-2 inline-block">
+                Maximum categories Reached
+              </span>
             ) : (
               <span className="mb-2 inline-block">Category(Maximum of 3)</span>
             )}
@@ -226,18 +227,18 @@ function UploadVideoDetails({
             height={1040}
             preload="metadata"
             className="w-full rounded pointer-events-auto"
-            src={url}
+            src={secureURL} // Video URL
           />
         </div>
 
         <div className="flex flex-col gap-3 px-3">
           <h1 className="text-2xl font-semibold tracking-wider">
-            {display_name || "The Title"}
+            {displayName || "The Title"}
           </h1>
           <div className="flex items-center gap-2">
-            <p className="w-full truncate">{url}</p>
+            <p className="w-full truncate">{secureURL}</p>
             <button
-              onClick={() => handleCopy(url)}
+              onClick={() => handleCopy(secureURL)}
               className="p-2 hover:bg-gray-100 rounded"
             >
               <FaCopy />
