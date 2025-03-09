@@ -14,74 +14,78 @@ function InitialUploadPage() {
   const [videoInfo, setVideoInfo] = useState(null);
   const { push } = useRouter();
 
+  // Automatically open modal when page loads
   useEffect(() => {
-    setShowModal(true); // Automatically open modal on page load
+    setShowModal(true);
   }, []);
 
-  const closeModal = () => {
-    setShowModal(false);
-  };
+  // Watch for changes in videoInfo and save to localStorage
+  useEffect(() => {
+    if (videoInfo) {
+      // Ensure correct data is available
+      const videoData = {
+        url: videoInfo?.secure_url || videoInfo?.url || "",
+        thumbnail_url: videoInfo?.thumbnail_url || "",
+        display_name: videoInfo?.display_name || "Untitled Video",
+        public_id: videoInfo?.public_id || Date.now(),
+      };
 
-  useEffect(
-    function () {
-      if (videoInfo !== null) {
-        push(
-          `/you/upload/final?url=${videoInfo?.url} & thumbnail_url=${videoInfo?.thumbnail_url} & display_name=${videoInfo?.display_name}`
-        );
+      if (videoData.url) {
+        localStorage.setItem("videoInfo", JSON.stringify(videoData));
+        toast.success("Video data saved!");
+        push(`/you/upload/final`);
+        // ?${new URLSearchParams(videoData)}
       }
-    },
-    [videoInfo]
-  );
+    }
+  }, [videoInfo, push]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="flex items-center flex-col py-4 gap-4 mt-5">
         <CldUploadWidget
-          // signatureEndpoint="/api/sign-cloudinary-params"
           uploadPreset="Images"
           onSuccess={(result, { widget }) => {
+            console.log("Upload Result:", result);
             setVideoInfo(result?.info);
-            toast.success("Talent Uploaded Successfully!");
             widget.close();
           }}
         >
-          {({ open }) => {
-            return (
-              <button
-                className="bg-gray-200/45 p-12 rounded-full flex items-center justify-center"
-                onClick={() => open()}
-              >
-                <FaFileUpload fontSize={32} />
-              </button>
-            );
-          }}
+          {({ open }) => (
+            <button
+              className="bg-gray-200/45 p-12 rounded-full flex items-center justify-center"
+              onClick={() => open()}
+            >
+              <FaFileUpload fontSize={32} />
+            </button>
+          )}
         </CldUploadWidget>
+
         <h2 className="text-sm font-medium tracking-wide text-gray-500 text-center">
-          Your Vides will be private untill Admin Approves them.
+          Your Videos will be private until Admin Approves them.
         </h2>
-        {videoInfo !== null ? (
-          <button onClick={() => push(`you/upload/final`)}>Next</button>
+
+        {videoInfo ? (
+          <button onClick={() => push(`/you/upload/final`)}>Next</button>
         ) : (
           <CldUploadWidget
-            // signatureEndpoint="/api/sign-cloudinary-params"
             uploadPreset="Images"
             onSuccess={(result, { widget }) => {
+              console.log("Upload Result:", result);
               setVideoInfo(result?.info);
-              toast.success("Talent Uploaded Successfully!");
+              widget.close();
             }}
           >
-            {({ open }) => {
-              return (
-                <button
-                  className="bg-secondary rounded text-white  px-4 py-2 tracking-wide font-semibold"
-                  onClick={() => open()}
-                >
-                  Upload Talents
-                </button>
-              );
-            }}
+            {({ open }) => (
+              <button
+                className="bg-secondary rounded text-white px-4 py-2 tracking-wide font-semibold"
+                onClick={() => open()}
+              >
+                Upload Talent
+              </button>
+            )}
           </CldUploadWidget>
         )}
+
         <div className="flex items-center justify-center w-full sm:px-6 md:px-16 px-2 lg:px-24 mt-5">
           <p className="text-center md:text-base text-xs tracking-wide text-gray-400">
             By submitting your videos to Talanta, you acknowledge that you agree
