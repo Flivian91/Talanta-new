@@ -14,9 +14,7 @@ function UploadVideoDetails({ data }) {
     secure_url: secureURL,
     thumbnail_url: thumbnailURL,
     display_name: displayName,
-    public_id: publicID,
   } = data;
-  console.log("this is the uploased " + data);
 
   const inputRef = useRef(null);
 
@@ -45,9 +43,9 @@ function UploadVideoDetails({ data }) {
   }
 
   return (
-    <div className="grid grid-cols-1  gap-2 md:gap-5 w-full py-4 px-2">
+    <div className="grid grid-cols-1 md:grid-cols-2  gap-2 md:gap-5 w-full py-4 px-2">
       {/* Description area */}
-      <div className="flex flex-col gap-4  w-full overflow-y-auto">
+      <div className="flex flex-col gap-4  w-full ">
         {/* Title Element */}
         <div
           className={`group rounded  w-full border  flex flex-col px-2 py-2 ${
@@ -219,14 +217,14 @@ function UploadVideoDetails({ data }) {
         </div>
       </div>
       {/* Video Preview area */}
-      <div className="border rounded flex flex-col gap-4 overflow-hidden pointer-events-auto">
-        <div className="overflow-y-auto pointer-events-auto w-full ">
+      <div className="border rounded flex flex-col gap-4">
+        <div className="w-full ">
           <CldVideoPlayer
             controls={true}
             autoplay={false}
-            height={1040}
+            height={340}
             preload="metadata"
-            className="w-full rounded pointer-events-auto"
+            className="w-full rounded "
             src={secureURL} // Video URL
           />
         </div>

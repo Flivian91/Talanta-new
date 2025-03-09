@@ -6,19 +6,27 @@ import UploadVideoDetails from "@/components/uploads/UploadVideoDetails";
 
 function FinalVideoUploadPage() {
   const searchParams = useSearchParams();
-  const publicId = searchParams.get("public_id");
+  const url = searchParams.get("url");
+  const thumbnailURL = searchParams.get("thumbnail_url");
+  const displayName = searchParams.get("display_name");
   const [mediaData, setMediaData] = useState(null);
 
   async function getMediaData(id) {
-    // Fetch the media data from the server
+    if (!id) {
+      console.log("Id not found");
+      return;
+    }
+
     try {
+      console.log("Fetching Media for ID:", id);
       const response = await fetch(`/api/media/${id}`, {
         cache: "no-store",
       });
+
       console.log("Response Status:", response.status);
 
       if (!response.ok) {
-        console.error("Failed to fetch data");
+        console.error("Failed to fetch data:", response.status);
         return;
       }
 
@@ -26,16 +34,20 @@ function FinalVideoUploadPage() {
       console.log("Fetched Data:", data);
       setMediaData(data);
     } catch (error) {
-      console.error(error);
+      console.error("API Error:", error);
     }
   }
+
   useEffect(
     function () {
-      getMediaData(publicId);
+      setMediaData({
+        secure_url: url,
+        thumbnail_url: thumbnailURL,
+        display_name: displayName,
+      });
     },
-    [publicId]
+    [url, thumbnailURL, displayName]
   );
-  // console.log(mediaData.secure_url);
 
   return (
     <div>
@@ -46,7 +58,6 @@ function FinalVideoUploadPage() {
       )}
     </div>
   );
-  
 }
 
 export default FinalVideoUploadPage;

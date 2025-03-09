@@ -25,7 +25,9 @@ function InitialUploadPage() {
   useEffect(
     function () {
       if (videoInfo !== null) {
-        push(`/you/upload/final?public_id=${videoInfo?.public_id}`);
+        push(
+          `/you/upload/final?url=${videoInfo?.url} & thumbnail_url=${videoInfo?.thumbnail_url} & display_name=${videoInfo?.display_name}`
+        );
       }
     },
     [videoInfo]
