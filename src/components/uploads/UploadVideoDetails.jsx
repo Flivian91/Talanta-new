@@ -62,47 +62,83 @@ function UploadVideoDetails({ data }) {
         toast.error("Failed to copy!");
       });
   }
+  function handleField() {
+    if (!title) {
+      toast.error("Please fill Title field before submitting.");
+    } else if (title.length < 3) {
+      toast.error("Title length must be more than 3");
+    } else if (title.length > 100) {
+      toast.error("Title length can not exceed 100");
+    } else if (!description) {
+      toast.error("Please fill Description field before submitting.");
+    } else if (description.length < 10) {
+      toast.error("Description must be at least 10 characters long");
+    } else if (description.length > 500) {
+      toast.error("Description length can not exceed 500");
+    } else if (!thumbnail) {
+      toast.error("Please fill Tumbnail field before submitting.");
+    } else if (categories.length === 0) {
+      toast.error("Categories fields must have a value");
+    } else {
+      createTalent();
+    }
+    setTimeout(() => setModelOpen(false), 3000);
+  }
 
   // Upload video on the backend.
   async function createTalent() {
     try {
       setLoading(true);
+
+      console.log("Uploading Talent...");
+
+      const payload = {
+        title,
+        description,
+        videoUrl: data?.url, // Ensure data exists before accessing url
+        thumbnailUrl: thumbnail || data?.thumbnail_url, // Ensure correct thumbnail
+        userId,
+        categories: categories.map((category) => category.toLowerCase()),
+      };
+
+      console.log("Request Payload:", payload);
+
       const response = await fetch("/api/talents", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          title,
-          description,
-          videoUrl: data.url,
-          thumbnailUrl: thumbnail || data.thumbnail_url,
-          userId: userId,
-          categories: categories.map((category) => category.toLowerCase()),
-        }),
+        body: JSON.stringify(payload),
       });
 
-      const data = await response.json();
+      console.log("Response Status:", response.status);
+
+      const responseData = await response.json();
+      console.log("API Response:", responseData);
+
       if (response.ok) {
         toast.success("Talent Uploaded Successfully!");
-        push(`/watch/${data.$id}`);
+        push(`/watch/${responseData.$id}`);
         localStorage.removeItem("videoInfo");
       } else {
-        toast.error(data[0]?.message || "Failed to upload talent");
+        console.error("Upload Error:", responseData);
+        toast.error(responseData.message || "Failed to upload talent");
       }
     } catch (error) {
-      toast.error("Failed to create talent");
+      console.error("Upload Failed:", error);
+      toast.error("Failed to create talent. Please try again.");
     } finally {
       setLoading(false);
     }
   }
+
   if (loading) return <LoadingSpinner />;
 
   return (
     <section className="flex flex-col gap-5 pb-3">
       {isModelOpen && (
         <FinalVideoUploadModel
-          createTalent={createTalent}
+          createTalent={handleField}
           onClose={() => setModelOpen(false)}
           loading={loading}
         />
@@ -111,7 +147,7 @@ function UploadVideoDetails({ data }) {
         <VideoUploadOverlay onClose={() => setModelOpen(false)} />
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2  gap-2 md:gap-5 w-full py-4 px-2">
+      <div className="grid grid-cols-1   gap-2 md:gap-5 w-full py-4 px-2">
         {/* Description area */}
         <div className="flex flex-col gap-6  w-full  ">
           {/* Title Element */}
@@ -291,7 +327,7 @@ function UploadVideoDetails({ data }) {
           </div>
         </div>
         {/* Video Preview area */}
-        <div className="border rounded flex flex-col gap-4 row-start-1 ">
+        {/* <div className="border rounded flex flex-col gap-4 row-start-1 ">
           <div className="w-full ">
             <CldVideoPlayer
               id={videoId}
@@ -330,7 +366,7 @@ function UploadVideoDetails({ data }) {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       {/* Upload button */}
       <div className="flex items-center justify-center">

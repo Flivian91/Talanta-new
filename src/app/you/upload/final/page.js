@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import UploadVideoDetails from "@/components/uploads/UploadVideoDetails";
+import VideoNotFound from "@/components/uploads/VideoNotFound";
 
 function FinalVideoUploadPage() {
   const [mediaData, setMediaData] = useState(null);
@@ -24,12 +25,8 @@ function FinalVideoUploadPage() {
   }, []);
 
   return (
-    <div>
-      {mediaData ? (
-        <UploadVideoDetails data={mediaData} />
-      ) : (
-        <p className="text-center text-lg font-medium">No video found. Please upload again.</p>
-      )}
+    <div className="overflow-hidden">
+      {mediaData ? <UploadVideoDetails data={mediaData} /> : <VideoNotFound />}
     </div>
   );
 }

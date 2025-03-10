@@ -7,7 +7,6 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const body = await req.json();
-    console.log(body);
 
     // Zod Validation
     const result = talentSchema.safeParse(body);

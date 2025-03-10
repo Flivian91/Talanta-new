@@ -4,7 +4,8 @@ import { IoClose } from "react-icons/io5";
 function FinalVideoUploadModel({ createTalent, onClose, loading }) {
   return (
     <div className="fixed top-1/2 left-1/2 z-50 bg-white transform -translate-x-1/2 -translate-y-1/2 md:w-1/2 mx-2 w-full  shadow-md rounded-md">
-      <div className="py-2 px-3 flex items-center justify-end border-b">
+      <div className="py-2 px-3 flex items-center justify-between border-b">
+        <span>Note</span>
         <button
           onClick={onClose}
           className="text-xl p-2 rounded hover:bg-gray-100"
