@@ -12,12 +12,12 @@ function VideoNotFound() {
           width={500}
           height={500}
         />
-        <h1 className="text-xl md:text-2xl font-bold tracking-wide mt-4">
+        <h1 className="text-2xl md:text-3xl font-bold tracking-wide mt-4">
           Video Not Found
         </h1>
         <Link
           href={"/you/upload"}
-          className="px-4 py-2 bg-accent text-white rounded tracking-wide font-semibold"
+          className="px-4 py-2 bg-accent text-white rounded tracking-wide mt-2 font-semibold"
         >
           Click Here to Upload
         </Link>
