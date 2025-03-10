@@ -1,9 +1,19 @@
 "use client";
-import { CldImage, CldUploadWidget, CldVideoPlayer } from "next-cloudinary";
+import {
+  CldImage,
+  CldUploadWidget,
+  CldVideoPlayer,
+  getCldImageUrl,
+} from "next-cloudinary";
 import { useEffect, useRef, useState } from "react";
 import { FaCopy, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 import CategoryListCard from "./CategoryListCard";
+import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import LoadingSpinner from "../common/LoadingSpinner";
+import FinalVideoUploadModel from "../models/FinalVideoUploadModel";
+import VideoUploadOverlay from "../overlays/VideoUploadOverlay";
 
 function UploadVideoDetails({ data }) {
   const [categories, setCategories] = useState([]);
@@ -12,6 +22,10 @@ function UploadVideoDetails({ data }) {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [videoId, setVideoId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [isModelOpen, setModelOpen] = useState(false);
+  const { userId } = useAuth();
+  const { push } = useRouter();
 
   const inputRef = useRef(null);
 
@@ -48,8 +62,55 @@ function UploadVideoDetails({ data }) {
         toast.error("Failed to copy!");
       });
   }
+
+  // Upload video on the backend.
+  async function createTalent() {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/talents", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          videoUrl: data.url,
+          thumbnailUrl: thumbnail || data.thumbnail_url,
+          userId: userId,
+          categories: categories.map((category) => category.toLowerCase()),
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success("Talent Uploaded Successfully!");
+        push(`/watch/${data.$id}`);
+        localStorage.removeItem("videoInfo");
+      } else {
+        toast.error(data[0]?.message || "Failed to upload talent");
+      }
+    } catch (error) {
+      toast.error("Failed to create talent");
+    } finally {
+      setLoading(false);
+    }
+  }
+  if (loading) return <LoadingSpinner />;
+
   return (
-    <section className="flex flex-col gap-5">
+    <section className="flex flex-col gap-5 pb-3">
+      {isModelOpen && (
+        <FinalVideoUploadModel
+          createTalent={createTalent}
+          onClose={() => setModelOpen(false)}
+          loading={loading}
+        />
+      )}
+      {isModelOpen && (
+        <VideoUploadOverlay onClose={() => setModelOpen(false)} />
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2  gap-2 md:gap-5 w-full py-4 px-2">
         {/* Description area */}
         <div className="flex flex-col gap-6  w-full  ">
@@ -157,7 +218,10 @@ function UploadVideoDetails({ data }) {
                 <CldImage
                   width="500"
                   height="200"
-                  src={thumbnail}
+                  src={
+                    thumbnail ||
+                    "https://res.cloudinary.com/talanta-mines/video/upload/c_limit,h_60,w_90/v1741595332/vxsgpkxc7ye8nytlhhx4.jpg"
+                  }
                   crop="fill"
                   alt="Description of my image"
                 />
@@ -220,12 +284,7 @@ function UploadVideoDetails({ data }) {
                 {categories.length === 0
                   ? null
                   : categories.map((cat, index) => (
-                      <CategoryListCard
-                        key={index}
-                        text={cat}
-                        index={index}
-                        onDelete={handleDeleteCategory}
-                      />
+                      <CategoryListCard key={index} text={cat} index={index} />
                     ))}
               </div>
             </div>
@@ -239,10 +298,21 @@ function UploadVideoDetails({ data }) {
               controls={true}
               autoplay={false}
               width="1920"
-              height="1080"
+              height="1480"
               preload="metadata"
               className="w-full rounded "
+              pictureInPictureToggle
+              logo={{
+                imageUrl: getCldImageUrl({
+                  src: "https://res.cloudinary.com/talanta-mines/image/upload/v1741598183/WhatsApp_Image_2025-02-12_at_00.43.16_4ae02cb0_kdkflu.jpg",
+                }),
+                // imageUrl: '<Your Image URL',
+                onClickUrl: "https://talanta-new.vercel.app/",
+              }}
               src={data?.url} // Video URL
+              onMetadataLoad={() => {
+                setVideoId(`video-${data?.public_id}`);
+              }}
             />
           </div>
 
@@ -262,8 +332,14 @@ function UploadVideoDetails({ data }) {
           </div>
         </div>
       </div>
+      {/* Upload button */}
       <div className="flex items-center justify-center">
-        <button>Submit</button>
+        <button
+          onClick={() => setModelOpen(true)}
+          className="px-12 py-2 bg-secondary text-white rounded text-xl tracking-wide font-semibold"
+        >
+          Complete Upload
+        </button>
       </div>
     </section>
   );
