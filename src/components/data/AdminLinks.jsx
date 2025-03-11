@@ -8,7 +8,7 @@ import {
   FaLayerGroup,
   FaSignOutAlt,
 } from "react-icons/fa";
-import { MdPendingActions } from "react-icons/md";
+import { MdMessage, MdPendingActions } from "react-icons/md";
 
 const adminLinks = [
   {
@@ -53,8 +53,15 @@ const adminLinks = [
     href: "/admin/notifications",
     icon: <FaBell />,
   },
+  ,
   {
     id: 8,
+    name: "Messages",
+    href: "/admin/messages",
+    icon: <MdMessage />,
+  },
+  {
+    id: 9,
     name: "Settings",
     href: "/admin/settings",
     icon: <FaCog />,

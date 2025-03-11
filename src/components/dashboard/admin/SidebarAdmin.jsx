@@ -49,18 +49,18 @@ function SidebarAdmin() {
           ))}
         </nav>
       </div>
-      <div className="flex items-center  w-full px-2">
+      {/* <div className="flex items-center  w-full px-2">
         <SignedIn>
           <SignOutButton>
             <Link href={"/admin"} className="inline-block gap-8 w-full">
               <div className="flex items-center gap-2 bg-red-600 px-4 py-2 rounded text-white">
-                <FaSignOutAlt/>
+                <FaSignOutAlt />
                 <span>Logout</span>
               </div>
             </Link>
           </SignOutButton>
         </SignedIn>
-      </div>
+      </div> */}
     </aside>
   );
 }
