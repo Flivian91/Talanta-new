@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { FaHome, FaSignOutAlt } from "react-icons/fa";
 
-function SidebarAdmin() {
+function SidebarAdmin({ onClose }) {
   const pathName = usePathname();
   return (
     <aside className="min-h-screen flex flex-col bg-white pb-2">
@@ -28,6 +28,7 @@ function SidebarAdmin() {
             <Link
               key={link.id}
               href={link.href}
+              onClick={onClose}
               className="group flex items-center gap-6 pr-3"
             >
               {pathName === link.href ? (
