@@ -38,7 +38,6 @@ export default function Notifications() {
       ></textarea>
       <button
         className="bg-blue-500 text-white px-4 py-2 mt-3 rounded"
-        onClick={sendNotification}
         disabled={sending}
       >
         {sending ? "Sending..." : "Send Notification"} <FiSend />
