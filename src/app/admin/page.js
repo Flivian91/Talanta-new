@@ -4,7 +4,7 @@ import React from "react";
 
 function AdminHome() {
   return (
-    <section className="px-4 w-full">
+    <section className="px-4 w-full flex flex-col gap-5">
       <WelcomeAdmin />
       <StatsAdminLayout />
     </section>

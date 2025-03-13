@@ -2,7 +2,7 @@ import React from "react";
 function StatsAdminCard({ title, count, icon, bgColor }) {
   return (
     <div
-      className={`p-6 rounded-lg shadow-lg flex items-center gap-4 ${bgColor}`}
+      className={`p-6 rounded shadow-lg flex items-center gap-4 ${bgColor}`}
     >
       <div className="text-4xl text-white">{icon}</div>
       <div>
