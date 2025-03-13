@@ -10,6 +10,7 @@
       views: "120K views",
       published: "1 week ago",
       category: "Music",
+      approved: "approved",
     },
     {
       id: 2,

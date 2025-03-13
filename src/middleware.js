@@ -19,7 +19,6 @@ export default clerkMiddleware(async (auth, req) => {
   ) {
     const url = new URL("/", req.url);
     console.log("UnAuthorized access");
-
     return NextResponse.redirect(url);
   }
 

@@ -8,7 +8,7 @@ import Overlay from "@/components/overlays/Overlay";
 function AdminMainLayout({ children }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
-    <div className="bg-gray-50 overflow-hidden w-full">
+    <div className="bg-gray-50 overflow-hidden w-full px-2">
       {/* sidebar */}
       <div className="fixed top-0 left-0 z-40 shadow w-0 md:w-64 hidden md:block">
         <SidebarAdmin onClose={() => setIsOpen(false)} />
