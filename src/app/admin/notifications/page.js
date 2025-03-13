@@ -2,29 +2,29 @@
 "use client";
 import { useState } from "react";
 import { FiSend } from "react-icons/fi";
-import { db } from "@/utils/appwrite";
+// import { db } from "@/utils/appwrite";
 
 export default function Notifications() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
 
-  async function sendNotification() {
-    if (!message) return;
-    setSending(true);
+  // async function sendNotification() {
+  //   if (!message) return;
+  //   setSending(true);
 
-    try {
-      await db.createDocument("database_id", "notifications_collection", {
-        message,
-        createdAt: new Date().toISOString(),
-      });
-      setMessage("");
-      alert("Notification sent successfully!");
-    } catch (error) {
-      console.error("Error sending notification:", error);
-    } finally {
-      setSending(false);
-    }
-  }
+  //   try {
+  //     await db.createDocument("database_id", "notifications_collection", {
+  //       message,
+  //       createdAt: new Date().toISOString(),
+  //     });
+  //     setMessage("");
+  //     alert("Notification sent successfully!");
+  //   } catch (error) {
+  //     console.error("Error sending notification:", error);
+  //   } finally {
+  //     setSending(false);
+  //   }
+  // }
 
   return (
     <div>

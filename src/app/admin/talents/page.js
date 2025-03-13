@@ -51,7 +51,7 @@ export default function TalentManagement() {
   }, [query])
 
   return (
-    <div className="py-6 bg-gray-50 min-h-screen">
+    <div className="py-3 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">
         Talent Management
       </h1>
