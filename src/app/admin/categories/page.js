@@ -26,7 +26,7 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="py-6 bg-gray-50 min-h-screen">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Manage Categories</h1>
 
       {/* 🔍 Search & Add New */}
@@ -38,7 +38,7 @@ export default function CategoriesPage() {
             placeholder="Search categories..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full outline-none"
+            className="w-full outline-none bg-transparent caret-accent"
           />
         </div>
         <div className="flex gap-2">
