@@ -13,9 +13,9 @@ function AdminCharts() {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
       {/* Bar Chart */}
-      <div className="bg-white shadow-lg p-6 rounded-lg">
+      <div className="bg-white shadow-lg p-6 rounded">
         <h2 className="text-xl font-semibold mb-4">Talent Distribution</h2>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
@@ -29,7 +29,7 @@ function AdminCharts() {
       </div>
       
       {/* Pie Chart */}
-      <div className="bg-white shadow-lg p-6 rounded-lg">
+      <div className="bg-white shadow-lg p-6 rounded">
         <h2 className="text-xl font-semibold mb-4">User & Talent Overview</h2>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
