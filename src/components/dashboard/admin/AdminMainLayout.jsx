@@ -14,7 +14,11 @@ function AdminMainLayout({ children }) {
         <SidebarAdmin onClose={() => setIsOpen(false)} />
       </div>
       {/* Mobile sidebar */}
-      {isOpen && <MobileAdminSidebar />}
+      {isOpen && (
+        <MobileAdminSidebar
+          onClose={() => setTimeout(() => setIsOpen(false), 1000)}
+        />
+      )}
       {isOpen && <Overlay onClose={() => setIsOpen(false)} />}
       <div className="fixed top-0 left-0 shadow  md:pl-64 z-30 w-full">
         <HeaderAdmin onOpen={() => setIsOpen(true)} />

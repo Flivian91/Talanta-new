@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-function MobileAdminSidebar() {
+function MobileAdminSidebar({ onClose }) {
   const pathName = usePathname();
   return (
     <aside className="w-64 fixed top-0 left-0 z-50 min-h-screen flex flex-col bg-white pb-2 md:hidden">
@@ -26,6 +26,7 @@ function MobileAdminSidebar() {
             <Link
               key={link.id}
               href={link.href}
+              onClick={onClose}
               className="group flex items-center gap-6 pr-3"
             >
               {pathName === link.href ? (
