@@ -1,3 +1,5 @@
+// Get Talent with a specific ID
+// PATCH, DELETE Talent with Specific ID
 import { databases } from "@/utils/appwriteClient";
 import { NextResponse } from "next/server";
 

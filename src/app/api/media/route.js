@@ -1,0 +1,1 @@
+// GET media info from cloudinary
