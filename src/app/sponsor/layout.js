@@ -18,7 +18,7 @@ export default function SponsorLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex h-screen ">
       {/* Sidebar */}
       <div className="fixed top-0 left-0 z-40 shadow w-0 md:w-64 hidden md:block">
         <SidebarSponsor onClose={() => setIsSidebarOpen(false)} />
@@ -39,18 +39,5 @@ export default function SponsorLayout({ children }) {
         <main className="md:pl-64 mt-16 min-h-screen py-2">{children}</main>
       </div>
     </div>
-  );
-}
-
-// Sidebar Link Component
-function SidebarLink({ href, icon, text, isSidebarOpen }) {
-  return (
-    <Link
-      href={href}
-      className="flex items-center p-3 hover:bg-gray-200 rounded-md"
-    >
-      {icon}
-      <span className={`ml-2 ${!isSidebarOpen && "hidden"}`}>{text}</span>
-    </Link>
   );
 }

@@ -46,7 +46,7 @@ function HeaderSponsor({ onOpen }) {
           <span className=" w-0.5 h-full bg-gray-200 hidden md:inline-block"></span>
           <div className="flex items-center text-gray-800 gap-3 ">
             <h3 className=" items-center gap-2 hidden md:flex">
-              <span className="text-sm font-medium tracking-wide">Hello,</span>
+              <span className="text-sm font-medium tracking-wide">{user?.firstName || user?.lastName|| ""}</span>
               <span className="text-base font-bold tracking-wide font-mono">
                 {user?.firstName || user?.lastName}
               </span>
