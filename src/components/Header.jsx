@@ -43,7 +43,7 @@ export default function Header() {
               {role === "admin" ? (
                 <DashboardButton link="admin" />
               ) : role === "sponser" ? (
-                <DashboardButton link="sponser" />
+                <DashboardButton link="sponsor" />
               ) : (
                 <UploadButton />
               )}

@@ -1,9 +1,11 @@
+// Clerk & Appwrite Middleware
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]); //protect the admin dashboard
 const isSponserRoute = createRouteMatcher(["/sponser(.*)"]); //protect the sponser dashboard
 const isYouRoute = createRouteMatcher(["/you(.*)"]);
+const isProtectedRoute = createRouteMatcher(["/api(.*)"]);
 export default clerkMiddleware(async (auth, req) => {
   const { redirectToSignIn, userId } = await auth();
   if (!userId && isYouRoute(req)) {
