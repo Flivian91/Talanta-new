@@ -13,11 +13,7 @@ export async function GET() {
 
     return NextResponse.json(users, { status: 200 });
   } catch (error) {
-    console.error("Clerk API Error:", error);
-    return NextResponse.json(
-      { message: "Failed to fetch users", error },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 // Create New User
