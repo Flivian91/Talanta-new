@@ -1,3 +1,5 @@
+import { handleApiError } from "@/middleware/errorHandler";
+import { userSchema } from "@/validator/users/userSchema";
 import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
@@ -22,32 +24,28 @@ export async function GET() {
 // BODY: id, fistname, lastName, emailAddress, PhoneNumber. password, publicMetadata='user'
 export async function POST(req) {
   try {
-    // Validate the information firstName
-
-    const { firstName, lastName, email, password } = await req.json();
-    console.log(email);
-
-    const data = await (
+    const body = await req.json();
+    // Validate User Data
+    const validatedData = userSchema.parse(body);
+    const { firstName, lastName, email, password, role } = validatedData;
+    const newUser = await (
       await clerkClient()
     ).users.createUser({
       externalId: uuidv4(),
       firstName,
-      publicMetadata: { role: "user" },
       lastName,
-      emailAddress: email,
+      emailAddress: [email],
       password,
+      publicMetadata: { role },
     });
-    if (!data) {
+    if (!newUser) {
       return NextResponse.json(
         { message: "Faild to create user" },
         { status: 404 }
       );
     }
-    return NextResponse.json({ data, message: "Success" }, { status: 200 });
+    return NextResponse.json({ newUser, message: "Success" }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Failed to Create a User", error },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
