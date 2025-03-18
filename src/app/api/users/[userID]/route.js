@@ -1,6 +1,7 @@
 // Get User by the ID.
 // PATCH user by ID
 import { handleApiError } from "@/middleware/errorHandler";
+import { updateUserSchema } from "@/validator/users/userSchema";
 import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
@@ -18,17 +19,28 @@ export async function GET(req, segmentData) {
   }
 }
 // Update User Data
-
 export async function PATCH(req, segmentData) {
   try {
-    const { userID } = await segmentData.params;
-    const { firstName, lastName, metadata } = await req.json();
+    const { userID } = await segmentData.params; // Fix: Access params correctly
+    console.log(userID);
+
+    const body = await req.json();
+
+    // ✅ Validate request data (allowing partial updates)
+    const validatedData = updateUserSchema.parse(body);
+
+    // ✅ Ensure the user exists before updating
+    const existingUser = await (await clerkClient()).users.getUser(userID);
+    if (!existingUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // ✅ Update only provided fields
     const updatedUser = await (
       await clerkClient()
     ).users.updateUser(userID, {
-      firstName,
-      lastName,
-      publicMetadata: { role: metadata },
+      ...validatedData,
+      publicMetadata: { role: validatedData.role }, // Ensure metadata is properly updated
     });
 
     return NextResponse.json(
@@ -36,7 +48,7 @@ export async function PATCH(req, segmentData) {
       { status: 200 }
     );
   } catch (error) {
-    return handleApiError(error);
+    return handleApiError(error); // ✅ Global error handling
   }
 }
 

@@ -17,7 +17,7 @@ export function handleApiError(error) {
       {
         status: "failed",
         source: "Validation Error",
-        message: error.errors[0].message,
+        message: error.errors,
       },
       { status: 400 }
     );
@@ -29,7 +29,7 @@ export function handleApiError(error) {
       {
         status: "failed",
         source: "Clerk API error",
-        message: error.errors[0].message,
+        message: error.errors,
       },
       { status: error.status || 500 }
     );
