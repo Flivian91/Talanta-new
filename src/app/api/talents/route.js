@@ -1,60 +1,91 @@
-import { databases, ID } from "@/utils/appwriteClient";
-import { talentSchema } from "@/validator/talentSchema";
-import { Query } from "appwrite";
 import { NextResponse } from "next/server";
+import { getAuth } from "@clerk/nextjs/server";
+import { ID, Query } from "appwrite";
+import { databases } from "@/utils/appwriteClient";
+import { talentSchema } from "@/validator/talentSchema";
+import { handleApiError } from "@/middleware/errorHandler";
 
-// Create Talents
 export async function POST(req) {
   try {
-    const body = await req.json();
-
-    // Zod Validation
-    const result = talentSchema.safeParse(body);
-    if (!result.success) {
-      return new NextResponse(JSON.stringify(result.error.errors), {
-        status: 400,
-      });
+    const { searchParams } = new URL(req.url);
+    const userID = searchParams.get("userID");
+    if (!userID) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { title, description, videoUrl, thumbnailUrl, userId, categories } =
-      result.data;
-
-    const talent = await databases.createDocument(
+    // ✅ Step 2: Parse and validate request body
+    const body = await req.json();
+    const validatedData = talentSchema.parse({
+      ...body,
+      userID: userID,
+    });
+    // Check if the video title exist
+    const talentTitle = await databases.listDocuments(
       process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
       process.env.NEXT_PUBLIC_APPWRITE_TALENTS_COLLECTION_ID,
-      ID.unique(),
-      {
-        title,
-        description,
-        videoUrl,
-        thumbnailUrl,
-        userId,
-        categories,
-      }
+      [Query.equal("title", validatedData.title)]
+    );
+    if (talentTitle.documents.length) {
+      return NextResponse.json(
+        { status: "failed", message: "Title Must be different" },
+        { status: 404 }
+      );
+    }
+
+    // ✅ Step 3: Store in Appwrite database
+    const newTalent = await databases.createDocument(
+      process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID, // Database ID
+      process.env.NEXT_PUBLIC_APPWRITE_TALENTS_COLLECTION_ID, // Collection ID
+      ID.unique(), // Generate unique ID
+      validatedData // Talent data
     );
 
-    return new NextResponse(JSON.stringify(talent), { status: 201 });
+    return NextResponse.json(
+      { message: "Talent uploaded successfully", talent: newTalent },
+      { status: 201 }
+    );
   } catch (error) {
-    console.error("Talent Creation Error:", error);
-    return new NextResponse(JSON.stringify({ message: "Server Error" }), {
-      status: 500,
-    });
+    console.error("Upload Error:", error);
+    return handleApiError(error);
   }
 }
 
-// Get all the document from the databases
 export async function GET(req) {
   try {
+    const { searchParams } = new URL(req.url);
+    const filterByUser = searchParams.get("userId");
+    const showPending = searchParams.get("pending"); // Admin only
+
+    let queries = [];
+
+    // ✅ Filter: Only show approved talents unless "pending" is specified (admin only)
+    if (showPending === "true") {
+      queries.push(Query.equal("approved", false));
+    } else {
+      queries.push(Query.equal("approved", true));
+    }
+
+    // ✅ Filter by User ID
+    if (filterByUser) {
+      queries.push(Query.equal("userID", filterByUser));
+    }
+
+    // ✅ Fetch talents from Appwrite
     const talents = await databases.listDocuments(
       process.env.NEXT_PUBLIC_APPWRITE_DATABASE_ID,
       process.env.NEXT_PUBLIC_APPWRITE_TALENTS_COLLECTION_ID
     );
+    console.log(JSON.stringify(queries));
 
-    return new NextResponse(JSON.stringify(talents), { status: 200 });
+    return NextResponse.json(
+      { message: "Talents fetched successfully", talents: talents },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Fetch Talents Error:", error);
-    return new NextResponse(JSON.stringify({ message: "Server Error" }), {
-      status: 500,
-    });
+    return NextResponse.json(
+      { message: "Failed to fetch talents", error: error.message },
+      { status: 500 }
+    );
   }
 }

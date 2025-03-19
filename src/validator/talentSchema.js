@@ -11,7 +11,10 @@ export const talentSchema = z.object({
     .max(500, { message: "Description must not exceed 500 characters" }),
   videoUrl: z.string().url({ message: "Invalid video URL" }),
   thumbnailUrl: z.string().url({ message: "Invalid thumbnail URL" }).optional(),
-  userId: z.string(),
+  userID: z.string(),
+  approved: z.boolean().default(false),
+  likesCount: z.number().default(0),
+  commentsCount: z.number().default(0),
   categories: z
     .array(z.string())
     .min(1, { message: "At least one category is required" })
