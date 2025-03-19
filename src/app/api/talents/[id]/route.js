@@ -3,13 +3,13 @@
 import { databases } from "@/utils/appwriteClient";
 import { NextResponse } from "next/server";
 
-export async function GET(req, { params }) {
+export async function GET(req, segmentData) {
   try {
-    const { id } = params;
+    const { id } = await segmentData.params;
 
     if (!id) {
       return new NextResponse(
-        JSON.stringify({ message: "Talent ID is required" }),
+        JSON.stringify({ status: "failed", message: "Talent ID is required" }),
         {
           status: 400,
         }

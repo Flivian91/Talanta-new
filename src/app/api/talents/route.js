@@ -83,9 +83,6 @@ export async function GET(req) {
     );
   } catch (error) {
     console.error("Fetch Talents Error:", error);
-    return NextResponse.json(
-      { message: "Failed to fetch talents", error: error.message },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
