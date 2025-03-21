@@ -1,3 +1,4 @@
+import { handleApiError } from "@/middleware/errorHandler";
 import { databases } from "@/utils/appwriteClient";
 import { NextResponse } from "next/server";
 
@@ -15,9 +16,6 @@ export async function GET(req) {
     );
   } catch (error) {
     console.error("Fetch Talents Error:", error);
-    return NextResponse.json(
-      { message: "Failed to fetch talents", error: error.message },
-      { status: 500 }
-    );
+    return handleApiError(error)
   }
 }

@@ -1,4 +1,5 @@
 "use client";
+import { useAuth } from "@clerk/nextjs";
 import Link from "next/link";
 import { useState } from "react";
 import { FiUsers, FiMessageSquare, FiClock } from "react-icons/fi";
@@ -17,9 +18,30 @@ export default function SponsorDashboard() {
     { name: "Feb", talents: 5 },
     { name: "Mar", talents: 7 },
   ];
+  async function getClerkToken() {
+    const response = await fetch("https://api.clerk.dev/v1/tokens", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer sk_test_y15JTpv4KR7kkfLgK9uT9m6RV0Ezu4nh7YzzFmYasF",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        user_id: "user_2t5wZLNwBO34FzcrESR97MUlmjH",
+        template_name: "default",
+        expires_in_seconds: 86400
+      })
+    });
+  
+    const data = await response.json();
+    console.log(data);
+  }
+  
+  getClerkToken();
+  
 
   return (
     <div className="p-6">
+      <GetTokenButton/>
       <h1 className="text-3xl font-bold mb-6">Sponsor Dashboard</h1>
 
       {/* Top Cards */}
@@ -57,3 +79,19 @@ const StatCard = ({ title, count, icon, link }) => (
     </button>
   </Link>
 );
+
+
+function GetTokenButton() {
+  const { getToken } = useAuth();
+
+  async function fetchToken() {
+    const token = await getToken(); // Retrieve the Bearer Token
+    console.log("Your Bearer Token:", token);
+  }
+
+  return (
+    <button onClick={fetchToken} className="p-2 bg-blue-500 text-white">
+      Get Token
+    </button>
+  );
+}

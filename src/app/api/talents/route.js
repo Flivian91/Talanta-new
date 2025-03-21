@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
-import { getAuth } from "@clerk/nextjs/server";
+import { auth, getAuth } from "@clerk/nextjs/server";
 import { ID, Query } from "appwrite";
 import { databases } from "@/utils/appwriteClient";
-import { talentSchema } from "@/validator/talentSchema";
+import { talentSchema } from "@/validator/talents/talentSchema";
 import { handleApiError } from "@/middleware/errorHandler";
 
 export async function POST(req) {
   try {
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
+    const {userId:userID} = await auth()
+    
+    // const { searchParams } = new URL(req.url);
+    // const userID = searchParams.get("userID");
+    
     if (!userID) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
