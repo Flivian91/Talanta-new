@@ -4,8 +4,9 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { v4 as uuidv4 } from "uuid";
 
-export async function GET() {
+export async function GET(req) {
   try {
+    // Only Admin can check fo this
     const users = await (await clerkClient()).users.getUserList();
     if (users.data.length === 0) {
       return NextResponse.json(
@@ -42,11 +43,18 @@ export async function POST(req) {
     });
     if (!newUser) {
       return NextResponse.json(
-        { message: "Faild to create user" },
+        { status: "failed", message: "Faild to create user" },
         { status: 404 }
       );
     }
-    return NextResponse.json({ newUser, message: "Success" }, { status: 200 });
+    return NextResponse.json(
+      {
+        status: "success",
+        message: "New user Created successfully",
+        data: newUser,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     return handleApiError(error);
   }

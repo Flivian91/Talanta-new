@@ -11,7 +11,7 @@ export const userSchema = z.object({
     .max(20, "Last Name characters must be less than 20"),
   email: z.string().email("Invalid email format"),
   password: z.string().min(6, "Password must be at least 6 characters").max(16, "Password cannot exceed 16 character"),
-  role: z.enum(["admin", "sponsor", "talent"]),
+  role: z.enum(["admin", "sponsor", "user"]),
 });
 
 
