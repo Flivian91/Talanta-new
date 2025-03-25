@@ -8,10 +8,16 @@ export async function GET() {
   try {
     const users = await (await clerkClient()).users.getUserList();
     if (users.data.length === 0) {
-      return NextResponse.json({ message: "No Users Found" }, { status: 404 });
+      return NextResponse.json(
+        { status: "failed", message: "No Users Found" },
+        { status: 400 }
+      );
     }
 
-    return NextResponse.json(users, { status: 200 });
+    return NextResponse.json(
+      { status: "success", data: users },
+      { status: 200 }
+    );
   } catch (error) {
     return handleApiError(error);
   }
