@@ -2,8 +2,13 @@ import mongoose from "mongoose";
 
 const PreferenceSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, unique: true },
-
+    userID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      unique: true,
+    },
+    cleckID: { type: String, required: true}, //Make the CleckID Unique
     // User preferences
     language: { type: String, enum: ["en", "sw", "fr"], default: "en" }, // Default language
     darkMode: { type: Boolean, default: false }, // UI preference
@@ -17,9 +22,10 @@ const PreferenceSchema = new mongoose.Schema(
     // Privacy settings
     allowMessages: { type: Boolean, default: true }, // Can other users message them?
     showProfilePublic: { type: Boolean, default: true }, // Is profile public?
-
   },
   { timestamps: true }
 );
 
-export default mongoose.models.Preference || mongoose.model("Preference", PreferenceSchema);
+const Preference =
+  mongoose.models.Preference || mongoose.model("Preference", PreferenceSchema);
+export default Preference;

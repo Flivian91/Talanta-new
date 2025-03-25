@@ -1,3 +1,4 @@
+import Preference from "@/models/preference";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
 import { NextResponse } from "next/server";
@@ -87,8 +88,12 @@ export async function POST(req) {
     const data = { ...body, cleckID };
     // Connect to DB
     await connectDB();
-
+    // Create User
     const newUser = await User.insertOne(data);
+
+    // Create default User Preference
+    await Preference.insertOne({ userID: newUser._id, cleckID: newUser.cleckID });
+
     return NextResponse.json(
       {
         status: "success",
