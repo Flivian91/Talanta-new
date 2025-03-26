@@ -139,6 +139,7 @@ export async function DELETE(req, segmentData) {
     // TODO: Get Currently login from clerk
     const { searchParams } = new URL(req.url);
     const userID = searchParams.get("userID");
+    const clerkID = searchParams.get("clerkID");
     const { talentID } = await segmentData.params;
     if (!userID && !Types.ObjectId.isValid(userID)) {
       return NextResponse.json(
@@ -149,6 +150,15 @@ export async function DELETE(req, segmentData) {
     if (!talentID && !Types.ObjectId.isValid(talentID)) {
       return NextResponse.json(
         { status: "failed", message: "Invalid or Missing Talent ID" },
+        { status: 400 }
+      );
+    }
+    if (!clerkID) {
+      return NextResponse.json(
+        {
+          status: "failed",
+          message: "Invalid or Missing Clerk ID",
+        },
         { status: 400 }
       );
     }
@@ -163,7 +173,7 @@ export async function DELETE(req, segmentData) {
     }
     const role = "admin";
     // TODO: Ensure only admin and owner of the Talent can Delete
-    if (talent.clerkID.toString() !== cleckID && role !== "admin") {
+    if (talent.clerkID.toString() !== clerkID && role !== "admin") {
       return NextResponse.json({ error: "Permission denied" }, { status: 403 });
     }
     const deletedTalent = await Talent.findByIdAndDelete(talentID);

@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const CommentSchema = new mongoose.Schema(
   {
-    userId: {
+    userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    talentId: {
+    talentID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Talent",
       required: true,
@@ -18,5 +18,6 @@ const CommentSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Comment ||
-  mongoose.model("Comment", CommentSchema);
+const Comment =
+  mongoose.models.Comment || mongoose.model("Comment", CommentSchema);
+export default Comment;
