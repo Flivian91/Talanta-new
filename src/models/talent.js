@@ -2,12 +2,16 @@ import mongoose from "mongoose";
 
 const TalentSchema = new mongoose.Schema(
   {
-    title: { type: String, required: true },
+    title: { type: String, required: true, unique: true },
     description: { type: String },
-    categories: [{ type: String, maxlength: 3 }], // Max 3 categories
+    categories: [String], // Max 3 categories
     videoUrl: { type: String, required: true },
     thumbnailUrl: { type: String },
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    userID: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     commentsCount: { type: Number, default: 0 },
     likesCount: { type: Number, default: 0 },
     sharesCount: { type: Number, default: 0 },
@@ -15,5 +19,6 @@ const TalentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+const Talent = mongoose.models.Talent || mongoose.model("Talent", TalentSchema);
 
-export default mongoose.models.Talent || mongoose.model("Talent", TalentSchema);
+export default Talent;
