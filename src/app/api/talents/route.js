@@ -66,12 +66,22 @@ export async function POST(req) {
 
     const { searchParams } = new URL(req.url);
     const userID = searchParams.get("userID");
+    const clerkID = searchParams.get("clerkID");
     // TODO: get currently logged user
     if (!userID && Types.ObjectId.isValid(userID)) {
       return NextResponse.json(
         {
           status: "failed",
           message: "Invalid or Missing User ID",
+        },
+        { status: 400 }
+      );
+    }
+    if (!clerkID) {
+      return NextResponse.json(
+        {
+          status: "failed",
+          message: "Invalid or Missing Clerk ID",
         },
         { status: 400 }
       );
@@ -89,7 +99,7 @@ export async function POST(req) {
     }
     // Validate Talent data
     const body = await req.json();
-    const data = { ...body, userID: user.id };
+    const data = { ...body, userID: user.id, clerkID };
     const validatedData = talentSchema.parse(data);
     // Validate talent Title
     const existingTalent = await Talent.findOne({ title: validatedData.title });

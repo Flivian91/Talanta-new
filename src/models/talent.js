@@ -12,6 +12,7 @@ const TalentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    clerkID: { type: String, required:true },
     commentsCount: { type: Number, default: 0 },
     likesCount: { type: Number, default: 0 },
     sharesCount: { type: Number, default: 0 },
