@@ -47,6 +47,7 @@ export async function GET(req) {
       .skip(skip)
       .limit(limit);
     return NextResponse.json({
+      count: talent.length,
       status: "success",
       data: talent,
     });
@@ -114,7 +115,6 @@ export async function POST(req) {
     );
   } catch (error) {
     console.log("Error Creating the Talent", error);
-    
     return NextResponse.json(
       {
         status: "failed",
