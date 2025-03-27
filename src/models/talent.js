@@ -15,7 +15,7 @@ const TalentSchema = new mongoose.Schema(
     clerkID: { type: String, required:true },
     commentsCount: { type: Number, default: 0 },
     likesCount: { type: Number, default: 0 },
-    sharesCount: { type: Number, default: 0 },
+    shareCount: { type: Number, default: 0 },
     approved: { type: Boolean, default: false }, // Admin approval
   },
   { timestamps: true }

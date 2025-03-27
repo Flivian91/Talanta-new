@@ -1,4 +1,5 @@
 import Comment from "@/models/comment";
+import Talent from "@/models/talent";
 import connectDB from "@/utils/db";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
@@ -97,12 +98,17 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+    // Create a new comment
     const { text, likesCount } = await req.json();
     const comment = await Comment.insertOne({
       userID,
       talentID,
       text,
       likesCount,
+    });
+    // Update the comments count in the talent
+    await Talent.findByIdAndUpdate(talentID, {
+      $inc: { commentsCount: 1 },
     });
     return NextResponse.json({
       status: "success",
