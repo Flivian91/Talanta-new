@@ -9,8 +9,8 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: true }, // Hashed
     role: {
       type: String,
-      enum: ["admin", "sponsor", "talent"],
-      default: "talent",
+      enum: ["admin", "sponsor", "user"],
+      default: "user",
     },
     profileImage: { type: String },
     bio: { type: String, maxlength: 200 },

@@ -3,7 +3,7 @@ import Like from "@/models/like";
 import Talent from "@/models/talent";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
-import { auth} from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -63,6 +63,12 @@ export async function POST(req) {
     }
 
     const { targetID, targetType } = await req.json();
+    if (!Types.ObjectId.isValid(targetID)) {
+      return NextResponse.json(
+        { status: "failed", error: "Invalid Target ID" },
+        { status: 400 }
+      );
+    }
 
     if (!["Talent", "Comment"].includes(targetType)) {
       return NextResponse.json(
@@ -70,12 +76,12 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-
+    // Toogle Mechanism
     // Check if user has already liked the target
     const existingLike = await Like.findOne({ userID, targetID });
 
     if (existingLike) {
-      // Unlike (Remove the like)
+      // Unlike (Remove like)
       await Like.findByIdAndDelete(existingLike._id);
 
       // Decrement likes count

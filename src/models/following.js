@@ -2,12 +2,12 @@ import mongoose from "mongoose";
 
 const FollowingSchema = new mongoose.Schema(
   {
-    followerId: {
+    followerID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    followingId: {
+    followingID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -16,5 +16,6 @@ const FollowingSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.models.Following ||
-  mongoose.model("Following", FollowingSchema);
+const Follow =
+  mongoose.models.Following || mongoose.model("Following", FollowingSchema);
+export default Follow;
