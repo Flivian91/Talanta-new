@@ -1,4 +1,6 @@
 import { handleApiError } from "@/middleware/errorHandler";
+import User from "@/models/user";
+import connectDB from "@/utils/db";
 import { userSchema } from "@/validator/users/userSchema";
 import { clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -8,12 +10,6 @@ export async function GET(req) {
   try {
     // Only Admin can check fo this
     const users = await (await clerkClient()).users.getUserList();
-    if (users.data.length === 0) {
-      return NextResponse.json(
-        { status: "failed", message: "No Users Found" },
-        { status: 400 }
-      );
-    }
 
     return NextResponse.json(
       { status: "success", data: users },
@@ -40,6 +36,16 @@ export async function POST(req) {
       emailAddress: [email],
       password,
       publicMetadata: { role },
+    });
+    // Create new user on MongoDB
+    await connectDB();
+    await User.insertOne({
+      clerkID: newUser.id,
+      email,
+      role,
+      firstName,
+      lastName,
+      profileImage: newUser.imageUrl,
     });
     if (!newUser) {
       return NextResponse.json(
