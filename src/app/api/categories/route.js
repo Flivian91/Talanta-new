@@ -18,24 +18,24 @@ export async function GET(req) {
         { status: 400 }
       );
     }
-    const user = await User.findById(userID);
+    const user = await User.findById({ _id: userID });
+
     if (!user) {
       return NextResponse.json(
         { status: "failed", message: "User not found in the database" },
         { status: 400 }
       );
     }
-    const categories = await Category.find(userID);
+    const categories = await Category.find();
     return NextResponse.json(
       { status: "success", data: categories },
       { status: 200 }
     );
   } catch (error) {
-    console.log("Error Fetching Categories", error);
     return NextResponse.json(
       {
         status: "failed",
-        message: "Error Fetchin Categories",
+        message: "Error Fetching Categories",
         error: error.message,
       },
       { status: 500 }
@@ -69,6 +69,16 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+    const role = "admin";
+    if (role !== "admin") {
+      return NextResponse.json(
+        {
+          status: "failed",
+          message: "You are not authorized to create a category",
+        },
+        { status: 401 }
+      );
+    }
 
     const newCategory = await Category.insertOne({ title, user: user.id });
     return NextResponse.json(
@@ -80,7 +90,6 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
-    console.log("Error Creating Categories", error);
     return NextResponse.json(
       {
         status: "failed",

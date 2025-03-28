@@ -1,8 +1,8 @@
 //GET, PATCH and DELETE
 
-import connectDB from "@/lib/db";
 import Category from "@/models/category";
-import User from "@/models/users";
+import User from "@/models/user";
+import connectDB from "@/utils/db";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -35,9 +35,19 @@ export async function GET(req, segmentData) {
         { status: 400 }
       );
     }
+    const role = "admin";
+    if (role !== "admin") {
+      return NextResponse.json(
+        {
+          status: "failed",
+          message: "You are not authorized to create a category",
+        },
+        { status: 401 }
+      );
+    }
     // Find the Category with ID
-    const category = await Category.findOne({ _id: categoryID, user: user.id });
-    if (!category || category.length === 0) {
+    const category = await Category.findOne({ _id: categoryID });
+    if (!category) {
       return NextResponse.json(
         { status: "failed", message: "No Category Found" },
         { status: 400 }
@@ -92,11 +102,21 @@ export async function PATCH(req, segmentData) {
       );
     }
     // Check if category exists
-    const category = await Category.findOne({ _id: categoryID, user: user.id });
-    if (!category || category.length === 0) {
+    const category = await Category.findOne({ _id: categoryID });
+    if (!category) {
       return NextResponse.json(
         { status: "failed", message: "No category Found" },
         { status: 404 }
+      );
+    }
+    const role = "admin";
+    if (role !== "admin") {
+      return NextResponse.json(
+        {
+          status: "failed",
+          message: "You are not authorized to create a category",
+        },
+        { status: 401 }
       );
     }
     // Update Category
@@ -133,7 +153,7 @@ export async function DELETE(req, segmentData) {
     if (!categoryID || !Types.ObjectId.isValid(categoryID)) {
       return NextResponse.json(
         {
-          status: "failed", 
+          status: "failed",
           message: "Invalid or missing category ID",
         },
         { status: 400 }
@@ -159,11 +179,21 @@ export async function DELETE(req, segmentData) {
       );
     }
     // Get the category to be deleted
-    const category = await Category.findOne({ _id: categoryID, user: userID });
-    if (!category || category.length === 0) {
+    const category = await Category.findOne({ _id: categoryID });
+    if (!category) {
       return NextResponse.json(
         { status: "failed", message: "No category Found" },
         { status: 400 }
+      );
+    }
+    const role = "admin";
+    if (role !== "admin") {
+      return NextResponse.json(
+        {
+          status: "failed",
+          message: "You are not authorized to create a category",
+        },
+        { status: 401 }
       );
     }
     // Delete the Category
