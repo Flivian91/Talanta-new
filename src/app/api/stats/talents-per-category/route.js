@@ -14,7 +14,7 @@ export async function GET(req) {
       {
         $group: {
           _id: "$categories",
-          count: { $sum: 1 },
+          value: { $sum: 1 },
         },
       },
       {
