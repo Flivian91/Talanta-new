@@ -56,7 +56,7 @@ function AdminCharts() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
       {/* Bar Chart */}
       <div className="bg-white shadow rounded">
-        <h2 className="text-xl font-semibold tracking-wider mb-2 px-3 py-2 border-b">
+        <h2 className="md:text-xl font-semibold tracking-wider mb-2 px-3 py-2 border-b">
           Number of talents per Categories
         </h2>
         <ResponsiveContainer width="100%" height={300}>
@@ -65,16 +65,16 @@ function AdminCharts() {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Bar dataKey="value" fill="#8884d8" barSize={20} />
+            <Bar dataKey="value" fill="#8884d8" barSize={30} />
           </BarChart>
         </ResponsiveContainer>
       </div>
       <div className="shadow bg-white rounded">
-        <h1 className="flex items-center border-b px-3 py-2 gap-4 text-xl font-semibold ">
+        <h1 className="flex items-center border-b px-3 py-2 gap-4 md:text-xl font-semibold ">
           <FiTrendingUp className="text-red-600" />
           <span className="tracking-wider">Top Followed Users</span>
         </h1>
-        <div className="grid grid-cols-[10px_1fr_1fr_20px_1fr] gap-3 text-base font-semibold py-1">
+        <div className="grid grid-cols-[10px_1fr_1fr_20px_1fr] gap-3 text-xs sm:text-base font-semibold py-1">
           <span></span>
           <span>Name</span>
           <span>Email</span>
