@@ -29,7 +29,6 @@ function AdminCharts() {
       });
 
       const data = await res.json();
-      console.log(data.data);
       setChartData(data.data);
     } catch (error) {
       console.log("Error: ", error);
