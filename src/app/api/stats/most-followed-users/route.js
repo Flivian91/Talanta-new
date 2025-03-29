@@ -12,12 +12,13 @@ export async function GET(req) {
         $sort: { followersCount: -1 },
       },
       {
-        $limit: 10,
+        $limit: 6,
       },
       {
         $project: {
           _id: 1,
           firstName: 1,
+          email: 1,
           followersCount: 1,
         },
       },
