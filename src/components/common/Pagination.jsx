@@ -6,9 +6,9 @@ import {
 function Pagination() {
   return (
     <div className="py-4 px-2 flex items-center justify-between text-sm">
-      <div>
-        <span>Show rows per page</span>
-        <select name="num" id="num">
+      <div className="flex ic gap-2">
+        <label htmlFor="num" className="text-gray-600">Show rows per page</label>
+        <select name="num" id="num" className="border border-gray-300 rounded py-1 px-2 font-mono focus:border-accent active:border-accent outline-accent">
           <option value="10">10</option>
           <option value="10">15</option>
           <option value="10">20</option>
@@ -20,11 +20,11 @@ function Pagination() {
           <span>of</span>
           <span className="font-mono">32</span>
         </div>
-        <div>
-          <button>
+        <div className="flex items-center gap-3">
+          <button className="p-1 text-lg hover:bg-gray-200 rounded">
             <MdOutlineKeyboardArrowLeft />
           </button>
-          <button>
+          <button className="p-1 text-lg hover:bg-gray-200 rounded">
             <MdOutlineKeyboardArrowRight />
           </button>
         </div>

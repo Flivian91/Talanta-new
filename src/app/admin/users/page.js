@@ -19,27 +19,27 @@ export default function UserManagement() {
   async function fetchUsers() {
     try {
       const token = await getToken();
-      const res = await fetch("/api/me?limit=", {
+      const res = await fetch("/api/users", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
       const data = await res.json();
-      setUsers(data.data);
+      setUsers(data.data.data);
     } catch (error) {
       console.log("Error fetching Users", error);
     }
   }
-  //   useEffect(() => {
-  //   fetchUsers();
-  // }, []);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Users Management</h1>
       <UserHeader />
-      <UsersGridArea />
+      <UsersGridArea data={users} />
       <Pagination />
     </div>
   );
