@@ -3,7 +3,7 @@ import { FaEdit, FaTrash, FaUser } from "react-icons/fa";
 
 function MostFollowedCard({ data, index }) {
   return (
-    <div className="grid grid-cols-[10px_1fr_1fr_20px_1fr] gap-3 py-1 px-2 hover:bg-gray-100 text-xs sm:text-base font-medium tracking-wide items-center">
+    <div className="grid grid-cols-[10px_1fr_2fr_20px_1fr] gap-3 py-1 px-2 hover:bg-gray-100 text-xs sm:text-base font-medium tracking-wide items-center">
       <span className="font-mono text-lg">{index + 1}</span>
       <div className="flex items-center gap-2">
         <FaUser className="text-xs mb-0.5" />

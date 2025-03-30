@@ -74,7 +74,7 @@ function AdminCharts() {
           <FiTrendingUp className="text-red-600" />
           <span className="tracking-wider">Top Followed Users</span>
         </h1>
-        <div className="grid grid-cols-[10px_1fr_1fr_20px_1fr] gap-3 text-xs sm:text-base font-semibold py-1">
+        <div className="grid grid-cols-[10px_1fr_2fr_20px_1fr] gap-3 text-xs sm:text-base font-semibold py-1">
           <span></span>
           <span>Name</span>
           <span>Email</span>

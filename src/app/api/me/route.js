@@ -1,18 +1,34 @@
 import Preference from "@/models/preference";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 // Get User data
 export async function GET(req) {
   try {
+    const { userId, sessionClaims } = await auth();
     const { searchParams } = new URL(req.url);
     const searchKeyword = searchParams.get("keywords");
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
-    // connect to the database
+    // Check user ID
+    if (!userId) {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized" },
+        { status: 403 }
+      );
+    }
+    // Check Admin Role.
+    const role = await sessionClaims?.metadata?.role;
+    if (role !== "admin") {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Only admin" },
+        { status: 401 }
+      );
+    }
 
     const filter = {};
     // Search by Keywords
@@ -41,7 +57,7 @@ export async function GET(req) {
         $lte: new Date(endDate),
       };
     }
-    const skip = ((page || 1) - 1) * (limit || 10);
+    const skip = ((page || 1) - 1) * (limit || 15);
     await connectDB();
     const user = await User.find(filter)
       .sort({ createdAt: -1 })
@@ -92,7 +108,10 @@ export async function POST(req) {
     const newUser = await User.insertOne(data);
 
     // Create default User Preference
-    await Preference.insertOne({ userID: newUser._id, cleckID: newUser.cleckID });
+    await Preference.insertOne({
+      userID: newUser._id,
+      cleckID: newUser.cleckID,
+    });
 
     return NextResponse.json(
       {
