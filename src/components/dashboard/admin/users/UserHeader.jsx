@@ -7,11 +7,11 @@ import { FaFilter, FaPlus, FaSearch } from "react-icons/fa";
 import { FiCloudSnow } from "react-icons/fi";
 
 function UserHeader({ query, setQuery }) {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex items-center gap-4 sm:flex-row flex-col justify-between">
-      <AddUserModel />
-      <SearchOverlay/>
+      {isOpen && <AddUserModel onClose={() => setIsOpen(false)} />}
+      {isOpen && <SearchOverlay onClose={() => setIsOpen(false)} />}
       <div className="flex items-center gap-1 border border-gray-300/60 bg-white rounded w-full sm:w-72">
         <button className="text-lg text-gray-600 p-2">
           <FaSearch />
@@ -25,7 +25,10 @@ function UserHeader({ query, setQuery }) {
         />
       </div>
       <div className="flex items-center justify-between sm:gap-3 w-full sm:w-72">
-        <button className="flex items-center text-sm justify-center gap-2 px-4 py-2 rounded bg-secondary text-white">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="flex items-center text-sm justify-center gap-2 px-4 py-2 rounded bg-secondary text-white"
+        >
           <FaPlus />
           <span>Add User</span>
         </button>
