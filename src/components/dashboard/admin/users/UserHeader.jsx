@@ -1,10 +1,17 @@
-import React from "react";
+"use client";
+import AddUserModel from "@/components/models/AddUserModel";
+import Overlay from "@/components/overlays/Overlay";
+import SearchOverlay from "@/components/overlays/SearchOverlay";
+import React, { useState } from "react";
 import { FaFilter, FaPlus, FaSearch } from "react-icons/fa";
 import { FiCloudSnow } from "react-icons/fi";
 
 function UserHeader({ query, setQuery }) {
+  const [isOpen, setIsOpen] = useState(false)
   return (
     <div className="flex items-center gap-4 sm:flex-row flex-col justify-between">
+      <AddUserModel />
+      <SearchOverlay/>
       <div className="flex items-center gap-1 border border-gray-300/60 bg-white rounded w-full sm:w-72">
         <button className="text-lg text-gray-600 p-2">
           <FaSearch />
