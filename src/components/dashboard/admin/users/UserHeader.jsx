@@ -2,7 +2,7 @@ import React from "react";
 import { FaFilter, FaPlus, FaSearch } from "react-icons/fa";
 import { FiCloudSnow } from "react-icons/fi";
 
-function UserHeader() {
+function UserHeader({ query, setQuery }) {
   return (
     <div className="flex items-center gap-4 sm:flex-row flex-col justify-between">
       <div className="flex items-center gap-1 border border-gray-300/60 bg-white rounded w-full sm:w-72">
@@ -11,6 +11,8 @@ function UserHeader() {
         </button>
         <input
           type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder="Search bg name"
           className=" flex-1 py-1 caret-accent text-base font-mono outline-none focus:outline-none border-none bg-transparent"
         />

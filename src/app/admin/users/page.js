@@ -34,12 +34,28 @@ export default function UserManagement() {
   useEffect(() => {
     fetchUsers();
   }, []);
+  function handleSearch(query) {
+    setFilteredUsers(
+      users.filter((user) =>
+        `${user.firstName} ${user.lastName}`
+          .toLowerCase()
+          .includes(query.toLowerCase())
+      )
+    );
+  }
+  useEffect(() => {
+    handleSearch(query);
+  }, [query]);
 
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Users Management</h1>
-      <UserHeader />
-      <UsersGridArea data={users} />
+      <UserHeader query={query} setQuery={setQuery} />
+      {filteredUsers.length === 0 ? (
+        <NoDataFound resetSearch={() => setFilteredUsers(users)} />
+      ) : (
+        <UsersGridArea data={filteredUsers} />
+      )}
       <Pagination />
     </div>
   );
