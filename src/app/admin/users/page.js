@@ -35,6 +35,9 @@ export default function UserManagement() {
     fetchUsers();
   }, []);
   function handleSearch(query) {
+    if (query < 2) {
+      setFilteredUsers(users);
+    }
     setFilteredUsers(
       users.filter((user) =>
         `${user.firstName} ${user.lastName}`
@@ -52,11 +55,11 @@ export default function UserManagement() {
       <h1 className="text-2xl font-bold">Users Management</h1>
       <UserHeader query={query} setQuery={setQuery} />
       {filteredUsers.length === 0 ? (
-        <NoDataFound resetSearch={() => setFilteredUsers(users)} />
+        <NoDataFound resetSearch={() => setQuery("")} />
       ) : (
         <UsersGridArea data={filteredUsers} />
       )}
-      <Pagination />
+      {filteredUsers.length !== 0 && <Pagination />}
     </div>
   );
 }
