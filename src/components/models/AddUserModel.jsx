@@ -40,7 +40,6 @@ function AddUserModel({ onClose }) {
         }),
       });
       const data = await res.json();
-      console.log(data);
 
       if (!res.ok) {
         toast.error("Failed to Create user");
