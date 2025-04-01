@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-function AddUserModel({ onClose }) {
+function AddUserModel({ onClose, onFetch }) {
   const { getToken } = useAuth();
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
@@ -15,11 +15,11 @@ function AddUserModel({ onClose }) {
   function handleSubmit(e) {
     e.preventDefault();
     createUser();
-    // setFname(" ");
-    // setLname("");
-    // setEmail("");
-    // setPassword("");
-    // setRole("user");
+    setFname(" ");
+    setLname("");
+    setEmail("");
+    setPassword("");
+    setRole("user");
   }
   async function createUser() {
     try {
@@ -45,10 +45,11 @@ function AddUserModel({ onClose }) {
         toast.error("Failed to Create user");
       }
       toast.success("User Created successfully");
-      onClose()
+      onFetch();
+      onClose();
     } catch (error) {
       console.log("Error Creating User", error);
-      toast.error(error.message)
+      toast.error(error.message);
     } finally {
       setLoading(false);
     }

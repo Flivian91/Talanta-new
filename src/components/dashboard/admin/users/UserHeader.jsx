@@ -6,11 +6,13 @@ import React, { useState } from "react";
 import { FaFilter, FaPlus, FaSearch } from "react-icons/fa";
 import { FiCloudSnow } from "react-icons/fi";
 
-function UserHeader({ query, setQuery }) {
+function UserHeader({ query, setQuery, onFetch }) {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="flex items-center gap-4 sm:flex-row flex-col justify-between">
-      {isOpen && <AddUserModel onClose={() => setIsOpen(false)} />}
+      {isOpen && (
+        <AddUserModel onClose={() => setIsOpen(false)} onFetch={onFetch} />
+      )}
       {isOpen && <SearchOverlay onClose={() => setIsOpen(false)} />}
       <div className="flex items-center gap-1 border border-gray-300/60 bg-white rounded w-full sm:w-72">
         <button className="text-lg text-gray-600 p-2">

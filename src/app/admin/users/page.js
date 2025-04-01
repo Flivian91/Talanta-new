@@ -53,7 +53,7 @@ export default function UserManagement() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Users Management</h1>
-      <UserHeader query={query} setQuery={setQuery} />
+      <UserHeader query={query} setQuery={setQuery} onFetch={fetchUsers} />
       {filteredUsers.length === 0 ? (
         <NoDataFound resetSearch={() => setQuery("")} />
       ) : (
