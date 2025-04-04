@@ -10,7 +10,7 @@ import { Tooltip } from "react-tooltip";
 function UserCard({ data }) {
   return (
     <div className="group hover:bg-gray-100 py-3 px-2 border-b border-gray-300 grid grid-cols-[2fr_1fr_1fr_1fr] items-center">
-      <Link href={`/users/${data?.id}`} className="flex items-center gap-2">
+      <Link href={`/admin/users/${data?.id}`} className="flex items-center gap-2">
         <Image
           src={`${data?.imageUrl}`}
           width={100}
