@@ -2,7 +2,8 @@ import Talent from "@/models/talent";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
 import { talentSchema } from "@/validator/talents/talentSchema";
-import { Types } from "mongoose";
+// import { auth } from "@clerk/nextjs/server";
+// import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
@@ -66,26 +67,26 @@ export async function POST(req) {
 
     const { searchParams } = new URL(req.url);
     const userID = searchParams.get("userID");
-    const clerkID = searchParams.get("clerkID");
+    const clerkID = searchParams.get("userID");
     // TODO: get currently logged user
-    if (!userID && Types.ObjectId.isValid(userID)) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Invalid or Missing User ID",
-        },
-        { status: 400 }
-      );
-    }
-    if (!clerkID) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Invalid or Missing Clerk ID",
-        },
-        { status: 400 }
-      );
-    }
+    // if (!userID && Types.ObjectId.isValid(userID)) {
+    //   return NextResponse.json(
+    //     {
+    //       status: "failed",
+    //       message: "Invalid or Missing User ID",
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
+    // if (!clerkID) {
+    //   return NextResponse.json(
+    //     {
+    //       status: "failed",
+    //       message: "Invalid or Missing Clerk ID",
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
     const user = await User.findById(userID);
 
     if (!user) {
@@ -99,7 +100,8 @@ export async function POST(req) {
     }
     // Validate Talent data
     const body = await req.json();
-    const data = { ...body, userID: user.id, clerkID };
+    // const {userId} = await auth()
+    const data = { ...body, clerkID };
     const validatedData = talentSchema.parse(data);
     // Validate talent Title
     const existingTalent = await Talent.findOne({ title: validatedData.title });

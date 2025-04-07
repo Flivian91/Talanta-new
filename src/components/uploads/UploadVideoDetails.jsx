@@ -24,7 +24,7 @@ function UploadVideoDetails({ data }) {
   const [videoId, setVideoId] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModelOpen, setModelOpen] = useState(false);
-  const { userId } = useAuth();
+  const { userId:userID, getToken } = useAuth();
   const { push } = useRouter();
 
   const inputRef = useRef(null);
@@ -97,16 +97,18 @@ function UploadVideoDetails({ data }) {
         description,
         videoUrl: data?.url, // Ensure data exists before accessing url
         thumbnailUrl: thumbnail || data?.thumbnail_url, // Ensure correct thumbnail
-        userId,
+        userID,
         categories: categories.map((category) => category.toLowerCase()),
       };
 
       console.log("Request Payload:", payload);
+      const token = await getToken()
 
-      const response = await fetch("/api/talents", {
+      const response = await fetch(`/api/talents?userID=${userID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify(payload),
       });

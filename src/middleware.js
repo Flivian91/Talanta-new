@@ -26,7 +26,7 @@ export default clerkMiddleware(async (auth, req) => {
 
   if (
     isSponserRoute(req) &&
-    (await (await auth()).sessionClaims?.metadata?.role) !== "sponser"
+    (await (await auth()).sessionClaims?.metadata?.role) !== "sponsor"
   ) {
     const url = new URL("/", req.url);
     console.log("UnAuthorized access");
