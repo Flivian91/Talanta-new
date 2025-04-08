@@ -101,6 +101,7 @@ export async function POST(req) {
     // Validate Talent data
     const body = await req.json();
     // const {userId} = await auth()
+    // This clerk ID
     const data = { ...body, clerkID };
     const validatedData = talentSchema.parse(data);
     // Validate talent Title
