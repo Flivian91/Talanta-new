@@ -29,7 +29,7 @@ export async function POST(req) {
     const { firstName, lastName, email, password, role } = validatedData;
     const newUser = await (
       await clerkClient()
-    ).users.createUser({
+    ).users.createUser({ 
       externalId: uuidv4(),
       firstName,
       lastName,
