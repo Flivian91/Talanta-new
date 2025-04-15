@@ -16,13 +16,13 @@ import {
   Legend,
 } from "recharts";
 import MostFollowedCard from "./users/MostFollowedCard";
+import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
 function AdminCharts() {
   const { getToken } = useAuth();
-  const [chartData, setChartData] = useState([]);
-  const [followedData, setFollowedData] = useState([]);
   async function fetchTalentPerCategoties() {
     const token = await getToken();
     try {
@@ -31,26 +31,40 @@ function AdminCharts() {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      const data = await res.json();
-      setChartData(data.data);
+      return await res.json();
     } catch (error) {
       console.log("Error: ", error);
+      toast.error("Error Fetching Talents Per Category");
     }
   }
+  const {
+    data: chartData,
+    error: talentPerCategoryError,
+    isLoading: loadingTalentsPerCategory,
+  } = useQuery({
+    queryKey: ["TalentsPerCategories"],
+    queryFn: fetchTalentPerCategoties,
+  });
   async function fetchMostFollowedUser() {
     try {
       const res = await fetch("/api/stats/most-followed-users");
-      const data = await res.json();
-      setFollowedData(data.data);
+      return await res.json();
     } catch (error) {
       console.log("Error on fetching followed users", error);
+      toast.error("Errror Fetching followed users");
     }
   }
-  useEffect(() => {
-    fetchTalentPerCategoties();
-    fetchMostFollowedUser();
-  }, []);
+  const {
+    data: topFollowedUsers,
+    error: topFollowedUserError,
+    isLoading: loadingTopFollowedUsers,
+  } = useQuery({
+    queryKey: ["TopFollowedUsers"],
+    queryFn: fetchMostFollowedUser,
+  });
+  if (talentPerCategoryError) {
+    console.log("Error Fetching Chart Data of Talents Per Categories");
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 ">
@@ -59,15 +73,21 @@ function AdminCharts() {
         <h2 className="md:text-xl font-semibold tracking-wider mb-2 px-3 py-2 border-b">
           Number of talents per Categories
         </h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <XAxis dataKey="_id" stroke="#555" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" fill="#8884d8" barSize={30} />
-          </BarChart>
-        </ResponsiveContainer>
+        {loadingTalentsPerCategory ? (
+          <div className=" w-[500px] h-[00px] e shadow-md p-6 rounded-lg animate-pulse">
+            <div className="bg-gray-300 rounded w-full h-full"></div>
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData?.data}>
+              <XAxis dataKey="_id" stroke="#555" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" fill="#8884d8" barSize={30} />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </div>
       <div className="shadow bg-white rounded">
         <h1 className="flex items-center border-b px-3 py-2 gap-4 md:text-xl font-semibold ">
@@ -81,11 +101,17 @@ function AdminCharts() {
           <span className="flex items-center justify-center">No.</span>
           <span className="flex items-center justify-center">Actions</span>
         </div>
-        <div className="flex flex-col gap-2 w-full py-2 transition-all duration-300">
-          {followedData.map((data, index) => (
-            <MostFollowedCard key={data._id} data={data} index={index} />
-          ))}
-        </div>
+        {loadingTopFollowedUsers ? (
+          <div className=" w-[500px] h-[300px] e shadow-md p-6 rounded-lg animate-pulse">
+            <div className="bg-gray-300 rounded w-full h-full"></div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-2 w-full py-2 transition-all duration-300">
+            {topFollowedUsers?.data.map((data, index) => (
+              <MostFollowedCard key={data._id} data={data} index={index} />
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Pie Chart */}
