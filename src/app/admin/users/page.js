@@ -27,28 +27,33 @@ export default function UserManagement() {
 
       const data = await res.json();
       setUsers(data.data.data);
+      setFilteredUsers(data.data.data); // 👈 Set both
     } catch (error) {
       console.log("Error fetching Users", error);
     }
   }
+
   useEffect(() => {
     fetchUsers();
   }, []);
-  function handleSearch(query) {
-    if (query < 2) {
+  function handleSearch(q) {
+    if (q.trim().length < 2) {
       setFilteredUsers(users);
+      return;
     }
-    setFilteredUsers(
-      users.filter((user) =>
-        `${user.firstName} ${user.lastName}`
-          .toLowerCase()
-          .includes(query.toLowerCase())
-      )
+
+    const filtered = users.filter((user) =>
+      `${user.firstName} ${user.lastName}`
+        .toLowerCase()
+        .includes(q.toLowerCase())
     );
+
+    setFilteredUsers(filtered);
   }
+
   useEffect(() => {
     handleSearch(query);
-  }, [query]);
+  }, [query, users]); // also react when users change
 
   return (
     <div className="flex flex-col gap-4">
