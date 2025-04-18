@@ -11,7 +11,7 @@ export async function POST(req) {
     if (!userId) {
       return NextResponse.json(
         { status: "failed", message: "Unauthorized Access" },
-        { status: 400 }
+        { status: 401 }
       );
     }
     // ✅ Ensure user exists

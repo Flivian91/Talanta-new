@@ -7,11 +7,14 @@ export default function ProfileSection() {
   const [firstName, setFirstName] = useState("John");
   const [lastName, setLastName] = useState("Doe");
   const [avatar, setAvatar] = useState("/default-avatar.png"); // Change to your actual image path
+  const [isEditing, setIsEditing] = useState(false);
+  const [role, setRole] = useState("");
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const imageUrl = URL.createObjectURL(file);
+
       setAvatar(imageUrl);
     }
   };
@@ -90,15 +93,36 @@ export default function ProfileSection() {
               />
             </div>
           </div>
-          <div className="bg-gray-50 rounded-md py-2 px-2 flex items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-              <h3 className="text-base font-semibold tracking-wide">role :</h3>
-              <span className="font-mono tracking-wide">"sponsor"</span>
+
+          {isEditing ? (
+            <select
+              name="role"
+              id="role"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="border px-3 py-2 rounded focus:ring focus:ring-secondary/10 outline-none font-mono tracking-wide caret-secondary"
+            >
+              <option value="user">User</option>
+              <option value="sponsor">Sponsor</option>
+              <option value="admin">Admin</option>
+            </select>
+          ) : (
+            <div className="bg-gray-50 rounded-md py-2 px-2 flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-semibold tracking-wide">
+                  role :
+                </h3>
+                <span className="font-mono tracking-wide">"sponsor"</span>
+              </div>
+
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-2 py-1 bg-accent/40 rounded text-sm font-semibold"
+              >
+                Edit
+              </button>
             </div>
-            <button className="px-2 py-1 bg-accent/40 rounded text-sm font-semibold">
-              Edit
-            </button>
-          </div>
+          )}
 
           <div className="flex items-center justify-center">
             <button className="bg-secondary text-white px-4 py-2 rounded">

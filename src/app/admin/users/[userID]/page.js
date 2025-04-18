@@ -24,7 +24,7 @@ export default function Page() {
             <AdminUserAction />
           </div>
         </div>
-        <div className="grid grid-cols-[2fr_0.5fr] gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_300px] gap-3">
         <AdminUserInformations />
         <AdminUserMinorDetails/>
         </div>

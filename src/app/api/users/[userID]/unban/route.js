@@ -1,11 +1,18 @@
-import { clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { handleApiError } from "@/middleware/errorHandler";
 
 export async function POST(req) {
   try {
     const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID")    
+    const userID = searchParams.get("userID");
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
+      );
+    }
 
     // ✅ Ensure user exists
     const existingUser = await (await clerkClient()).users.getUser(userID);

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
+import { BsUnlock } from "react-icons/bs";
 import { FaBan } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { RxCaretDown } from "react-icons/rx";
@@ -36,6 +37,10 @@ export default function AdminUserAction() {
           <button className="flex items-center gap-2 w-full px-4 py-2 text-red-600 hover:bg-gray-100">
             <FaBan />
             <span className="text-sm font-semibold">Ban user</span>
+          </button>
+          <button className="flex items-center gap-2 w-full px-4 py-2 text-red-600 hover:bg-gray-100">
+            <BsUnlock />
+            <span className="text-sm font-semibold">Unban user</span>
           </button>
           <button className="flex items-center gap-2 w-full px-4 py-2 text-red-600 hover:bg-gray-100">
             <MdDelete />

@@ -5,13 +5,12 @@ import { FaUserCircle } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 import AdminDeleteUser from "./AdminDeleteUser";
 import AdminBanUser from "./AdminBanUser";
+import AdminUnbanUser from "./AdminUnbanUser";
 
 function UserCard({ data }) {
   return (
     <div
-      className={`group hover:bg-gray-100 py-3 px-2 border-b border-gray-300 grid grid-cols-[2fr_1fr_1fr_1fr] items-center ${
-        data.banned ? " bg-red-500 " : " "
-      }`}
+      className={`group hover:bg-gray-100 py-3 px-2 border-b border-gray-300 grid grid-cols-[2fr_1fr_1fr_1fr] items-center`}
     >
       <Link
         href={`/admin/users/${data?.id}`}
@@ -44,7 +43,7 @@ function UserCard({ data }) {
       </Link>
       <div>
         {data.banned ? (
-          <span className="text-secondary rounded-full px-4 py-2 bg-green-100/50 tracking-wide">
+          <span className="text-red-600 rounded-full px-4 py-2 bg-red-100/50 tracking-wide">
             Banned
           </span>
         ) : data.lastActiveAt === null ? (
@@ -75,14 +74,19 @@ function UserCard({ data }) {
       <div className="">
         <div className=" text-gray-400">
           <div className="flex gap-2">
-            <button
+            <Link
+              href={`/admin/users/${data.id}`}
               data-tooltip-id="user-actions-tooltip"
               data-tooltip-content="View Profile"
               className="flex items-center p-2 text-base  text-green-600 gap-2 hover:bg-accent/20 rounded"
             >
               <FaUserCircle />
-            </button>
-            <AdminBanUser userID={data.id} />
+            </Link>
+            {data.banned ? (
+              <AdminUnbanUser userID={data.id} />
+            ) : (
+              <AdminBanUser userID={data.id} />
+            )}
             <AdminDeleteUser userID={data.id} />
           </div>
         </div>
