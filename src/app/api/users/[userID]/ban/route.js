@@ -7,19 +7,18 @@ export async function POST(req) {
     const { searchParams } = new URL(req.url);
     const userID = searchParams.get("userID");
     const { userId } = await auth();
+    //✅ Check if the user is login
     if (!userId) {
       return NextResponse.json(
         { status: "failed", message: "Unauthorized Access" },
         { status: 400 }
       );
     }
-
     // ✅ Ensure user exists
     const existingUser = await (await clerkClient()).users.getUser(userID);
     if (!existingUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-
     await (await clerkClient()).users.banUser(userID);
 
     return NextResponse.json(

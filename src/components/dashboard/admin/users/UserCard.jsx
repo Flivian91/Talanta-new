@@ -2,14 +2,17 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { FaUserCircle } from "react-icons/fa";
-import { FaBan } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
 import AdminDeleteUser from "./AdminDeleteUser";
+import AdminBanUser from "./AdminBanUser";
 
 function UserCard({ data }) {
   return (
-    <div className="group hover:bg-gray-100 py-3 px-2 border-b border-gray-300 grid grid-cols-[2fr_1fr_1fr_1fr] items-center">
+    <div
+      className={`group hover:bg-gray-100 py-3 px-2 border-b border-gray-300 grid grid-cols-[2fr_1fr_1fr_1fr] items-center ${
+        data.banned ? " bg-red-500 " : " "
+      }`}
+    >
       <Link
         href={`/admin/users/${data?.id}`}
         className="flex items-center gap-2"
@@ -40,7 +43,11 @@ function UserCard({ data }) {
         </div>
       </Link>
       <div>
-        {data.lastActiveAt === null ? (
+        {data.banned ? (
+          <span className="text-secondary rounded-full px-4 py-2 bg-green-100/50 tracking-wide">
+            Banned
+          </span>
+        ) : data.lastActiveAt === null ? (
           <span className="text-gray-600 rounded-full px-4 py-2 border border-gray-300 tracking-wide">
             Inactive
           </span>
@@ -75,13 +82,7 @@ function UserCard({ data }) {
             >
               <FaUserCircle />
             </button>
-            <button
-              data-tooltip-id="user-actions-tooltip"
-              data-tooltip-content="Ban User"
-              className="flex items-center p-2 text-base gap-2 text-red-600 hover:bg-accent/20 rounded"
-            >
-              <FaBan />
-            </button>
+            <AdminBanUser userID={data.id} />
             <AdminDeleteUser userID={data.id} />
           </div>
         </div>
