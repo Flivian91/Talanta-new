@@ -1,18 +1,16 @@
 // src/app/admin/users/page.jsx
 "use client";
 import { useEffect, useState } from "react";
-import { FiTrash, FiEdit, FiEye } from "react-icons/fi";
-import SearchUsers from "@/components/dashboard/admin/users/SearchUsers";
 import NoDataFound from "@/components/dashboard/admin/users/NoDataFound ";
 import { useAuth } from "@clerk/nextjs";
 import UserHeader from "@/components/dashboard/admin/users/UserHeader";
 import UsersGridArea from "@/components/layouts/UsersGridArea";
 import Pagination from "@/components/common/Pagination";
+import { useQuery } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export default function UserManagement() {
   const { getToken } = useAuth();
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [query, setQuery] = useState("");
   // Fetch user data
@@ -25,24 +23,26 @@ export default function UserManagement() {
         },
       });
 
-      const data = await res.json();
-      setUsers(data.data.data);
-      setFilteredUsers(data.data.data); // 👈 Set both
+      return await res.json();
     } catch (error) {
       console.log("Error fetching Users", error);
     }
   }
+  const {
+    data: users,
+    isLoading: loadingUsers,
+    error: usersError,
+  } = useQuery({ queryKey: ["Users"], queryFn: fetchUsers });
+  console.log(users?.data?.data);
+  
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
   function handleSearch(q) {
     if (q.trim().length < 2) {
       setFilteredUsers(users);
       return;
     }
 
-    const filtered = users.filter((user) =>
+    const filtered = users?.data?.data.filter((user) =>
       `${user.firstName} ${user.lastName}`
         .toLowerCase()
         .includes(q.toLowerCase())
@@ -55,16 +55,22 @@ export default function UserManagement() {
     handleSearch(query);
   }, [query, users]); // also react when users change
 
+  if (usersError) {
+    console.error("Error Loading user");
+  }
+  console.log(filteredUsers);
+  
+
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Users Management</h1>
       <UserHeader query={query} setQuery={setQuery} onFetch={fetchUsers} />
-      {filteredUsers.length === 0 ? (
+      {filteredUsers?.length === 0 ? (
         <NoDataFound resetSearch={() => setQuery("")} />
       ) : (
-        <UsersGridArea data={filteredUsers} />
+        <UsersGridArea data={filteredUsers} loading={loadingUsers} />
       )}
-      {filteredUsers.length !== 0 && <Pagination />}
+      {filteredUsers?.length !== 0 && <Pagination />}
     </div>
   );
 }

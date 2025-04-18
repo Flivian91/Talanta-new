@@ -1,7 +1,10 @@
 import React from "react";
 import UserCard from "../dashboard/admin/users/UserCard";
+import LoadingUserSkeleton from "../common/LoadingUserSkeleton";
 
-function UsersGridArea({data}) {
+function UsersGridArea({ data, loading }) {
+  console.log(data);
+  
   return (
     <div className="overflow-x-auto bg-stone-100 rounded-t-xl text-sm transition-all duration-300">
       <div className="w-full min-w-[600px] text-xs md:text-sm overflow-hidden">
@@ -12,12 +15,23 @@ function UsersGridArea({data}) {
           <span className="px-2">Actions</span>
         </div>
         <div className="rounded-xl flex flex-col bg-white border border-gray-300 overflow-hidden">
-         {
+          {loading ? (
+            <>
+              <LoadingUserSkeleton />
+              <LoadingUserSkeleton />
+              <LoadingUserSkeleton />
+              <LoadingUserSkeleton />
+              <LoadingUserSkeleton />
+            </>
+          ) : (
+            data.map((data) => <UserCard data={data} key={data.id} />)
+          )}
+          {/* {
           data.map(data => <UserCard data={data} key={data.id}/>)
-         }
+         } */}
+          {}
         </div>
       </div>
-     
     </div>
   );
 }
