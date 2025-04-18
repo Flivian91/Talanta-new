@@ -5,11 +5,15 @@ import { FaUserCircle } from "react-icons/fa";
 import { FaBan } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { Tooltip } from "react-tooltip";
+import AdminDeleteUser from "./AdminDeleteUser";
 
 function UserCard({ data }) {
   return (
     <div className="group hover:bg-gray-100 py-3 px-2 border-b border-gray-300 grid grid-cols-[2fr_1fr_1fr_1fr] items-center">
-      <Link href={`/admin/users/${data?.id}`} className="flex items-center gap-2">
+      <Link
+        href={`/admin/users/${data?.id}`}
+        className="flex items-center gap-2"
+      >
         <Image
           src={`${data?.imageUrl}`}
           width={100}
@@ -20,7 +24,9 @@ function UserCard({ data }) {
         <div className="flex flex-col gap-0.5">
           <h2 className="text-base font-semibold">
             {data?.firstName === null || data.lastName === null ? (
-              <span>{data.emailAddresses.at(0).emailAddress?.split("@").at(0)}</span>
+              <span>
+                {data.emailAddresses.at(0).emailAddress?.split("@").at(0)}
+              </span>
             ) : (
               <div className=" flex items-center gap-1">
                 <span>{data?.firstName}</span>
@@ -76,13 +82,7 @@ function UserCard({ data }) {
             >
               <FaBan />
             </button>
-            <button
-              data-tooltip-id="user-actions-tooltip"
-              data-tooltip-content="Delete User"
-              className="flex items-center p-2 text-lg gap-2 text-red-600 hover:bg-accent/20 rounded"
-            >
-              <MdDelete />
-            </button>
+            <AdminDeleteUser userID={data.id} />
           </div>
         </div>
       </div>

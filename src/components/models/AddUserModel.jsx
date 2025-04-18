@@ -1,145 +1,186 @@
 "use client";
+
+import { useCreateUser } from "@/libs/react-query/mutations/useCreateUser";
 import { useAuth } from "@clerk/nextjs";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-function AddUserModel({ onClose, onFetch }) {
+function AddUserModal({ onClose, onFetch }) {
   const { getToken } = useAuth();
-  const [fname, setFname] = useState("");
-  const [lname, setLname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("user");
-  const [loading, setLoading] = useState(false);
-  function handleSubmit(e) {
-    e.preventDefault();
-    createUser();
-    setFname(" ");
-    setLname("");
-    setEmail("");
-    setPassword("");
-    setRole("user");
-  }
-  async function createUser() {
-    try {
-      setLoading(true);
-      const token = await getToken();
-      const res = await fetch("/api/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          firstName: fname,
-          lastName: lname,
-          email,
-          password,
-          role,
-        }),
-      });
-      const data = await res.json();
+  const { mutateAsync, isPending } = useCreateUser();
+  const [formData, setFormData] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+    password: "",
+    role: "user",
+  });
 
-      if (!res.ok) {
-        toast.error("Failed to Create user");
-      }
-      toast.success("User Created successfully");
+  const [loading, setLoading] = useState(false);
+  const firstInputRef = useRef(null);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const resetForm = () => {
+    setFormData({
+      fname: "",
+      lname: "",
+      email: "",
+      password: "",
+      role: "user",
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = await getToken();
+    const userPayload = {
+      firstName: formData.fname,
+      lastName: formData.lname,
+      email: formData.email,
+      password: formData.password,
+      role: formData.role,
+    };
+
+    try {
+      await mutateAsync({ user: userPayload, token });
+      resetForm();
       onFetch();
       onClose();
-    } catch (error) {
-      console.log("Error Creating User", error);
-      toast.error(error.message);
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.log("Error creating user", err.message);
+      toast.error(err.message || "Something went wrong");
     }
-  }
+  };
+
+  useEffect(() => {
+    const escHandler = (e) => e.key === "Escape" && onClose();
+    document.addEventListener("keydown", escHandler);
+    return () => document.removeEventListener("keydown", escHandler);
+  }, []);
+
   return (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  md:w-1/2 w-full lg:w-1/3  z-50">
-      <div className="bg-white m-1 py-2 shadow border border-gray-400 rounded">
-        <div className="flex items-center justify-between border-b border-gray-300 py-2 px-2">
-          <h1 className="text-sm font-semibold tracking-wider text-gray-700">
-            Create new user
-          </h1>
-          <button onClick={onClose} className="p-1 rounded hover:bg-gray-200">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/20 px-4">
+      <div className="bg-white w-full max-w-lg rounded shadow-xl border border-gray-200 overflow-hidden">
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-lg font-semibold">Add New User</h2>
+          <button onClick={onClose} className="text-gray-500 hover:text-black">
             <FaTimes />
           </button>
         </div>
-        <form
-          onSubmit={(e) => handleSubmit(e)}
-          className="flex flex-col gap-2 px-2 py-4"
-        >
-          <div className="flex items-center gap-3">
-            <div className="flex flex-col w-full">
-              <label htmlFor="fname">FirstName</label>
+
+        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label htmlFor="fname" className="block text-sm font-medium">
+                First Name
+              </label>
               <input
+                ref={firstInputRef}
                 type="text"
-                value={fname}
-                onChange={(e) => setFname(e.target.value)}
                 id="fname"
+                name="fname"
+                value={formData.fname}
+                onChange={handleChange}
                 required
-                className="border rounded px-1 py-2 outline-none"
+                placeholder="John"
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
               />
             </div>
-            <div className="flex flex-col w-full">
-              <label htmlFor="lname">LastName</label>
+            <div>
+              <label htmlFor="lname" className="block text-sm font-medium">
+                Last Name
+              </label>
               <input
                 type="text"
                 id="lname"
+                name="lname"
+                value={formData.lname}
+                onChange={handleChange}
                 required
-                value={lname}
-                onChange={(e) => setLname(e.target.value)}
-                className="border rounded px-1 py-2 outline-none"
+                placeholder="Doe"
+                className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
               />
             </div>
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="email">Email</label>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium">
+              Email Address
+            </label>
             <input
               type="email"
               id="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="border rounded px-1 py-2 outline-none"
+              placeholder="user@example.com"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
             />
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="password">Password</label>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium">
+              Password
+            </label>
             <input
-              type="text"
+              type="password"
               id="password"
-              value={password}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
-              onChange={(e) => setPassword(e.target.value)}
-              className="border rounded px-1 py-2 outline-none"
+              placeholder="••••••••"
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
             />
           </div>
-          <div className="flex flex-col gap-1">
-            <label htmlFor="role">Role</label>
+
+          <div>
+            <label htmlFor="role" className="block text-sm font-medium">
+              Role
+            </label>
             <select
-              name="role"
               id="role"
-              value={role}
-              onChange={(e) => setRole(e.target.value)}
-              className="border rounded px-1 py-2 outline-none"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded focus:outline-none focus:ring"
             >
               <option value="user">User</option>
               <option value="sponsor">Sponsor</option>
               <option value="admin">Admin</option>
             </select>
           </div>
-          <div className="flex items-center justify-between px-2 py-3">
-            <button className="border px-4 py-2 border-gray-300 rounded bg-gray-300">
+
+          <div className="flex justify-between pt-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="border border-gray-300 px-4 py-2 rounded hover:bg-gray-100"
+            >
               Cancel
             </button>
             <button
               type="submit"
-              className={`${
-                loading ? " animate-pulse " : " "
-              }bg-secondary px-4 py-2 text-white text-sm font-semibold tracking-wide rounded`}
+              disabled={isPending}
+              className={`bg-blue-600 text-white px-4 py-2 rounded ${
+                isPending
+                  ? "opacity-70 cursor-not-allowed"
+                  : "hover:bg-blue-700"
+              }`}
             >
-              {loading ? "Creating..." : "Create User"}
+              {isPending ? "Creating..." : "Create User"}
             </button>
           </div>
         </form>
@@ -148,4 +189,4 @@ function AddUserModel({ onClose, onFetch }) {
   );
 }
 
-export default AddUserModel;
+export default AddUserModal;
