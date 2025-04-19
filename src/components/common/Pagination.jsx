@@ -3,7 +3,7 @@ import {
   MdOutlineKeyboardArrowLeft,
   MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
-function Pagination() {
+function Pagination({ limit, setLimit }) {
   return (
     <div className="py-4 px-2 flex items-center justify-between text-sm">
       <div className="flex ic gap-2">
@@ -13,11 +13,13 @@ function Pagination() {
         <select
           name="num"
           id="num"
+          value={limit}
+          onChange={(e) => setLimit(e.target.value)}
           className="border border-gray-300 rounded py-1 px-2 font-mono focus:border-accent active:border-accent outline-accent"
         >
           <option value="10">10</option>
-          <option value="10">15</option>
-          <option value="10">20</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
         </select>
       </div>
       <div className="flex items-center gap-3">

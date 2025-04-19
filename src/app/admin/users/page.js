@@ -14,8 +14,8 @@ export default function UserManagement() {
   const { getToken } = useAuth();
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [query, setQuery] = useState("");
-  const [limit, setLimit] = useState(8)
-  const [offset, setOffset] = useState(1)
+  const [limit, setLimit] = useState(10);
+  const [offset, setOffset] = useState(1);
 
   // Fetch user data
   async function fetchUsers() {
@@ -34,11 +34,17 @@ export default function UserManagement() {
     }
   }
 
+  console.log(limit);
+
   const {
     data: users,
     isLoading: loadingUsers,
     error: usersError,
-  } = useQuery({ queryKey: ["Users"], queryFn: fetchUsers });
+  } = useQuery({
+    queryKey: ["Users"],
+    queryFn: fetchUsers,
+    keepPreviousData: true,
+  });
 
   // Search and filter logic
   function handleSearch(q) {
@@ -57,7 +63,6 @@ export default function UserManagement() {
 
     setFilteredUsers(filtered);
   }
-
   // Initialize filtered users and re-run filtering on query/user updates
   useEffect(() => {
     if (users?.data?.data) {
@@ -95,7 +100,7 @@ export default function UserManagement() {
       ) : (
         <>
           <UsersGridArea data={filteredUsers} loading={loadingUsers} />
-          <Pagination />
+          <Pagination limit={limit} setLimit={setLimit} />
         </>
       )}
     </div>
