@@ -14,12 +14,14 @@ export default function UserManagement() {
   const { getToken } = useAuth();
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [query, setQuery] = useState("");
+  const [limit, setLimit] = useState(8)
+  const [offset, setOffset] = useState(1)
 
   // Fetch user data
   async function fetchUsers() {
     try {
       const token = await getToken();
-      const res = await fetch("/api/users", {
+      const res = await fetch(`/api/users?limit=${limit}&offset=${offset}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

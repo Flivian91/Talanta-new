@@ -8,8 +8,16 @@ import { v4 as uuidv4 } from "uuid";
 
 export async function GET(req) {
   try {
-    // Only Admin can check fo this
-    const users = await (await clerkClient()).users.getUserList();
+    const { searchParams } = new URL(req.url);
+
+    // Ensure fallback values and convert to numbers
+    const limit = parseInt(searchParams.get("limit") || "10");
+    const offset = parseInt(searchParams.get("offset") || "0");
+
+    const users = await (await clerkClient()).users.getUserList({
+      limit,
+      offset,
+    });
 
     return NextResponse.json(
       { status: "success", data: users },
@@ -19,6 +27,7 @@ export async function GET(req) {
     return handleApiError(error);
   }
 }
+
 // Create New User
 // BODY: id, fistname, lastName, emailAddress, PhoneNumber. password, publicMetadata='user'
 export async function POST(req) {
@@ -29,7 +38,7 @@ export async function POST(req) {
     const { firstName, lastName, email, password, role } = validatedData;
     const newUser = await (
       await clerkClient()
-    ).users.createUser({ 
+    ).users.createUser({
       externalId: uuidv4(),
       firstName,
       lastName,

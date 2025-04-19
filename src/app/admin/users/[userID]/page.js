@@ -62,7 +62,7 @@ export default function Page() {
           </div>
           <div className="flex items-center justify-between">
             <AdminUserHeader user={user?.data} />
-            <AdminUserAction />
+            <AdminUserAction userID={userID} user={user?.data} />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[2fr_300px]  gap-3">
