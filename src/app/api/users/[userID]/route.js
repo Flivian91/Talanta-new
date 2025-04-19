@@ -3,18 +3,29 @@
 import { handleApiError } from "@/middleware/errorHandler";
 import User from "@/models/user";
 import { updateUserSchema } from "@/validator/users/userSchema";
-import { clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 // Gets a Single User
 export async function GET(req, segmentData) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
+      );
+    }
     const { userID } = await segmentData.params;
+
     const user = await (await clerkClient()).users.getUser(userID);
     if (!user)
       return NextResponse.json({ message: "User not found" }, { status: 404 });
 
-    return NextResponse.json({ status: "success", user }, { status: 200 });
+    return NextResponse.json(
+      { status: "success", data: user },
+      { status: 200 }
+    );
   } catch (error) {
     return handleApiError(error);
   }
