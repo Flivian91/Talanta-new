@@ -1,7 +1,9 @@
+import dayjs from "dayjs";
 import Image from "next/image";
 import React from "react";
 
 function AdminUserHeader({ user }) {
+  const formatedDate = dayjs(user?.lastSignInAt).format("DD MMMM, YYYY");
   return (
     <div className="flex items-center gap-3">
       <Image
@@ -13,10 +15,21 @@ function AdminUserHeader({ user }) {
       />
       <div className="flex flex-col">
         <h1 className="text-xl sm:text-2xl font-semibold tracking-wide space-x-2">
-          <span>{user?.firstName}</span>
-          <span>{user?.lastName}</span>
+
+            {user?.firstName === null || user.lastName === null ? (
+              <span>
+                {user.emailAddresses.at(0).emailAddress?.split("@").at(0)}
+              </span>
+            ) : (
+              <div className=" flex items-center gap-1">
+                <span>{user?.firstName}</span>
+                <span>{user?.lastName}</span>
+              </div>
+            )}
         </h1>
-        <p className="text-xs font-medium text-gray-500">Never Active</p>
+        <p className="text-xs font-medium text-gray-500">
+          {user.lastSignInAt === null ? "Never Active" : formatedDate}
+        </p>
       </div>
     </div>
   );

@@ -4,16 +4,16 @@ import AdminUserAction from "@/components/dashboard/admin/users/AdminUserAction"
 import AdminUserHeader from "@/components/dashboard/admin/users/AdminUserHeader";
 import AdminUserInformations from "@/components/dashboard/admin/users/AdminUserInformations";
 import AdminUserMinorDetails from "@/components/dashboard/admin/users/AdminUserMinorDetails";
-import { auth } from "@clerk/nextjs/server";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
 import ProfileSkeleton from "@/components/common/ProfileSkeleton";
+import { useEffect } from "react";
 
 export default function Page() {
   const { userID } = useParams();
   const { getToken } = useAuth();
-  const {back} = useRouter()
+  const { back } = useRouter();
 
   // Fetch single user data
   async function fetchUserData() {
@@ -45,12 +45,17 @@ export default function Page() {
   if (isLoading) {
     return <ProfileSkeleton />;
   }
+
   return (
     <div>
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-4 border-b border-gray-300/60 py-2">
+          {/* Navigate back */}
           <div>
-            <button onClick={()=> back()} className="flex items-center gap-2 border border-gray-300 px-2 py-1 rounded text-gray-600 text-sm hover:shadow">
+            <button
+              onClick={() => back()}
+              className="flex items-center gap-2 border border-gray-300 px-2 py-1 rounded text-gray-600 text-sm hover:shadow"
+            >
               <BsArrowLeft />
               <span className="text-sm font-semibold">Back</span>
             </button>
