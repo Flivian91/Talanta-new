@@ -1,14 +1,12 @@
-import Image from "next/image";
 import { BsArrowLeft } from "react-icons/bs";
-import { MdDelete } from "react-icons/md";
-import { RxCaretDown } from "react-icons/rx";
-import { FaBan } from "react-icons/fa";
 import AdminUserAction from "@/components/dashboard/admin/users/AdminUserAction";
 import AdminUserHeader from "@/components/dashboard/admin/users/AdminUserHeader";
 import AdminUserInformations from "@/components/dashboard/admin/users/AdminUserInformations";
 import AdminUserMinorDetails from "@/components/dashboard/admin/users/AdminUserMinorDetails";
 
-export default function Page() {
+export default async function Page({ params }) {
+  const { userID } = await params;
+
   return (
     <div>
       <div className="flex flex-col gap-5">
@@ -24,9 +22,9 @@ export default function Page() {
             <AdminUserAction />
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-[2fr_300px] gap-3">
-        <AdminUserInformations />
-        <AdminUserMinorDetails/>
+        <div className="grid grid-cols-1 md:grid-cols-[2fr_300px]  gap-3">
+          <AdminUserInformations />
+          <AdminUserMinorDetails />
         </div>
       </div>
     </div>
