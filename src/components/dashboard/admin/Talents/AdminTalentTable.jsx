@@ -1,7 +1,10 @@
-import React from "react";
+import { useSingleUser } from "@/hooks/useSingleUser";
+import { useAuth } from "@clerk/nextjs";
+import React, { useEffect, useState } from "react";
 import { FiCheck, FiUser, FiX } from "react-icons/fi";
+import { MdGeneratingTokens } from "react-icons/md";
 
-function AdminTalentTable({displayedTalents}) {
+function AdminTalentTable({ displayedTalents }) {
   // Get User with Cleck ID as shown
   return (
     <div className="overflow-x-auto bg-white shadow-md rounded-sm">
@@ -28,10 +31,8 @@ function AdminTalentTable({displayedTalents}) {
                 className="border-b hover:bg-gray-100 transition"
               >
                 <td className="p-3">{talent.title}</td>
-                <td className="p-3 flex items-center gap-2">
-                  <FiUser className="text-gray-500" />
-                  <span>{talent.clerkID}</span>
-                </td>
+                <UserName user={talent} />
+
                 <td className="p-3">
                   {talent.approved ? (
                     <span className="text-green-600 font-semibold">
@@ -69,3 +70,26 @@ function AdminTalentTable({displayedTalents}) {
 }
 
 export default AdminTalentTable;
+
+// User name
+function UserName({ user }) {
+  const { getToken } = useAuth();
+  const [token, setToken] = useState(null);
+  useEffect(() => {
+    async function loadToken() {
+      const t = await getToken();
+      setToken(t);
+    }
+    loadToken();
+  }, [getToken]);
+  const { data } = useSingleUser(token, "user_2vzDfJd6VYcQz9h4LW0u0XSERqZ");
+  console.log(data);
+  
+
+  return (
+    <td className="p-3 flex items-center gap-2">
+      <FiUser className="text-gray-500" />
+      <span>{data?.data.firstName}</span>
+    </td>
+  );
+}

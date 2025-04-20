@@ -14,7 +14,6 @@ export default function AdminUserInformations({ data, userID }) {
   const { user } = useUser();
   const { getToken } = useAuth();
   const { mutateAsync: updateProfile, isPending } = useUpdateProfile();
-  console.log(userID)
 
   const handleSave = async () => {
     const token = await getToken();

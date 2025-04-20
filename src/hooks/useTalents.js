@@ -1,7 +1,5 @@
 // hooks/useTalents.js
 import { useQuery } from "@tanstack/react-query";
-import { auth } from "@clerk/nextjs/server";
-import { useAuth } from "@clerk/nextjs";
 
 const fetchTalents = async ({ queryKey }) => {
   const [_key, { limit, page }] = queryKey;

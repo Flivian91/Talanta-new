@@ -8,37 +8,26 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@clerk/nextjs";
 import { useParams, useRouter } from "next/navigation";
 import ProfileSkeleton from "@/components/common/ProfileSkeleton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { useSingleUser } from "@/hooks/useSingleUser";
 
 export default function Page() {
   const { userID } = useParams();
   const { getToken } = useAuth();
+  const [token, setToken] = useState(null)
   const { back } = useRouter();
-
-  // Fetch single user data
-  async function fetchUserData() {
-    try {
-      const token = await getToken();
-      const res = await fetch(`/api/users/${userID}`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!res.ok) throw new Error("Failed to Get User");
-      return await res.json();
-    } catch (error) {
-      console.error("Error fetching user data", error.message);
+  useEffect(()=> {
+    async function loadToken(){
+      const t = await getToken()
+      setToken(t)
     }
-  }
+    loadToken()
+  }, [getToken])
   const {
     data: user,
     isLoading,
     error: userError,
-  } = useQuery({
-    queryKey: ["SingleUser"],
-    queryFn: fetchUserData,
-  });
+  } = useSingleUser(token, userID);
   if (userError) {
     console.log("Failed to fetch User Data");
   }
