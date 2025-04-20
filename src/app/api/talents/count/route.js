@@ -8,20 +8,20 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   try {
     // Ensure User ID Exisits
-    const { userId, sessionClaims } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { status: "error", message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
-    const role = await sessionClaims?.metadata?.role;
-    if (role !== "admin") {
-      return NextResponse.json(
-        { status: "error", message: "Unauthorized" },
-        { status: 401 }
-      );
-    }
+    // const { userId, sessionClaims } = await auth();
+    // if (!userId) {
+    //   return NextResponse.json(
+    //     { status: "error", message: "Unauthorized" },
+    //     { status: 401 }
+    //   );
+    // }
+    // const role = await sessionClaims?.metadata?.role;
+    // if (role !== "admin") {
+    //   return NextResponse.json(
+    //     { status: "error", message: "Unauthorized" },
+    //     { status: 401 }
+    //   );
+    // }
     await connectDB();
     const talentsCount = await Talent.countDocuments();
     return NextResponse.json(

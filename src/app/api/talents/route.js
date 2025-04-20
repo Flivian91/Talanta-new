@@ -67,7 +67,7 @@ export async function POST(req) {
 
     const { searchParams } = new URL(req.url);
     const userID = searchParams.get("userID");
-    const clerkID = searchParams.get("userID");
+    const clerkID = searchParams.get("clerkID");
     // TODO: get currently logged user
     // if (!userID && Types.ObjectId.isValid(userID)) {
     //   return NextResponse.json(
@@ -100,9 +100,10 @@ export async function POST(req) {
     }
     // Validate Talent data
     const body = await req.json();
+    
     // const {userId} = await auth()
     // This clerk ID
-    const data = { ...body, clerkID };
+    const data = { ...body, clerkID, userID };
     const validatedData = talentSchema.parse(data);
     // Validate talent Title
     const existingTalent = await Talent.findOne({ title: validatedData.title });

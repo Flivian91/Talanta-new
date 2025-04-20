@@ -1,24 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
-import { FiCheck, FiX, FiUser } from "react-icons/fi";
-import { allTalents } from "@/components/data/talents";
-import ReactPaginate from "react-paginate";
 import AdminTalentHeader from "@/components/dashboard/admin/Talents/AdminTalentHeader";
 import AdminTalentTable from "@/components/dashboard/admin/Talents/AdminTalentTable";
 import Pagination from "@/components/common/Pagination";
+import LoadingTalentSkeleton from "@/components/common/LoadingTalentSkeleton";
+import { toast } from "react-toastify";
+import { useTalents } from "@/hooks/useTalents";
+import { useAuth } from "@clerk/nextjs";
+import { useTalentsCOunt } from "@/hooks/useTalentCount";
 
 export default function TalentManagement() {
-  const [talents, setTalents] = useState(allTalents);
+  // const [talents, setTalents] = useState([]);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
-
-  // const [currentPage, setCurrentPage] = useState(0);
-  // const talentsPerPage = 5; // Adjust per page limit
+  // Fetch Talents Data
+  const { data: talents, isLoading, error } = useTalents({ limit, page });
+  // Total talents Count
+  const { data: talentCount } = useTalentsCOunt();
 
   // ✅ Search Function
-  const filteredTalents = talents.filter((talent) =>
+  const filteredTalents = talents?.data.filter((talent) =>
     talent.title.toLowerCase().includes(query.toLowerCase())
   );
 
@@ -26,32 +29,20 @@ export default function TalentManagement() {
   const finalTalents =
     filter === "all"
       ? filteredTalents
-      : filteredTalents.filter((talent) => {
+      : filteredTalents?.filter((talent) => {
           return filter === "approved" ? talent.approved : !talent.approved;
         });
 
-  // ✅ Pagination Logic
-  function handleSearch(q) {
-    if (q.length < 1) {
-      setTalents(allTalents);
-    } else {
-      setTalents(
-        allTalents.filter((talent) =>
-          talent.title.toLowerCase().includes(q.toLowerCase())
-        )
-      );
-    }
-  }
-
-  useEffect(
-    function () {
-      handleSearch(query);
-    },
-    [query]
-  );
   useEffect(() => {
     setPage(1);
   }, [limit]);
+  if (isLoading) {
+    return <LoadingTalentSkeleton />;
+  }
+  if (error) {
+    console.log("Failed to fetch Talents");
+    toast.error("Failed to fetch Talents");
+  }
 
   return (
     <div className="py-3 bg-gray-50 min-h-screen">
@@ -76,22 +67,8 @@ export default function TalentManagement() {
         setLimit={setLimit}
         page={page}
         setPage={setPage}
-        total={30}
+        total={talentCount?.data}
       />
-      {/* 
-      <div className="flex justify-center mt-6">
-        <ReactPaginate
-          previousLabel={"← Previous"}
-          nextLabel={"Next →"}
-          pageCount={pageCount}
-          onPageChange={({ selected }) => setCurrentPage(selected)}
-          containerClassName="flex gap-2 text-sm"
-          pageLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
-          previousLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
-          nextLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
-          activeClassName="bg-blue-500 text-white"
-        />
-      </div> */}
     </div>
   );
 }

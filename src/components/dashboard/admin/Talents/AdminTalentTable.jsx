@@ -2,6 +2,7 @@ import React from "react";
 import { FiCheck, FiUser, FiX } from "react-icons/fi";
 
 function AdminTalentTable({displayedTalents}) {
+  // Get User with Cleck ID as shown
   return (
     <div className="overflow-x-auto bg-white shadow-md rounded-sm">
       <table className="w-full min-w-[600px] border-collapse">
@@ -14,7 +15,7 @@ function AdminTalentTable({displayedTalents}) {
           </tr>
         </thead>
         <tbody>
-          {displayedTalents.length === 0 ? (
+          {displayedTalents?.length === 0 ? (
             <tr>
               <td colSpan="4" className="text-center py-6 text-gray-600">
                 No talents found.
@@ -23,13 +24,13 @@ function AdminTalentTable({displayedTalents}) {
           ) : (
             displayedTalents.map((talent) => (
               <tr
-                key={talent.id}
+                key={talent._id}
                 className="border-b hover:bg-gray-100 transition"
               >
                 <td className="p-3">{talent.title}</td>
                 <td className="p-3 flex items-center gap-2">
                   <FiUser className="text-gray-500" />
-                  <span>{talent.userId}</span>
+                  <span>{talent.clerkID}</span>
                 </td>
                 <td className="p-3">
                   {talent.approved ? (
