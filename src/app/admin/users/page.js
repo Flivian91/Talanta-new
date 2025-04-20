@@ -38,7 +38,6 @@ export default function UserManagement() {
     }
   }
 
-  console.log(limit);
 
   const {
     data: users,
