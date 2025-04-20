@@ -131,7 +131,6 @@ export async function PATCH(req, segmentData) {
 // Delete talent
 export async function DELETE(req, segmentData) {
   try {
-    // Get searchParams
     // TODO: Get Currently login from clerk
     const { userId, sessionClaims } = await auth();
     if (!userId) {

@@ -2,6 +2,7 @@ import { useApproveTalent } from "@/hooks/useApproveTalent";
 import { useDeleteTalent } from "@/hooks/useDeleteTalent";
 import { useRejectTalent } from "@/hooks/useRejectTalent";
 import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
 import { React } from "react";
 import { FaEdit } from "react-icons/fa";
 import { FiCheck, FiDelete, FiX } from "react-icons/fi";
@@ -88,12 +89,13 @@ function AdminTalentTable({ displayedTalents }) {
                       <FiX size={18} />
                     </button>
                   )}
-                  <button
-                    onClick={() => rejectTalent(talent._id)}
+                  <Link
+                    role="button"
+                    href={`/admin/talents/${talent._id}`}
                     className="text-green-600 hover:bg-green-100 px-3 py-2 flex items-center justify-center rounded-md transition"
                   >
                     <FaEdit size={18} />
-                  </button>
+                  </Link>
                   <button
                     disabled={deletingTalent}
                     onClick={() => handleDelete(talent._id)}
