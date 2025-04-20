@@ -1,22 +1,22 @@
 import Talent from "@/models/talent";
 import connectDB from "@/utils/db";
 import { talentUpdateSchema } from "@/validator/talents/talentSchema";
+import { auth } from "@clerk/nextjs/server";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
 // GET single Talent, UPDATE and DELETE
 export async function GET(req, segmentData) {
   try {
-    // Get searchParams
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    const { talentID } = await segmentData.params;
-    if (!userID && !Types.ObjectId.isValid(userID)) {
+    //TODO; Get User from the current session
+    const { userId } = await auth();
+    if (!userId) {
       return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing User ID" },
-        { status: 400 }
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
       );
     }
+    const { talentID } = await segmentData.params;
     if (!talentID && !Types.ObjectId.isValid(talentID)) {
       return NextResponse.json(
         { status: "failed", message: "Invalid or Missing Talent ID" },
@@ -51,32 +51,23 @@ export async function GET(req, segmentData) {
 // Update talent
 export async function PATCH(req, segmentData) {
   try {
-    // Get searchParams
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    const clerkID = searchParams.get("clerkID");
-    const { talentID } = await segmentData.params;
-    if (!userID && !Types.ObjectId.isValid(userID)) {
+    // Get Currently logged in User
+    const { userId, sessionClaims } = await auth();
+    if (!userId) {
       return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing User ID" },
-        { status: 400 }
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
       );
     }
+    // Get talent ID from URL
+    const { talentID } = await segmentData.params;
     if (!talentID && !Types.ObjectId.isValid(talentID)) {
       return NextResponse.json(
         { status: "failed", message: "Invalid or Missing Talent ID" },
         { status: 400 }
       );
     }
-    if (!clerkID) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Invalid or Missing Clerk ID",
-        },
-        { status: 400 }
-      );
-    }
+
     // Connect to the database
     await connectDB();
     const talent = await Talent.findById(talentID);
@@ -84,6 +75,15 @@ export async function PATCH(req, segmentData) {
       return NextResponse.json(
         { status: "failed", message: "No Talent Found" },
         { status: 400 }
+      );
+    }
+    const role = await sessionClaims?.publicMetadata?.role;
+
+    // TODO: Ensure only admin and owner of the Talent can Delete
+    if (talent.clerkID.toString() !== userId && role !== "admin") {
+      return NextResponse.json(
+        { status: "failed", message: "Permission denied" },
+        { status: 403 }
       );
     }
     const body = await req.json();
@@ -102,11 +102,7 @@ export async function PATCH(req, segmentData) {
         { status: 400 }
       );
     }
-    const role = "admin";
-    // TODO: Ensure only admin and owner of the Talent can Delete
-    if (talent.clerkID.toString() !== clerkID && role !== "admin") {
-      return NextResponse.json({ error: "Permission denied" }, { status: 403 });
-    }
+
     const updatedTalent = await Talent.findByIdAndUpdate(
       talentID,
       validatedData,
@@ -137,28 +133,17 @@ export async function DELETE(req, segmentData) {
   try {
     // Get searchParams
     // TODO: Get Currently login from clerk
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    const clerkID = searchParams.get("clerkID");
-    const { talentID } = await segmentData.params;
-    if (!userID && !Types.ObjectId.isValid(userID)) {
+    const { userId, sessionClaims } = await auth();
+    if (!userId) {
       return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing User ID" },
-        { status: 400 }
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
       );
     }
+    const { talentID } = await segmentData.params;
     if (!talentID && !Types.ObjectId.isValid(talentID)) {
       return NextResponse.json(
         { status: "failed", message: "Invalid or Missing Talent ID" },
-        { status: 400 }
-      );
-    }
-    if (!clerkID) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Invalid or Missing Clerk ID",
-        },
         { status: 400 }
       );
     }
@@ -171,11 +156,15 @@ export async function DELETE(req, segmentData) {
         { status: 400 }
       );
     }
-    const role = "admin";
+    const role = await sessionClaims?.metadata?.role;
     // TODO: Ensure only admin and owner of the Talent can Delete
-    if (talent.clerkID.toString() !== clerkID && role !== "admin") {
-      return NextResponse.json({ error: "Permission denied" }, { status: 403 });
+    if (talent.clerkID.toString() !== userId && role !== "admin") {
+      return NextResponse.json(
+        { status: "failed", message: "Permission denied" },
+        { status: 403 }
+      );
     }
+
     const deletedTalent = await Talent.findByIdAndDelete(talentID);
     return NextResponse.json(
       {
