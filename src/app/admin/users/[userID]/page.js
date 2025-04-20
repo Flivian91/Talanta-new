@@ -66,7 +66,7 @@ export default function Page() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[2fr_300px]  gap-3">
-          <AdminUserInformations />
+          <AdminUserInformations data={user?.data} userID={userID} />
           <AdminUserMinorDetails user={user?.data} />
         </div>
       </div>

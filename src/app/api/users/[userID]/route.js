@@ -1,7 +1,6 @@
 // Get User by the ID.
 // PATCH user by ID
 import { handleApiError } from "@/middleware/errorHandler";
-import User from "@/models/user";
 import { updateUserSchema } from "@/validator/users/userSchema";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -33,6 +32,13 @@ export async function GET(req, segmentData) {
 // Update User Data
 export async function PATCH(req, segmentData) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
+      );
+    }
     const { userID } = await segmentData.params;
     const body = await req.json();
 
@@ -44,7 +50,7 @@ export async function PATCH(req, segmentData) {
     if (!existingUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
-
+    // await connectDB()
     // ✅ Update only provided fields
     const updatedUser = await (
       await clerkClient()
@@ -52,7 +58,7 @@ export async function PATCH(req, segmentData) {
       ...validatedData,
       publicMetadata: { role: validatedData.role }, // Ensure metadata is properly updated
     });
-    await User.findOneAndUpdate({ clerkID: userID }, { ...validatedData });
+    // await User.findOneAndUpdate({ clerkID: userID }, { ...validatedData });
     return NextResponse.json(
       { message: "User updated successfully", updatedUser },
       { status: 200 }

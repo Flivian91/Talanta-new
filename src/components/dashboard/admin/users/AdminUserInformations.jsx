@@ -1,23 +1,57 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaExclamationTriangle } from "react-icons/fa";
+import { useAuth, useUser } from "@clerk/nextjs";
+import { useUpdateProfile } from "@/libs/react-query/mutations/useUpdateProfile";
 
-export default function ProfileSection() {
-  const [firstName, setFirstName] = useState("John");
-  const [lastName, setLastName] = useState("Doe");
-  const [avatar, setAvatar] = useState("/default-avatar.png"); // Change to your actual image path
+export default function AdminUserInformations({ data, userID }) {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [avatar, setAvatar] = useState(""); // Change to your actual image path
   const [isEditing, setIsEditing] = useState(false);
   const [role, setRole] = useState("");
+  const { user } = useUser();
+  const { getToken } = useAuth();
+  const { mutateAsync: updateProfile, isPending } = useUpdateProfile();
+  console.log(userID)
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-
-      setAvatar(imageUrl);
+  const handleSave = async () => {
+    const token = await getToken();
+    try {
+      await updateProfile({
+        token,
+        payload: {
+          firstName,
+          lastName,
+          role,
+        },
+        userID
+      });
+      setIsEditing(false);
+    } catch (err) {
+      console.error("Error saving profile", err);
     }
   };
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        await user.setProfileImage({ file });
+        const imageUrl = URL.createObjectURL(file);
+        setAvatar(imageUrl);
+      } catch (err) {
+        console.error("Error uploading image:", err);
+        toast.error("Failed to upload profile picture");
+      }
+    }
+  };
+  useEffect(() => {
+    setAvatar(data?.imageUrl);
+    setFirstName(data?.firstName);
+    setLastName(data?.lastName);
+  }, [data]);
 
   return (
     <div className="bg-gray-50 rounded-xl shadow-md">
@@ -35,7 +69,7 @@ export default function ProfileSection() {
         <div className="flex flex-col items-center">
           <div className="w-20 h-20 rounded-full overflow-hidden border">
             <Image
-              src={avatar}
+              src={avatar || data?.imageUrl}
               alt="Avatar"
               width={100}
               height={100}
@@ -48,7 +82,7 @@ export default function ProfileSection() {
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={handleAvatarChange}
+              onChange={(e) => handleAvatarChange(e)}
             />
           </label>
           <p className="text-xs text-gray-400 mt-2 text-center">
@@ -112,7 +146,7 @@ export default function ProfileSection() {
                 <h3 className="text-base font-semibold tracking-wide">
                   role :
                 </h3>
-                <span className="font-mono tracking-wide">"sponsor"</span>
+                <span className="font-mono tracking-wide">{`${data?.publicMetadata?.role}`}</span>
               </div>
 
               <button
@@ -125,8 +159,15 @@ export default function ProfileSection() {
           )}
 
           <div className="flex items-center justify-center">
-            <button className="bg-secondary text-white px-4 py-2 rounded">
-              Save changes
+            <button
+              onClick={() => handleSave()}
+              disabled={isPending}
+              className="bg-secondary text-white px-4 py-2 rounded disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isPending && (
+                <p className="w-4 h-4 rounded-full border-t border-b border-white animate-spin"></p>
+              )}
+              <span>{isPending ? "Saving..." : "Save Changes"}</span>
             </button>
           </div>
         </div>
