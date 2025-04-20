@@ -26,17 +26,13 @@ function UserHeader({ query, setQuery, onFetch }) {
           className=" flex-1 py-1 caret-accent text-base font-mono outline-none focus:outline-none border-none bg-transparent"
         />
       </div>
-      <div className="flex items-center justify-between sm:gap-3 w-full sm:w-72">
+      <div className="">
         <button
           onClick={() => setIsOpen(true)}
           className="flex items-center text-sm justify-center gap-2 px-4 py-2 rounded bg-secondary text-white"
         >
           <FaPlus />
           <span>Add User</span>
-        </button>
-        <button className="flex items-center text-sm justify-center gap-2 px-4 py-2 rounded border border-secondary text-secondary">
-          <FiCloudSnow />
-          <span>Download CSV</span>
         </button>
       </div>
     </div>
