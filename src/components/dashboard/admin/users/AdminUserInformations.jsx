@@ -146,7 +146,7 @@ export default function AdminUserInformations({ data, userID }) {
                 <h3 className="text-base font-semibold tracking-wide">
                   role :
                 </h3>
-                <span className="font-mono tracking-wide">{`${data?.publicMetadata?.role}`}</span>
+                <span className="font-mono tracking-wide">{`"${data?.publicMetadata?.role}"`}</span>
               </div>
 
               <button
