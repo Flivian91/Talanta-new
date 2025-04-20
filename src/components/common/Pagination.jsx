@@ -44,14 +44,14 @@ function Pagination({ limit, setLimit, total, page, setPage }) {
           <button
             onClick={handlePrev}
             disabled={page === 1}
-            className="p-1 text-lg hover:bg-gray-200 rounded disabled:text-gray-400"
+            className="p-1 text-lg hover:bg-gray-200 rounded disabled:text-gray-400 disabled:cursor-not-allowed"
           >
             <MdOutlineKeyboardArrowLeft />
           </button>
           <button
             onClick={handleNext}
             disabled={page === totalPages}
-            className="p-1 text-lg hover:bg-gray-200 rounded disabled:text-gray-400"
+            className="p-1 text-lg hover:bg-gray-200 rounded disabled:text-gray-400 disabled:cursor-not-allowed"
           >
             <MdOutlineKeyboardArrowRight />
           </button>

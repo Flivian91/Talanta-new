@@ -4,13 +4,18 @@ import { FiCheck, FiX, FiUser } from "react-icons/fi";
 import { allTalents } from "@/components/data/talents";
 import ReactPaginate from "react-paginate";
 import AdminTalentHeader from "@/components/dashboard/admin/Talents/AdminTalentHeader";
+import AdminTalentTable from "@/components/dashboard/admin/Talents/AdminTalentTable";
+import Pagination from "@/components/common/Pagination";
 
 export default function TalentManagement() {
   const [talents, setTalents] = useState(allTalents);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
-  const [currentPage, setCurrentPage] = useState(0);
-  const talentsPerPage = 5; // Adjust per page limit
+  const [limit, setLimit] = useState(10);
+  const [page, setPage] = useState(1);
+
+  // const [currentPage, setCurrentPage] = useState(0);
+  // const talentsPerPage = 5; // Adjust per page limit
 
   // ✅ Search Function
   const filteredTalents = talents.filter((talent) =>
@@ -26,12 +31,6 @@ export default function TalentManagement() {
         });
 
   // ✅ Pagination Logic
-  const pageCount = Math.ceil(finalTalents.length / talentsPerPage);
-  const displayedTalents = finalTalents.slice(
-    currentPage * talentsPerPage,
-    (currentPage + 1) * talentsPerPage
-  );
-
   function handleSearch(q) {
     if (q.length < 1) {
       setTalents(allTalents);
@@ -50,6 +49,9 @@ export default function TalentManagement() {
     },
     [query]
   );
+  useEffect(() => {
+    setPage(1);
+  }, [limit]);
 
   return (
     <div className="py-3 bg-gray-50 min-h-screen">
@@ -66,84 +68,30 @@ export default function TalentManagement() {
       />
 
       {/* 🏆 Talent Table */}
-      <div className="overflow-x-auto bg-white shadow-md rounded-sm">
-        <table className="w-full min-w-[600px] border-collapse">
-          <thead className="bg-blue-500 text-white">
-            <tr>
-              <th className="p-3 text-left">Title</th>
-              <th className="p-3 text-left">User</th>
-              <th className="p-3 text-left">Status</th>
-              <th className="p-3 text-center">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {displayedTalents.length === 0 ? (
-              <tr>
-                <td colSpan="4" className="text-center py-6 text-gray-600">
-                  No talents found.
-                </td>
-              </tr>
-            ) : (
-              displayedTalents.map((talent) => (
-                <tr
-                  key={talent.id}
-                  className="border-b hover:bg-gray-100 transition"
-                >
-                  <td className="p-3">{talent.title}</td>
-                  <td className="p-3 flex items-center gap-2">
-                    <FiUser className="text-gray-500" />
-                    <span>{talent.userId}</span>
-                  </td>
-                  <td className="p-3">
-                    {talent.approved ? (
-                      <span className="text-green-600 font-semibold">
-                        Approved
-                      </span>
-                    ) : (
-                      <span className="text-yellow-500 font-semibold">
-                        Pending
-                      </span>
-                    )}
-                  </td>
-                  <td className="p-3 flex justify-center gap-4">
-                    {!talent.approved && (
-                      <button
-                        onClick={() => approveTalent(talent.$id)}
-                        className="text-green-600 hover:bg-green-100 px-3 py-2 rounded-md transition"
-                      >
-                        <FiCheck size={18} />
-                      </button>
-                    )}
-                    <button
-                      onClick={() => rejectTalent(talent.$id)}
-                      className="text-red-600 hover:bg-red-100 px-3 py-2 rounded-md transition"
-                    >
-                      <FiX size={18} />
-                    </button>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <AdminTalentTable displayedTalents={finalTalents} />
 
       {/* 📌 Pagination */}
-      {finalTalents.length > talentsPerPage && (
-        <div className="flex justify-center mt-6">
-          <ReactPaginate
-            previousLabel={"← Previous"}
-            nextLabel={"Next →"}
-            pageCount={pageCount}
-            onPageChange={({ selected }) => setCurrentPage(selected)}
-            containerClassName="flex gap-2 text-sm"
-            pageLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
-            previousLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
-            nextLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
-            activeClassName="bg-blue-500 text-white"
-          />
-        </div>
-      )}
+      <Pagination
+        limit={limit}
+        setLimit={setLimit}
+        page={page}
+        setPage={setPage}
+        total={30}
+      />
+      {/* 
+      <div className="flex justify-center mt-6">
+        <ReactPaginate
+          previousLabel={"← Previous"}
+          nextLabel={"Next →"}
+          pageCount={pageCount}
+          onPageChange={({ selected }) => setCurrentPage(selected)}
+          containerClassName="flex gap-2 text-sm"
+          pageLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
+          previousLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
+          nextLinkClassName="px-3 py-1 border rounded-md hover:bg-blue-100"
+          activeClassName="bg-blue-500 text-white"
+        />
+      </div> */}
     </div>
   );
 }
