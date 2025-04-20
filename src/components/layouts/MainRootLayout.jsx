@@ -21,7 +21,7 @@ export default function MainRootLayout({ children }) {
           theme="colored"
         />
       </GlobalProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
+      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </QueryClientProvider>
   );
 }

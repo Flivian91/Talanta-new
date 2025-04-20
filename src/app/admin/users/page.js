@@ -15,17 +15,21 @@ export default function UserManagement() {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [query, setQuery] = useState("");
   const [limit, setLimit] = useState(10);
-  const [offset, setOffset] = useState(1);
+  const [page, setPage] = useState(1);
+  const realOffset = (page - 1) * limit;
 
   // Fetch user data
   async function fetchUsers() {
     try {
       const token = await getToken();
-      const res = await fetch(`/api/users?limit=${limit}&offset=${offset}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        `/api/users?limit=${limit}&offset=${realOffset}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       return await res.json();
     } catch (error) {
@@ -41,9 +45,9 @@ export default function UserManagement() {
     isLoading: loadingUsers,
     error: usersError,
   } = useQuery({
-    queryKey: ["Users"],
+    queryKey: ["Users", limit, page],
     queryFn: fetchUsers,
-    keepPreviousData: true,
+    keepPreviousData: true, // Optional: Keeps the last page while loading new one
   });
 
   // Search and filter logic
@@ -69,6 +73,9 @@ export default function UserManagement() {
       handleSearch(query);
     }
   }, [query, users]);
+  useEffect(() => {
+    setPage(1); // reset to first page if limit changes
+  }, [limit]);
 
   if (usersError) {
     console.error("Failed to load users. Please try again");
@@ -100,7 +107,13 @@ export default function UserManagement() {
       ) : (
         <>
           <UsersGridArea data={filteredUsers} loading={loadingUsers} />
-          <Pagination limit={limit} setLimit={setLimit} />
+          <Pagination
+            limit={limit}
+            setLimit={setLimit}
+            total={users?.data?.totalCount || 0}
+            page={page}
+            setPage={setPage}
+          />
         </>
       )}
     </div>

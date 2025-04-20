@@ -14,11 +14,11 @@ export async function GET(req) {
     const limit = parseInt(searchParams.get("limit") || "10");
     const offset = parseInt(searchParams.get("offset") || "0");
 
-    const realOffset = (offset -1) * limit
-
-    const users = await (await clerkClient()).users.getUserList({
+    const users = await (
+      await clerkClient()
+    ).users.getUserList({
       limit,
-      offset:realOffset,
+      offset,
     });
 
     return NextResponse.json(

@@ -67,7 +67,7 @@ export default function Page() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-[2fr_300px]  gap-3">
           <AdminUserInformations />
-          <AdminUserMinorDetails />
+          <AdminUserMinorDetails user={user?.data} />
         </div>
       </div>
     </div>
