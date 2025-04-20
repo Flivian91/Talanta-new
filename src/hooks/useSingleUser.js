@@ -10,10 +10,9 @@ const fetchSingleUser = async ({ queryKey }) => {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log(await res.json());
   if (!res.ok) throw new Error("Failed to Get User");
   
-  return await res.json();
+  return res.json();
 };
 
 export const useSingleUser = (token, userID) => {
