@@ -24,7 +24,7 @@ function UploadVideoDetails({ data }) {
   const [videoId, setVideoId] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModelOpen, setModelOpen] = useState(false);
-  const { userId:userID, getToken } = useAuth();
+  const { userId: userID, getToken } = useAuth();
   const { push } = useRouter();
 
   const inputRef = useRef(null);
@@ -102,13 +102,13 @@ function UploadVideoDetails({ data }) {
       };
 
       console.log("Request Payload:", payload);
-      const token = await getToken()
+      const token = await getToken();
 
       const response = await fetch(`/api/talents?userID=${userID}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });
@@ -329,29 +329,31 @@ function UploadVideoDetails({ data }) {
           </div>
         </div>
         {/* Video Preview area */}
-        {/* <div className="border rounded flex flex-col gap-4 row-start-1 ">
+        <div className="border rounded flex flex-col gap-4 row-start-1 ">
           <div className="w-full ">
-            <CldVideoPlayer
-              id={videoId}
-              controls={true}
-              autoplay={false}
-              width="1920"
-              height="1480"
-              preload="metadata"
-              className="w-full rounded "
-              pictureInPictureToggle
-              logo={{
-                imageUrl: getCldImageUrl({
-                  src: "https://res.cloudinary.com/talanta-mines/image/upload/v1741598183/WhatsApp_Image_2025-02-12_at_00.43.16_4ae02cb0_kdkflu.jpg",
-                }),
-                // imageUrl: '<Your Image URL',
-                onClickUrl: "https://talanta-new.vercel.app/",
-              }}
-              src={data?.url} // Video URL
-              onMetadataLoad={() => {
-                setVideoId(`video-${data?.public_id}`);
-              }}
-            />
+            {videoId && (
+              <CldVideoPlayer
+                id={Date.now()}
+                controls={true}
+                autoplay={false}
+                width="1920"
+                height="1480"
+                preload="metadata"
+                className="w-full rounded "
+                pictureInPictureToggle
+                logo={{
+                  imageUrl: getCldImageUrl({
+                    src: "https://res.cloudinary.com/talanta-mines/image/upload/v1741598183/WhatsApp_Image_2025-02-12_at_00.43.16_4ae02cb0_kdkflu.jpg",
+                  }),
+                  // imageUrl: '<Your Image URL',
+                  onClickUrl: "https://talanta-new.vercel.app/",
+                }}
+                src={data?.url} // Video URL
+                onMetadataLoad={() => {
+                  setVideoId(`video-${data?.public_id}`);
+                }}
+              />
+            )}
           </div>
 
           <div className="flex flex-col gap-3 px-3">
@@ -368,7 +370,7 @@ function UploadVideoDetails({ data }) {
               </button>
             </div>
           </div>
-        </div> */}
+        </div>
       </div>
       {/* Upload button */}
       <div className="flex items-center justify-center">

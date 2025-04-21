@@ -77,31 +77,20 @@ export async function PATCH(req, segmentData) {
         { status: 400 }
       );
     }
-    const role = await sessionClaims?.publicMetadata?.role;
+    const role = await sessionClaims?.metadata?.role;
 
     // TODO: Ensure only admin and owner of the Talent can Delete
     if (talent.clerkID.toString() !== userId && role !== "admin") {
+      console.log("I am here");
+
       return NextResponse.json(
         { status: "failed", message: "Permission denied" },
         { status: 403 }
       );
     }
     const body = await req.json();
-    const validatedData = talentUpdateSchema.parse(body);
-    // Validate talent Title
-    const existingTalent = await Talent.findOne({
-      title: validatedData?.title,
-    });
 
-    if (existingTalent) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "A talent with this title already exists!",
-        },
-        { status: 400 }
-      );
-    }
+    const validatedData = talentUpdateSchema.parse(body);
 
     const updatedTalent = await Talent.findByIdAndUpdate(
       talentID,
@@ -156,6 +145,7 @@ export async function DELETE(req, segmentData) {
       );
     }
     const role = await sessionClaims?.metadata?.role;
+
     // TODO: Ensure only admin and owner of the Talent can Delete
     if (talent.clerkID.toString() !== userId && role !== "admin") {
       return NextResponse.json(

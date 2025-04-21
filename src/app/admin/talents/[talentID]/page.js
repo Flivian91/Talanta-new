@@ -2,7 +2,11 @@
 import LoadingSkeleton from "@/components/common/LoadingSkeleton";
 import AdminTalentSkeleton from "@/components/dashboard/admin/Talents/AdminTalentSkeleton";
 import { extractPublicIdFromUrl } from "@/helpers/extractPublicIDFromUrl";
+import { useApproveTalent } from "@/hooks/useApproveTalent";
+import { useDeleteTalent } from "@/hooks/useDeleteTalent";
 import { useSingleTalent } from "@/hooks/useGetSingleTalent";
+import { useRejectTalent } from "@/hooks/useRejectTalent";
+import { useUpdateTalent } from "@/libs/react-query/mutations/useUpdateTalent";
 import { useAuth } from "@clerk/nextjs";
 import { CldVideoPlayer } from "next-cloudinary";
 import { useParams, useRouter } from "next/navigation";
@@ -13,23 +17,33 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 function page() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState("pending");
-  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   const { back } = useRouter();
   const { talentID } = useParams();
   const [publicID, setPublicID] = useState(null);
+  const { getToken } = useAuth();
 
   const { data: talent, error, isLoading } = useSingleTalent(talentID);
+  // Handle Mutation of delete
+  const { mutate: deleteTalent, isPending: deletingTalent } = useDeleteTalent();
+  const { mutate: approveTalent, isPending: approvingTalent } =
+    useApproveTalent();
+  const { mutate: rejectTalent, isPending: rejectingTalent } =
+    useRejectTalent();
 
-  // const {title:talentTitle, description:talentDescription, videoUrl, approved} = talent?.data
-
+  const { mutateAsync: updateTalent, isPending } = useUpdateTalent();
   if (error) {
     console.log("Error fetching Talent Data");
   }
 
   useEffect(
     function () {
-      setStatus(talent?.data?.approved ? "Approved" : "Pending");
+      if (talent?.data) {
+        const stat = talent?.data?.approved ? "approved" : "pending";
+        setStatus(stat);
+        setTitle(talent?.data?.title);
+        setDescription(talent?.data?.description);
+      }
     },
     [talent]
   );
@@ -39,8 +53,39 @@ function page() {
       setPublicID(id);
     }
   }, [talent]);
+  // Handle Delete Talent
+  async function handleDelete(id) {
+    const token = await getToken();
+    deleteTalent({ id, token });
+    back();
+  }
+  async function handleApprove(id) {
+    const token = await getToken();
+    approveTalent({ id, token });
+  }
+  async function handleReject(id) {
+    const token = await getToken();
+    rejectTalent({ id, token });
+  }
 
-  console.log(publicID);
+  const handleSave = async () => {
+    const token = await getToken();
+    try {
+      await updateTalent({
+        token,
+        payload: {
+          title,
+          description,
+          status,
+        },
+        talentID,
+      });
+    } catch (err) {
+      console.error("Error saving profile", err);
+    }
+  };
+
+  // Handle Approve Talent
   if (isLoading) {
     return <AdminTalentSkeleton />;
   }
@@ -79,7 +124,7 @@ function page() {
         <div className="rounded overflow-hidden w-full">
           {publicID ? (
             <CldVideoPlayer
-              id="Video Image"
+              id={Date.now()}
               width="1920"
               height="580"
               src={publicID}
@@ -88,12 +133,6 @@ function page() {
           ) : (
             <div className="w-full h-72 bg-gray-200 rounded"></div>
           )}
-
-          {/* <video
-            height={380}
-            className="aspect-video w-full"
-            src="https://res.cloudinary.com/talanta-mines/video/upload/v1741868953/vdnxhwnrbydx9mtq32re.mp4"
-          /> */}
         </div>
 
         {/* Form */}
@@ -108,7 +147,7 @@ function page() {
             <input
               type="text"
               id="title"
-              value={talent?.data?.title || title}
+              value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full border px-3 py-2 rounded outline-none focus:ring"
             />
@@ -122,7 +161,7 @@ function page() {
             </label>
             <textarea
               id="description"
-              value={talent?.data?.description || description}
+              value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={4}
               className="w-full border px-3 py-2 rounded outline-none focus:ring"
@@ -144,37 +183,40 @@ function page() {
         {/* Action Buttons */}
         <div className="flex justify-between items-center pt-4 text-sm border-t">
           <button
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-500 rounded hover:bg-red-50"
+            disabled={deletingTalent}
+            onClick={() => handleDelete(talentID)}
+            className="flex items-center gap-2 px-4 py-2 border border-red-500 text-red-500 rounded hover:bg-red-50 disabled:bg-gray-400 disabled:cursor-not-allowed"
           >
             <FiTrash /> Delete
           </button>
           <div className="flex sm:flex-row flex-col gap-3">
             {talent?.data?.approved ? (
               <button
-                onClick={() => setStatus("pending")}
-                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                disabled={rejectingTalent}
+                onClick={() => handleReject(talentID)}
+                className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 <FiX /> Reject
               </button>
             ) : (
               <button
-                onClick={() => setStatus("approved")}
-                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                disabled={approvingTalent}
+                onClick={() => handleApprove(talentID)}
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
               >
                 <FiCheck /> Approve
               </button>
             )}
             <div className="flex items-center justify-center">
               <button
-                // onClick={() => handleSave()}
-                // disabled={isPending}
+                onClick={() => handleSave()}
+                disabled={isPending}
                 className="bg-blue-600 text-white px-4 py-2 rounded disabled:cursor-not-allowed flex items-center gap-2"
               >
-                {loading && (
+                {isPending && (
                   <p className="w-4 h-4 rounded-full border-t border-b border-white animate-spin"></p>
                 )}
-                <span>{loading ? "Saving..." : "Save Changes"}</span>
+                <span>{isPending ? "Saving..." : "Save Changes"}</span>
               </button>
             </div>
           </div>
