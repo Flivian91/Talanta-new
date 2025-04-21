@@ -1,4 +1,5 @@
 "use client";
+import AdminCategoriesHeader from "@/components/dashboard/admin/categories/AdminCategoriesHeader";
 import categoriesNew from "@/components/data/categoriesNew";
 import { useState } from "react";
 import { FiTrash, FiEdit, FiPlus, FiSearch } from "react-icons/fi";
@@ -6,7 +7,11 @@ import { FiTrash, FiEdit, FiPlus, FiSearch } from "react-icons/fi";
 export default function CategoriesPage() {
   const [categories, setCategories] = useState(categoriesNew);
   const [query, setQuery] = useState("");
-  const [newCategory, setNewCategory] = useState({ name: "", color: "#000000", icon: "📌" });
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    color: "#000000",
+    icon: "📌",
+  });
 
   // ✅ Search Function
   const filteredCategories = categories.filter((cat) =>
@@ -26,43 +31,19 @@ export default function CategoriesPage() {
   }
 
   return (
-    <div className="py-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Manage Categories</h1>
+    <div className="py-4 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+        Manage Categories
+      </h1>
 
       {/* 🔍 Search & Add New */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-        <div className="flex items-center border border-gray-300 rounded-md p-2 w-full md:w-1/3">
-          <FiSearch className="text-gray-500 mr-2" />
-          <input
-            type="text"
-            placeholder="Search categories..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className="w-full outline-none bg-transparent caret-accent"
-          />
-        </div>
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="New Category"
-            value={newCategory.name}
-            onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-            className="border border-gray-300 p-2 rounded-md"
-          />
-          <input
-            type="color"
-            value={newCategory.color}
-            onChange={(e) => setNewCategory({ ...newCategory, color: e.target.value })}
-            className="w-10 h-10 border rounded-md"
-          />
-          <button
-            onClick={addCategory}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-          >
-            <FiPlus />
-          </button>
-        </div>
-      </div>
+      <AdminCategoriesHeader
+        query={query}
+        setQuery={setQuery}
+        newCategory={newCategory}
+        setNewCategory={setNewCategory}
+        addCategory={addCategory}
+      />
 
       {/* 🏆 Category Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
