@@ -1,16 +1,21 @@
 "use client";
 import AdminCategoriesArea from "@/components/dashboard/admin/categories/AdminCategoriesArea";
 import AdminCategoriesHeader from "@/components/dashboard/admin/categories/AdminCategoriesHeader";
+import AdminCategoriesSkeleton from "@/components/dashboard/admin/categories/AdminCategoriesSkeleton";
 import categoriesNew from "@/components/data/categoriesNew";
 import { useCategories } from "@/hooks/useCategories";
+import { useCreateCategory } from "@/libs/react-query/mutations/useCreateCategory";
+import { useAuth } from "@clerk/nextjs";
 import { useState } from "react";
 import { FiTrash, FiEdit, FiPlus, FiSearch } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 export default function CategoriesPage() {
   const [query, setQuery] = useState("");
   const [title, setTitle] = useState();
+  const { getToken } = useAuth();
   const { data: categories, isLoading, error } = useCategories();
-  console.log(categories?.data);
+  const { mutateAsync: createCategory, isPending } = useCreateCategory();
 
   // ✅ Search Function
   const filteredCategories = categories?.data.filter((cat) =>
@@ -18,14 +23,30 @@ export default function CategoriesPage() {
   );
 
   // ✅ Add New Category
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const payload = {
+      title,
+    };
+    const token = await getToken();
+    try {
+      await createCategory({ category: payload, token });
+      setTitle("");
+    } catch (error) {
+      console.error("Failed to create category", error.message);
+      toast.error("Failed to create category");
+    }
+  }
 
   // ✅ Delete Category
+  console.log(Array.from({ length: 8 }, (_, i) => i));
 
   if (error) {
     console.log("Error Fetching Categories", error);
   }
+  const loding = true;
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <AdminCategoriesSkeleton />;
   }
 
   return (
@@ -40,6 +61,7 @@ export default function CategoriesPage() {
         setQuery={setQuery}
         title={title}
         setTitle={setTitle}
+        onSubmit={handleSubmit}
       />
 
       {/* 🏆 Category Cards */}

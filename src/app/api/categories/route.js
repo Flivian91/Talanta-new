@@ -3,14 +3,13 @@
 import Category from "@/models/category";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
-import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
     await connectDB();
     // TODO get currently logged in user
-    const categories = await Category.find();
+    const categories = await Category.find().sort({createdAt: -1});
     return NextResponse.json(
       { status: "success", data: categories },
       { status: 200 }
@@ -49,7 +48,7 @@ export async function POST(req) {
       );
     }
 
-    const newCategory = await Category.insertOne({ title, user: user.id });
+    const newCategory = await Category.insertOne({ title });
     return NextResponse.json(
       {
         status: "success",
