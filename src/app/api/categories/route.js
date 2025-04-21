@@ -1,34 +1,54 @@
 // GET and POST
 
+import { handleApiError } from "@/middleware/errorHandler";
 import Category from "@/models/category";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
+import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function GET(req) {
   try {
     await connectDB();
     // TODO get currently logged in user
-    const categories = await Category.find().sort({createdAt: -1});
+    // GEt currently Logged in User
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
+      );
+    }
+    const categories = await Category.find().sort({ createdAt: -1 });
     return NextResponse.json(
       { status: "success", data: categories },
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      {
-        status: "failed",
-        message: "Error Fetching Categories",
-        error: error.message,
-      },
-      { status: 500 }
-    );
+    console.log("Error Fetching Categories", error);
+    return handleApiError(error);
   }
 }
 
 // Create New Categories
 export async function POST(req) {
   try {
+    // GEt currently Logged in User
+    const { userId, sessionClaims } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
+      );
+    }
+    // Only Admin can UPDATE category
+    const role = await sessionClaims?.metadata?.role;
+    if (role !== "admin") {
+      return NextResponse.json(
+        { status: "failed", message: "Permission Denied(only admins)" },
+        { status: 403 }
+      );
+    }
     await connectDB();
     const { title } = await req.json();
     if (!title) {
@@ -37,14 +57,12 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-    const role = "admin";
-    if (role !== "admin") {
+    // Check if the category exists
+    const extstingCategory = await Category.find({ title });
+    if (extstingCategory) {
       return NextResponse.json(
-        {
-          status: "failed",
-          message: "You are not authorized to create a category",
-        },
-        { status: 401 }
+        { status: "failed", message: "Category already Exists!!" },
+        { status: 400 }
       );
     }
 
@@ -58,15 +76,7 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
-    return NextResponse.json(
-      {
-        status: "failed",
-        message: "Error in Creating Category",
-        error: error.message,
-      },
-      {
-        status: 500,
-      }
-    );
+    console.log("Error Creating a Category", error);
+    return handleApiError(error);
   }
 }
