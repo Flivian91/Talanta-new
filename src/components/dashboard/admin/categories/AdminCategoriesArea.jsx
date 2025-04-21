@@ -4,17 +4,17 @@ import { FiEdit, FiTrash } from "react-icons/fi";
 function AdminCategoriesArea({ filteredCategories }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {filteredCategories.length === 0 ? (
+      {filteredCategories?.length === 0 ? (
         <p className="text-gray-600">No categories found.</p>
       ) : (
-        filteredCategories.map((category, i) => (
+        filteredCategories?.map((category, i) => (
           <div
-            key={category.id}
-            className="flex justify-between items-center p-4 rounded-lg shadow-md text-black bg-gray-50"
+            key={category._id}
+            className="flex justify-between items-center p-4 rounded shadow-md text-black bg-gray-50 hover:bg-gray-100"
           >
             <div className="flex items-center gap-3">
               <span className="text-lg font-mono">{i + 1}.</span>
-              <span className="font-semibold text-base">{category.name}</span>
+              <span className="font-semibold text-base tracking-wide">{category.title}</span>
             </div>
             <div className="flex gap-2">
               <button className="bg-white p-2 rounded-md text-gray-800 hover:bg-gray-200">

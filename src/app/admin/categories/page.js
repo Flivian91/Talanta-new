@@ -2,22 +2,31 @@
 import AdminCategoriesArea from "@/components/dashboard/admin/categories/AdminCategoriesArea";
 import AdminCategoriesHeader from "@/components/dashboard/admin/categories/AdminCategoriesHeader";
 import categoriesNew from "@/components/data/categoriesNew";
+import { useCategories } from "@/hooks/useCategories";
 import { useState } from "react";
 import { FiTrash, FiEdit, FiPlus, FiSearch } from "react-icons/fi";
 
 export default function CategoriesPage() {
-  const [categories, setCategories] = useState(categoriesNew);
   const [query, setQuery] = useState("");
   const [title, setTitle] = useState();
+  const { data: categories, isLoading, error } = useCategories();
+  console.log(categories?.data);
 
   // ✅ Search Function
-  const filteredCategories = categories.filter((cat) =>
-    cat.name.toLowerCase().includes(query.toLowerCase())
+  const filteredCategories = categories?.data.filter((cat) =>
+    cat.title.toLowerCase().includes(query.toLowerCase())
   );
 
   // ✅ Add New Category
 
   // ✅ Delete Category
+
+  if (error) {
+    console.log("Error Fetching Categories", error);
+  }
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="py-4 bg-gray-50 min-h-screen">

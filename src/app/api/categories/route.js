@@ -32,24 +32,9 @@ export async function POST(req) {
   try {
     await connectDB();
     const { title } = await req.json();
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
     if (!title) {
       return NextResponse.json(
         { status: "failed", message: "Category Title is required" },
-        { status: 400 }
-      );
-    }
-    if (!userID || !Types.ObjectId.isValid(userID)) {
-      return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing User ID" },
-        { status: 400 }
-      );
-    }
-    const user = await User.findById(userID);
-    if (!user) {
-      return NextResponse.json(
-        { status: "failed", message: "User Not found in the database" },
         { status: 400 }
       );
     }

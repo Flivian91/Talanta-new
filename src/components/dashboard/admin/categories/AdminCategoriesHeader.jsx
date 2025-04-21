@@ -4,7 +4,7 @@ import { FiPlus, FiSearch } from "react-icons/fi";
 function AdminCategoriesHeader({ query, setQuery, title, setTitle }) {
   return (
     <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-      <div className="flex items-center border border-gray-300 rounded px-2 py-1 w-full md:w-1/3">
+      <div className="flex items-center border border-gray-300 bg-white rounded px-2 py-1 w-full md:w-1/3">
         <FiSearch className="text-gray-500 mr-2" />
         <input
           type="text"
