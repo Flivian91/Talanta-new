@@ -85,22 +85,22 @@ export async function PATCH(req, segmentData) {
     // Connect to the database
     await connectDB();
     // check user who is updating the category if there the one who uploaded the category
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    if (!userID || !Types.ObjectId.isValid(userID)) {
-      return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing User ID" },
-        { status: 400 }
-      );
-    }
+    // const { searchParams } = new URL(req.url);
+    // const userID = searchParams.get("userID");
+    // if (!userID || !Types.ObjectId.isValid(userID)) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "Invalid or Missing User ID" },
+    //     { status: 400 }
+    //   );
+    // }
 
-    const user = await User.findById(userID);
-    if (!user) {
-      return NextResponse.json(
-        { status: "failed", message: "User Not Found" },
-        { status: 404 }
-      );
-    }
+    // const user = await User.findById(userID);
+    // if (!user) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "User Not Found" },
+    //     { status: 404 }
+    //   );
+    // }
     // Check if category exists
     const category = await Category.findOne({ _id: categoryID });
     if (!category) {
@@ -161,23 +161,23 @@ export async function DELETE(req, segmentData) {
     }
     // Connect to database
     await connectDB();
-    // Get the current User
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    if (!userID || !Types.ObjectId.isValid(userID)) {
-      return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing User ID" },
-        { status: 400 }
-      );
-    }
-    // find user data
-    const user = await User.findById(userID);
-    if (!user) {
-      return NextResponse.json(
-        { status: "failed", message: "No user Found" },
-        { status: 400 }
-      );
-    }
+    // // Get the current User
+    // const { searchParams } = new URL(req.url);
+    // const userID = searchParams.get("userID");
+    // if (!userID || !Types.ObjectId.isValid(userID)) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "Invalid or Missing User ID" },
+    //     { status: 400 }
+    //   );
+    // }
+    // // find user data
+    // const user = await User.findById(userID);
+    // if (!user) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "No user Found" },
+    //     { status: 400 }
+    //   );
+    // }
     // Get the category to be deleted
     const category = await Category.findOne({ _id: categoryID });
     if (!category) {
