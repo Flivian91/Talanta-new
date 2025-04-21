@@ -9,23 +9,7 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   try {
     await connectDB();
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-
-    if (!userID || !Types.ObjectId.isValid(userID)) {
-      return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing User ID" },
-        { status: 400 }
-      );
-    }
-    const user = await User.findById({ _id: userID });
-
-    if (!user) {
-      return NextResponse.json(
-        { status: "failed", message: "User not found in the database" },
-        { status: 400 }
-      );
-    }
+    // TODO get currently logged in user
     const categories = await Category.find();
     return NextResponse.json(
       { status: "success", data: categories },

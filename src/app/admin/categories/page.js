@@ -7,11 +7,7 @@ import { FiTrash, FiEdit, FiPlus, FiSearch } from "react-icons/fi";
 export default function CategoriesPage() {
   const [categories, setCategories] = useState(categoriesNew);
   const [query, setQuery] = useState("");
-  const [newCategory, setNewCategory] = useState({
-    name: "",
-    color: "#000000",
-    icon: "📌",
-  });
+  const [title, setTitle] = useState();
 
   // ✅ Search Function
   const filteredCategories = categories.filter((cat) =>
@@ -19,16 +15,8 @@ export default function CategoriesPage() {
   );
 
   // ✅ Add New Category
-  function addCategory() {
-    if (!newCategory.name.trim()) return;
-    setCategories([...categories, { ...newCategory, id: Date.now() }]);
-    setNewCategory({ name: "", color: "#000000", icon: "📌" });
-  }
 
   // ✅ Delete Category
-  function deleteCategory(id) {
-    setCategories(categories.filter((cat) => cat.id !== id));
-  }
 
   return (
     <div className="py-4 bg-gray-50 min-h-screen">
@@ -40,9 +28,8 @@ export default function CategoriesPage() {
       <AdminCategoriesHeader
         query={query}
         setQuery={setQuery}
-        newCategory={newCategory}
-        setNewCategory={setNewCategory}
-        addCategory={addCategory}
+        title={title}
+        setTitle={setTitle}
       />
 
       {/* 🏆 Category Cards */}
@@ -65,7 +52,7 @@ export default function CategoriesPage() {
                   <FiEdit />
                 </button>
                 <button
-                  onClick={() => deleteCategory(category.id)}
+                 
                   className="bg-red-500 p-2 rounded-md text-white hover:bg-red-600"
                 >
                   <FiTrash />
