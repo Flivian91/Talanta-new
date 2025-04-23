@@ -43,6 +43,8 @@ export async function GET(req) {
         $lte: new Date(endDate),
       };
     }
+    console.log(status);
+    
     if (status) {
       filter.approved = status;
     }

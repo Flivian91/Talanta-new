@@ -35,14 +35,14 @@ function AdminPreviewModel({
       {/* Buttons */}
       <div className="mt-6 flex justify-between">
         <button
-          onClick={() => approveTalent(selectedTalent.id)}
+          onClick={() => approveTalent(selectedTalent._id)}
           className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition flex-1 mx-1"
         >
           <FiCheck />
           <span>Approve</span>
         </button>
         <button
-          onClick={() => rejectTalent(selectedTalent.id)}
+          onClick={() => rejectTalent(selectedTalent._id)}
           className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition flex-1 mx-1"
         >
           <FiX /> Reject
