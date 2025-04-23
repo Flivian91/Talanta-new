@@ -108,7 +108,7 @@ export default function ReportAnalysisPage() {
       {/* 📊 Summary Cards */}
       <AdminReportSummaryCards />
 
-      {/* 📊 Conditional Charts */}
+      {/* 📊 Conditional Charts
       <AdminReportUserPerMonth
         filter={filter}
         userPerMonth={userPerMonth}
@@ -119,7 +119,7 @@ export default function ReportAnalysisPage() {
         filter={filter}
         talentsPerCategory={talentsPerCategory}
         loading={loadingTalentsPerCategory}
-      />
+      /> */}
     </div>
   );
 }
