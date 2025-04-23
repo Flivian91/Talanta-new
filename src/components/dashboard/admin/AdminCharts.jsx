@@ -74,9 +74,7 @@ function AdminCharts() {
           Number of talents per Categories
         </h2>
         {loadingTalentsPerCategory ? (
-          <div className=" w-[500px] h-[00px] e shadow-md p-6 rounded-lg animate-pulse">
-            <div className="bg-gray-300 rounded w-full h-full"></div>
-          </div>
+          <div className=" py-36  bg-gray-200 animate-pulse"></div>
         ) : (
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={chartData?.data}>
@@ -102,9 +100,7 @@ function AdminCharts() {
           <span className="flex items-center justify-center">Actions</span>
         </div>
         {loadingTopFollowedUsers ? (
-          <div className=" w-[500px] h-[300px] e shadow-md p-6 rounded-lg animate-pulse">
-            <div className="bg-gray-300 rounded w-full h-full"></div>
-          </div>
+          <div className=" py-32  bg-gray-200 animate-pulse"></div>
         ) : (
           <div className="flex flex-col gap-2 w-full py-2 transition-all duration-300">
             {topFollowedUsers?.data.map((data, index) => (
