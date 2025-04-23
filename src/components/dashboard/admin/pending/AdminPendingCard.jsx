@@ -1,14 +1,16 @@
+import NoData from "@/components/common/NoData";
 import { formatedDate } from "@/helpers/formatedDate";
 import React from "react";
 import { FiEye } from "react-icons/fi";
 
 function AdminPendingCard({ filteredTalents, openModal }) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+    <div>
       {filteredTalents?.length === 0 ? (
-        <p className="text-gray-600">No pending approvals.</p>
+        <NoData message={"Pending Approvals"} />
       ) : (
-        filteredTalents.map((talent) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+         { filteredTalents.map((talent) => (
           <div
             key={talent._id}
             className="bg-white shadow-lg rounded-lg px-2 py-4 flex flex-col"
@@ -24,7 +26,11 @@ function AdminPendingCard({ filteredTalents, openModal }) {
             <div className="text-gray-500">
               <ul className="flex items-center gap-2 marker:bg-yellow-500">
                 {talent.categories.map((cat) => (
-                  <li li key={cat} className="text-blue-500 text-xs font-medium tracking-wide">
+                  <li
+                    li
+                    key={cat}
+                    className="text-blue-500 text-xs font-medium tracking-wide"
+                  >
                     {cat}
                   </li>
                 ))}
@@ -45,7 +51,8 @@ function AdminPendingCard({ filteredTalents, openModal }) {
               </button>
             </div>
           </div>
-        ))
+          ))}
+        </div>
       )}
     </div>
   );

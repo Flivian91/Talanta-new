@@ -36,16 +36,16 @@ function AdminPreviewModel({
       <div className="mt-6 flex justify-between">
         <button
           onClick={() => approveTalent(selectedTalent._id)}
-          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition flex-1 mx-1"
+          className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition flex-1 mx-1  flex items-center justify-center gap-3"
         >
           <FiCheck />
           <span>Approve</span>
         </button>
         <button
           onClick={() => rejectTalent(selectedTalent._id)}
-          className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition flex-1 mx-1"
+          className="bg-red-500 text-white px-4 py-3 rounded-md hover:bg-red-600 transition flex-1 mx-1 flex items-center justify-center gap-3"
         >
-          <FiX /> Reject
+          <FiX /> <span>Reject</span>
         </button>
       </div>
 
