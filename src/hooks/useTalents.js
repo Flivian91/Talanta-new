@@ -9,8 +9,7 @@ const fetchTalents = async ({ queryKey }) => {
   if (limit) params.append("limit", limit);
   if (page) params.append("page", page);
   if (status) params.append("status", status);
-  console.log(params);
-  
+
 
   const res = await fetch(`/api/talents?${params.toString()}`);
 
