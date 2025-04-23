@@ -26,8 +26,17 @@ function AdminReportSummaryCards() {
     error: rejectedTalentsCountError,
     isLoading: loadingRejectedTalentsCount,
   } = useRejectedTalentsCount();
-  if(userCountError){
-    console.error("Error fetching User Count")
+  if (userCountError) {
+    console.error("Error fetching User Count");
+  }
+  if (talentsCountError) {
+    console.error("Error fetching Talents Count");
+  }
+  if (approvedTalentsCountError) {
+    console.error("Error fetching Approved Talents Count");
+  }
+  if (rejectedTalentsCountError) {
+    console.error("Error fetching Rejected Count");
   }
 
   return (
@@ -80,7 +89,6 @@ function AdminReportSummaryCards() {
           color="bg-yellow-500"
         />
       )}
-      
     </div>
   );
 }

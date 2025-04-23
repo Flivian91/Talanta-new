@@ -11,6 +11,7 @@ function AdminReportHeader({ filter, setFilter, exportToCSV, exportToPDF }) {
           className="border border-gray-300 rounded-md p-2"
         >
           <option value="all">All</option>
+          <option value="users">User Growth</option>
           <option value="monthly">Monthly Uploads</option>
           <option value="categories">Category Insights</option>
         </select>

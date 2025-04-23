@@ -18,9 +18,25 @@ import autoTable from "jspdf-autotable"; // ✅ Correct import
 import { saveAs } from "file-saver";
 import AdminReportSummaryCards from "@/components/dashboard/admin/reports/AdminReportSummaryCards";
 import AdminReportHeader from "@/components/dashboard/admin/reports/AdminReportHeader";
+import { useTalentsPerCategory } from "@/hooks/useTalentsPerCategory";
+import AdminReportUserPerCategory from "@/components/dashboard/admin/reports/AdminReportUserPerCategory";
+import { useUserPerMonth } from "@/hooks/useUserPerMonth";
+import AdminReportUserPerMonth from "@/components/dashboard/admin/reports/AdminReportUserPerMonth";
 
 export default function ReportAnalysisPage() {
   const [filter, setFilter] = useState("all");
+  // Fetch Talents Per Category
+  const {
+    data: talentsPerCategory,
+    isLoading: loadingTalentsPerCategory,
+    error: talentsPerCategoryError,
+  } = useTalentsPerCategory();
+  const {
+    data: userPerMonth,
+    error: userPerMonthError,
+    isLoading: loadingUserPerMonth,
+  } = useUserPerMonth();
+  console.log(userPerMonth?.data);
 
   // ✅ Export to CSV
   function exportToCSV() {
@@ -93,51 +109,17 @@ export default function ReportAnalysisPage() {
       <AdminReportSummaryCards />
 
       {/* 📊 Conditional Charts */}
-      {filter === "all" || filter === "monthly" ? (
-        <div className="bg-white shadow-lg p-6 rounded-lg mb-6">
-          <h2 className="text-xl font-semibold mb-4">Monthly Uploads</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={reportData.monthlyUploads}>
-              <XAxis dataKey="month" stroke="#555" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="uploads" fill="#8884d8" barSize={50} />
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
-      ) : null}
+      <AdminReportUserPerMonth
+        filter={filter}
+        userPerMonth={userPerMonth}
+        loadin={loadingUserPerMonth}
+      />
 
-      {filter === "all" || filter === "categories" ? (
-        <div className="bg-white shadow-lg p-6 rounded-lg">
-          <h2 className="text-xl font-semibold mb-4">
-            Talent Distribution by Category
-          </h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <PieChart>
-              <Pie
-                data={reportData.categories}
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#82ca9d"
-                dataKey="value"
-                label
-              >
-                {reportData.categories.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={
-                      ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"][index % 4]
-                    }
-                  />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        </div>
-      ) : null}
+      <AdminReportUserPerCategory
+        filter={filter}
+        talentsPerCategory={talentsPerCategory}
+        loading={loadingTalentsPerCategory}
+      />
     </div>
   );
 }
