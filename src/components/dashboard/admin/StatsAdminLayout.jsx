@@ -6,75 +6,30 @@ import { useAuth } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import LoadingAdminSkeleton from "@/components/common/LoadingAdminSkeleton";
+import { useUserCount } from "@/hooks/useUserCount";
+import { useTalentsCOunt } from "@/hooks/useTalentCount";
+import { useCategoriesCount } from "@/hooks/useCategoriesCount";
 
 function StatsAdminLayout() {
   const { getToken } = useAuth();
   // Fetch Number of users
-  async function fetchUsers() {
-    try {
-      const token = await getToken();
-      const res = await fetch("/api/me/count", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return await res.json();
-    } catch (error) {
-      console.error("Failed to fetch users Count");
-      toast.error("Failed to fetch users Count");
-    }
-  }
   const {
     data: userCount,
     isLoading: loadingUsersCount,
     error: userError,
-  } = useQuery({ queryKey: ["Users"], queryFn: fetchUsers });
-
+  } = useUserCount();
   // Fetch Number of talents
-  async function fetchTalents() {
-    try {
-      const token = await getToken();
-      const res = await fetch("/api/talents/count", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return await res.json();
-    } catch (error) {
-      console.error("Failed to fetch talents COunt");
-      toast.error("Failed to fetch Talents Count");
-    }
-  }
   const {
     data: talentsCount,
     isLoading: loadingTalentCount,
     error: talentError,
-  } = useQuery({ queryKey: ["Talents"], queryFn: fetchTalents });
-
+  } = useTalentsCOunt();
   // Fetch Number of Categories
-
-  async function fetchCategories() {
-    try {
-      const token = await getToken();
-      const res = await fetch("/api/categories/count", {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      return await res.json();
-    } catch (error) {
-      console.error("Failed to fetch talents Count");
-      toast.error("Failed to fetch talents Count");
-    }
-  }
   const {
     data: categoriesCount,
     error: categoriesError,
     isLoading: loadingCategoriesCount,
-  } = useQuery({ queryKey: ["Categories"], queryFn: fetchCategories });
+  } = useCategoriesCount();
   if (userError) {
     console.log("Error Fetching Users Count.");
   }
