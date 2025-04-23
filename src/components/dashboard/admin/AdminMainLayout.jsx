@@ -10,7 +10,7 @@ function AdminMainLayout({ children }) {
   return (
     <div className="bg-gray-50 overflow-hidden w-full px-2">
       {/* sidebar */}
-      <div className="fixed top-0 left-0 z-40 shadow w-0 md:w-64 hidden md:block">
+      <div className="fixed top-0 left-0 z-40 shadow w-0 md:w-64 hidden md:block overflow-y-auto">
         <SidebarAdmin onClose={() => setIsOpen(false)} />
       </div>
       {/* Mobile sidebar */}

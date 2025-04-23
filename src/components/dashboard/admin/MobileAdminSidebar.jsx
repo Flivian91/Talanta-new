@@ -1,14 +1,16 @@
 "use client";
 
 import adminLinks from "@/components/data/AdminLinks";
+import { SignedIn, SignOutButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { FaSignOutAlt } from "react-icons/fa";
 
 function MobileAdminSidebar({ onClose }) {
   const pathName = usePathname();
   return (
-    <aside className="w-64 fixed top-0 left-0 z-50 min-h-screen flex flex-col bg-white pb-2 md:hidden">
+    <aside className="w-64 fixed top-0 left-0 z-50 h-screen overflow-y-auto scrollbar-hide flex flex-col bg-white pb-2 md:hidden">
       <div className="flex items-center flex-col gap-2 border-b border-gray-200 py-2">
         <Image
           src={"/logo.svg"}
@@ -48,18 +50,18 @@ function MobileAdminSidebar({ onClose }) {
           ))}
         </nav>
       </div>
-      {/* <div className="flex items-center  w-full px-2">
+      <div className="flex items-center  w-full px-2">
         <SignedIn>
           <SignOutButton>
             <Link href={"/admin"} className="inline-block gap-8 w-full">
-              <div className="flex items-center gap-2 bg-red-600 px-4 py-2 rounded text-white">
+              <div className="flex items-center justify-center gap-2 bg-gray-400 px-4 py-2 rounded text-white">
                 <FaSignOutAlt />
                 <span>Logout</span>
               </div>
             </Link>
           </SignOutButton>
         </SignedIn>
-      </div> */}
+      </div>
     </aside>
   );
 }

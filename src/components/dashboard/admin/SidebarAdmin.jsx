@@ -10,7 +10,7 @@ import { FaHome, FaSignOutAlt } from "react-icons/fa";
 function SidebarAdmin({ onClose }) {
   const pathName = usePathname();
   return (
-    <aside className="min-h-screen flex flex-col bg-white pb-2">
+    <aside className="h-screen overflow-y-auto scrollbar-hide flex flex-col bg-white pb-2 ">
       <div className="flex items-center flex-col gap-2 border-b border-gray-200 py-2">
         <Image
           src={"/logo.svg"}
@@ -22,7 +22,7 @@ function SidebarAdmin({ onClose }) {
           Modern Admin Dashboard
         </span>
       </div>
-      <div className="flex-1 overflow-auto py-4">
+      <div className="flex-1 overflow-y-scroll py-4">
         <nav className="flex flex-col gap-4 w-full">
           {adminLinks.map((link) => (
             <Link
@@ -50,18 +50,18 @@ function SidebarAdmin({ onClose }) {
           ))}
         </nav>
       </div>
-      {/* <div className="flex items-center  w-full px-2">
+      <div className="flex items-center  w-full px-2">
         <SignedIn>
           <SignOutButton>
             <Link href={"/admin"} className="inline-block gap-8 w-full">
-              <div className="flex items-center gap-2 bg-red-600 px-4 py-2 rounded text-white">
+              <div className="flex items-center justify-center gap-2 bg-gray-400 px-4 py-2 rounded text-white">
                 <FaSignOutAlt />
                 <span>Logout</span>
               </div>
             </Link>
           </SignOutButton>
         </SignedIn>
-      </div> */}
+      </div>
     </aside>
   );
 }
