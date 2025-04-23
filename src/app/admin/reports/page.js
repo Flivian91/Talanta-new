@@ -16,6 +16,8 @@ import reportData from "@/components/data/reportData";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable"; // ✅ Correct import
 import { saveAs } from "file-saver";
+import AdminReportSummaryCards from "@/components/dashboard/admin/reports/AdminReportSummaryCards";
+import AdminReportHeader from "@/components/dashboard/admin/reports/AdminReportHeader";
 
 export default function ReportAnalysisPage() {
   const [filter, setFilter] = useState("all");
@@ -80,58 +82,15 @@ export default function ReportAnalysisPage() {
       </h1>
 
       {/* 📌 Filters & Export Options */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-        <div>
-          <label className="mr-3 text-gray-600">Filter By:</label>
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="border border-gray-300 rounded-md p-2"
-          >
-            <option value="all">All</option>
-            <option value="monthly">Monthly Uploads</option>
-            <option value="categories">Category Insights</option>
-          </select>
-        </div>
-        <div className="flex gap-3">
-          <button
-            onClick={exportToCSV}
-            className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
-          >
-            Export CSV
-          </button>
-          <button
-            onClick={exportToPDF}
-            className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
-          >
-            Export PDF
-          </button>
-        </div>
-      </div>
+      <AdminReportHeader
+        filter={filter}
+        setFilter={setFilter}
+        exportToCSV={exportToCSV}
+        exportToPDF={exportToPDF}
+      />
 
       {/* 📊 Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <StatCard
-          title="Total Users"
-          count={reportData.totalUsers}
-          color="bg-blue-500"
-        />
-        <StatCard
-          title="Total Talents"
-          count={reportData.totalTalents}
-          color="bg-green-500"
-        />
-        <StatCard
-          title="Approved Talents"
-          count={reportData.approvedTalents}
-          color="bg-purple-500"
-        />
-        <StatCard
-          title="Pending Approvals"
-          count={reportData.pendingApprovals}
-          color="bg-yellow-500"
-        />
-      </div>
+      <AdminReportSummaryCards />
 
       {/* 📊 Conditional Charts */}
       {filter === "all" || filter === "monthly" ? (
@@ -182,11 +141,3 @@ export default function ReportAnalysisPage() {
     </div>
   );
 }
-
-// 📌 Statistic Card Component
-const StatCard = ({ title, count, color }) => (
-  <div className={`p-6 ${color} text-white rounded-lg shadow-lg`}>
-    <h3 className="text-lg font-semibold">{title}</h3>
-    <p className="text-2xl">{count}</p>
-  </div>
-);
