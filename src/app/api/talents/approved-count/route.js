@@ -8,9 +8,9 @@ import { NextResponse } from "next/server";
 export async function GET(req) {
   try {
     await connectDB();
-    const talentsCount = await Talent.countDocuments();
+    const approvedTalentsCount = await Talent.countDocuments({ approved: true });
     return NextResponse.json(
-      { status: "success", data: talentsCount },
+      { status: "success", data: approvedTalentsCount },
       { status: 200 }
     );
   } catch (error) {

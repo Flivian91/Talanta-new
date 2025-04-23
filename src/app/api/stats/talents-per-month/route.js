@@ -1,16 +1,27 @@
 import { handleApiError } from "@/middleware/errorHandler";
 import Talent from "@/models/talent";
 import connectDB from "@/utils/db";
-import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-// Count the number of users
+// Count Users Registered per Month
 export async function GET(req) {
   try {
     await connectDB();
-    const talentsCount = await Talent.countDocuments();
+    const talentsCreatedPerMonth = await Talent.aggregate([
+      {
+        $group: {
+          _id: {
+            $month: "$createdAt",
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
     return NextResponse.json(
-      { status: "success", data: talentsCount },
+      { status: "success", data: talentsCreatedPerMonth },
       { status: 200 }
     );
   } catch (error) {
