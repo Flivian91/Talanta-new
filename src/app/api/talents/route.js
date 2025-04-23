@@ -14,6 +14,7 @@ export async function GET(req) {
     const searchKeyword = searchParams.get("keywords");
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
+    const status = searchParams.get("status");
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
     // Search by Keywords
@@ -42,6 +43,10 @@ export async function GET(req) {
         $lte: new Date(endDate),
       };
     }
+    if (status) {
+      filter.approved = status;
+    }
+
     const skip = ((page || 1) - 1) * (limit || 10);
     const talent = await Talent.find(filter)
       .sort({ createdAt: -1 })
@@ -53,10 +58,10 @@ export async function GET(req) {
       data: talent,
     });
   } catch (error) {
-    console.log("Error Fetching the Use", error);
+    console.log("Error Fetching the Talents", error);
     return NextResponse.json({
       status: "failed",
-      message: "Error Fetching the Use",
+      message: "Error Fetching the Talents",
     });
   }
 }
@@ -100,7 +105,7 @@ export async function POST(req) {
     }
     // Validate Talent data
     const body = await req.json();
-    
+
     // const {userId} = await auth()
     // This clerk ID
     const data = { ...body, clerkID, userID };
