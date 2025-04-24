@@ -1,6 +1,7 @@
 import Notification from "@/models/notification";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
+import { clerkClient } from "@clerk/nextjs/server";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 // Get all notifications
@@ -14,12 +15,12 @@ export async function GET(req) {
     const endDate = searchParams.get("endDate");
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
-    if (!userID || !Types.ObjectId.isValid(userID)) {
-      return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing user ID" },
-        { status: 400 }
-      );
-    }
+    // if (!userID || !Types.ObjectId.isValid(userID)) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "Invalid or Missing user ID" },
+    //     { status: 400 }
+    //   );
+    // }
     const role = "admin";
     if (role !== "admin") {
       return NextResponse.json(
@@ -31,8 +32,9 @@ export async function GET(req) {
     const filter = {};
     // Search by Keywords
     if (searchKeyword) {
-      filter = {
-        type: { $eq: searchKeyword, $options: "i" },
+      filter.type = {
+        $eq: searchKeyword,
+        $options: "i",
       };
     }
     // Filter
@@ -70,33 +72,31 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     await connectDB();
-    // const { userId } = auth();
+    // TODO: Get currently logged user
+    // const { userId } = await auth();
     // if (!userId)
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    //   return NextResponse.json({status: "failed", message: "Unauthorized" }, { status: 401 });
     const { searchParams } = new URL(req.url);
     const userID = searchParams.get("userID");
-    if (!userID || !Types.ObjectId.isValid(userID)) {
-      return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing user ID" },
-        { status: 400 }
-      );
-    }
-    // Verify if user Exists
-    const user = await User.findById(userID);
+    // Get Sender data
+    const user = await (await clerkClient()).users.getUser(userID);
     if (!user) {
       return NextResponse.json(
         { status: "failed", message: "User not found" },
         { status: 404 }
       );
     }
-    const { recipientID, type, relatedID } = await req.json();
-    if (!Types.ObjectId.isValid(recipientID)) {
+    // Get Receiver data
+    const { receiverID, type } = await req.json();
+    const receiver = await (await clerkClient()).users.getUser(receiverID);
+    if (!receiver) {
       return NextResponse.json(
-        { status: "failed", message: "Invalid recipient ID" },
-        { status: 400 }
+        { status: "failed", message: "Receiver Not Found" },
+        { status: 404 }
       );
     }
-    if (!recipientID || !type) {
+    // Ensure all the fields has values
+    if (!receiverID || !type) {
       return NextResponse.json(
         { error: "All fields are required" },
         { status: 400 }
@@ -110,18 +110,22 @@ export async function POST(req) {
       );
     }
     let message = "";
+    const userName =
+      user.firstName ||
+      user.lastName ||
+      user.emailAddresses.at(0).emailAddress.split("@").at(0);
     // Check the type of notification and attach a custom message
     if (type === "like") {
-      message = `${user.firstName} liked your post`;
+      message = `${userName} liked your post`;
     } else if (type === "comment") {
-      message = `${user.firstName} commented on your post`;
+      message = `${userName} commented on your post`;
     } else if (type === "follow") {
-      message = `${user.firstName} followed you`;
+      message = `${userName} followed you`;
     } else if (type === "share") {
-      message = `${user.firstName} shared your post`;
+      message = `${userName} shared your post`;
     }
     // You cannot send Notification to yourself
-    if (userID === recipientID) {
+    if (user.id === receiver.id) {
       return NextResponse.json(
         {
           status: "failed",
@@ -131,11 +135,10 @@ export async function POST(req) {
       );
     }
     const notification = await Notification.insertOne({
-      recipientID,
-      senderID: userID,
+      receiverID: receiver.id,
+      senderID: user.id,
       type,
       message,
-      relatedID,
     });
 
     return NextResponse.json(

@@ -19,7 +19,10 @@ export async function GET(req, segmentData) {
 
     const user = await (await clerkClient()).users.getUser(userID);
     if (!user)
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        { status: "failed", message: "User not found" },
+        { status: 404 }
+      );
 
     return NextResponse.json(
       { status: "success", data: user },
