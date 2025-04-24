@@ -1,7 +1,8 @@
+import { handleApiError } from "@/middleware/errorHandler";
 import Notification from "@/models/notification";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
-import { clerkClient } from "@clerk/nextjs/server";
+import { auth, clerkClient } from "@clerk/nextjs/server";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 // Get all notifications
@@ -9,18 +10,12 @@ export async function GET(req) {
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
     const searchKeyword = searchParams.get("keywords");
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
-    // if (!userID || !Types.ObjectId.isValid(userID)) {
-    //   return NextResponse.json(
-    //     { status: "failed", message: "Invalid or Missing user ID" },
-    //     { status: 400 }
-    //   );
-    // }
+
     const role = "admin";
     if (role !== "admin") {
       return NextResponse.json(
@@ -63,19 +58,19 @@ export async function GET(req) {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { status: "failed", message: "Error fetching notifications", error },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 export async function POST(req) {
   try {
     await connectDB();
     // TODO: Get currently logged user
-    // const { userId } = await auth();
-    // if (!userId)
-    //   return NextResponse.json({status: "failed", message: "Unauthorized" }, { status: 401 });
+    const { userId } = await auth();
+    if (!userId)
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
+      );
     const { searchParams } = new URL(req.url);
     const userID = searchParams.get("userID");
     // Get Sender data
@@ -152,9 +147,6 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { status: "failed", message: "Error creating notification", error },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

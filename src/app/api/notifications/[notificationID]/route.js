@@ -1,103 +1,57 @@
-export async function PATCH(req) {
+import { handleApiError } from "@/middleware/errorHandler";
+import Notification from "@/models/notification";
+import connectDB from "@/utils/db";
+import { auth } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+
+export async function PATCH(req, segmentData) {
   try {
     await connectDB();
-    // const { userId } = auth();
-    // if (!userId)
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    if (!userID || !Types.ObjectId.isValid(userID)) {
+    const { notificationID } = await segmentData.params;
+    // TODO: Get currently logged user
+    const { userId } = await auth();
+    if (!userId)
       return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing user ID" },
-        { status: 400 }
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
       );
-    }
-    // Verify if user Exists
-    const user = await User.findById(userID);
-    if (!user) {
-      return NextResponse.json(
-        { status: "failed", message: "User not found" },
-        { status: 404 }
-      );
-    }
-
-    const { notificationID } = await req.json();
-    if (!notificationID) {
-      return NextResponse.json(
-        { error: "Notification IDs required" },
-        { status: 400 }
-      );
-    }
-    const notification = await Notification.findOne({
-      _id: notificationID,
-      recipientID: userID,
-    });
+    const notification = await Notification.findById(notificationID);
     if (!notification) {
       return NextResponse.json(
         { status: "failed", message: "Notification not found" },
         { status: 404 }
       );
     }
-
-    await Notification.updateOne(
-      { _id: notificationID, recipientID: userID },
-      { read: true }
-    );
-
+    await Notification.findByIdAndUpdate(notificationID, { read: true });
     return NextResponse.json(
       { message: "Notifications marked as read!" },
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error updating notifications", details: error },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
-export async function DELETE(req) {
+export async function DELETE(req, segmentData) {
   try {
     await connectDB();
+    const { notificationID } = await segmentData.params;
     // const { userId } = auth();
     // if (!userId)
     //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    if (!userID || !Types.ObjectId.isValid(userID)) {
+    const notification = await Notification.findById(notificationID);
+    if (!notification) {
       return NextResponse.json(
-        { status: "failed", message: "Invalid or Missing user ID" },
-        { status: 400 }
-      );
-    }
-    // Verify if user Exists
-    const user = await User.findById(userID);
-    if (!user) {
-      return NextResponse.json(
-        { status: "failed", message: "User not found" },
+        { status: "failed", message: "Notification not found" },
         { status: 404 }
       );
     }
-
-    const { notificationID } = await req.json();
-    if (!notificationID)
-      return NextResponse.json(
-        { error: "Notification ID required" },
-        { status: 400 }
-      );
-
-    await Notification.findOneAndDelete({
-      _id: notificationID,
-      recipientID: userID,
-    });
+    await Notification.findByIdAndDelete(notificationID);
 
     return NextResponse.json(
       { message: "Notification deleted!" },
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { error: "Error deleting notification", details: error },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
