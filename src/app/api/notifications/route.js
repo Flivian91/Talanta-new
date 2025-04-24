@@ -102,7 +102,9 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-    const isType = ["like", "comment", "follow", "share"].includes(type);
+    const isType = ["like", "comment", "follow", "share", "general"].includes(
+      type
+    );
     if (!isType) {
       return NextResponse.json(
         { status: "failed", message: "Invalid notification type" },
@@ -114,6 +116,8 @@ export async function POST(req) {
       user.firstName ||
       user.lastName ||
       user.emailAddresses.at(0).emailAddress.split("@").at(0);
+    // const checkAdmin = user?.publicMetadata.role
+    // console.log(checkAdmin)
     // Check the type of notification and attach a custom message
     if (type === "like") {
       message = `${userName} liked your post`;
@@ -123,6 +127,8 @@ export async function POST(req) {
       message = `${userName} followed you`;
     } else if (type === "share") {
       message = `${userName} shared your post`;
+    } else if (type === "general") {
+      message = `${userName} Updated Your Profile`;
     }
     // You cannot send Notification to yourself
     if (user.id === receiver.id) {
