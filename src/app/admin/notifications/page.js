@@ -27,6 +27,7 @@ export default function NotificationsPage() {
   // ✅ Notification Type Icons & Colors
   function getNotificationStyle(type) {
     switch (type) {
+      // This is a comment
       case "success":
         return { icon: <FaCheckCircle className="text-green-500" />, bg: "bg-green-100" };
       case "warning":
