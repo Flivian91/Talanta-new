@@ -6,7 +6,7 @@ function CartegorySection({ onSelectCategory, selectedCategory, categories }) {
       {/* "All" Category */}
       <button
         onClick={() => onSelectCategory("All")}
-        className={`px-4 py-2 rounded-full border transition-all duration-300 text-sm
+        className={`px-2 py-1 rounded-full border transition-all duration-300 text-xs
         ${
           selectedCategory === "All"
             ? "bg-secondary hover:bg-secondary/90 text-white tracking-wide"
@@ -21,9 +21,9 @@ function CartegorySection({ onSelectCategory, selectedCategory, categories }) {
         <button
           key={cat._id}
           onClick={() => onSelectCategory(cat.title)}
-          className={`px-4 py-2 rounded-full border transition
+          className={`px-2 py-1 rounded-full border transition text-xs
           ${
-            selectedCategory === cat
+            selectedCategory === cat.title
               ? "bg-secondary text-white"
               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-200"
           }`}

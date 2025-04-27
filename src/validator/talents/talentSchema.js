@@ -12,7 +12,6 @@ export const talentSchema = z.object({
   videoUrl: z.string().url({ message: "Invalid video URL" }),
   thumbnailUrl: z.string().url({ message: "Invalid thumbnail URL" }).optional(),
   userID: z.string(),
-  clerkID: z.string(),
   approved: z.boolean().default(false),
   likesCount: z.number().default(0),
   commentsCount: z.number().default(0),

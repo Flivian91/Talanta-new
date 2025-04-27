@@ -15,9 +15,9 @@ export default function VideoCard({ video }) {
         onMouseLeave={() => setHovered(false)}
       >
         {/* Video Thumbnail */}
-        <Link href={`/watch/${video.id}`} className="relative">
+        <Link href={`/watch/${video._id}`} className="relative">
           <img
-            src={hovered ? video.hoverThumbnail : video.thumbnail}
+            src={hovered ? video.thumbnail : video.thumbnail}
             alt={video.title}
             className="w-full h-48 object-cover"
           />
@@ -26,7 +26,7 @@ export default function VideoCard({ video }) {
             <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-12 w-12 text-white"
+                className="h-8 w-8 text-white border border-white rounded-full"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -45,7 +45,7 @@ export default function VideoCard({ video }) {
         {/* Video Details */}
         <div className="p-3 flex flex-col gap-2">
           <Link
-            href={`/watch/${video.id}`}
+            href={`/watch/${video._id}`}
             className="text-lg font-semibold text-gray-900"
           >
             {video.title}

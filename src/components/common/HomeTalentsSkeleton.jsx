@@ -4,11 +4,11 @@ import React from "react";
 
 function HomeTalentsSkeleton() {
   return (
-    <div className="flex flex-wrap gap-4">
-      {Array.from({ length: 4 }).map((_, index) => (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      {Array.from({ length: 8}).map((_, index) => (
         <div
           key={index}
-          className="w-[250px] rounded-md overflow-hidden bg-white shadow animate-pulse"
+          className="rounded-md overflow-hidden bg-white shadow animate-pulse"
         >
           {/* Video Thumbnail Placeholder */}
           <div className="h-40 bg-gray-300 w-full"></div>

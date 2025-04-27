@@ -25,15 +25,15 @@ function CategoriesModel({
         </button>
         {categories.map((cat) => (
           <button
-          key={cat}
-            onClick={() => handleSelectCatgeory(cat)}
+          key={cat._id}
+            onClick={() => handleSelectCatgeory(cat.title)}
             className={`px-4 py-2  rounded ${
-              selectedCategory === cat
+              selectedCategory === cat.title
                 ? "bg-secondary shadow hover:bg-secondary/90 text-white"
                 : "bg-white border  text-black border-gray-300 hover:bg-gray-200"
             }`}
           >
-            {cat}
+            {cat.title}
           </button>
         ))}
       </div>

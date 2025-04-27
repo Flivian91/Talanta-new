@@ -1,3 +1,4 @@
+import { handleApiError } from "@/middleware/errorHandler";
 import Talent from "@/models/talent";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
@@ -42,8 +43,8 @@ export async function GET(req) {
       filter.createdAt = {
         $lte: new Date(endDate),
       };
-    };
-    
+    }
+
     if (status) {
       filter.approved = status;
     }
@@ -72,44 +73,14 @@ export async function POST(req) {
     await connectDB();
 
     const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
-    const clerkID = searchParams.get("clerkID");
+    const userID = "user_2w3QjYFrcdezo8DClMHrJamNNjR";
     // TODO: get currently logged user
-    // if (!userID && Types.ObjectId.isValid(userID)) {
-    //   return NextResponse.json(
-    //     {
-    //       status: "failed",
-    //       message: "Invalid or Missing User ID",
-    //     },
-    //     { status: 400 }
-    //   );
-    // }
-    // if (!clerkID) {
-    //   return NextResponse.json(
-    //     {
-    //       status: "failed",
-    //       message: "Invalid or Missing Clerk ID",
-    //     },
-    //     { status: 400 }
-    //   );
-    // }
-    const user = await User.findById(userID);
-
-    if (!user) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "User not found",
-        },
-        { status: 404 }
-      );
-    }
     // Validate Talent data
     const body = await req.json();
 
     // const {userId} = await auth()
     // This clerk ID
-    const data = { ...body, clerkID, userID };
+    const data = { ...body, userID };
     const validatedData = talentSchema.parse(data);
     // Validate talent Title
     const existingTalent = await Talent.findOne({ title: validatedData.title });
@@ -135,13 +106,6 @@ export async function POST(req) {
     );
   } catch (error) {
     console.log("Error Creating the Talent", error);
-    return NextResponse.json(
-      {
-        status: "failed",
-        message: "Error Creating the Talent",
-        error: error.message,
-      },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }

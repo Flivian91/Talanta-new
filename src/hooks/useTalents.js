@@ -12,6 +12,7 @@ const fetchTalents = async ({ queryKey }) => {
 
 
   const res = await fetch(`/api/talents?${params.toString()}`);
+  console.log(res)
 
   if (!res.ok) throw new Error("Failed to fetch talents");
   return await res.json();

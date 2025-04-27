@@ -7,12 +7,7 @@ const TalentSchema = new mongoose.Schema(
     categories: [String], // Max 3 categories
     videoUrl: { type: String, required: true },
     thumbnailUrl: { type: String },
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    clerkID: { type: String, required:true },
+    userID: { type: String, required:true },
     commentsCount: { type: Number, default: 0 },
     likesCount: { type: Number, default: 0 },
     shareCount: { type: Number, default: 0 },
