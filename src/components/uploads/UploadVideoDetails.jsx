@@ -97,14 +97,13 @@ function UploadVideoDetails({ data }) {
         description,
         videoUrl: data?.url, // Ensure data exists before accessing url
         thumbnailUrl: thumbnail || data?.thumbnail_url, // Ensure correct thumbnail
-        userID,
         categories: categories.map((category) => category.toLowerCase()),
       };
 
       console.log("Request Payload:", payload);
       const token = await getToken();
 
-      const response = await fetch(`/api/talents?userID=${userID}`, {
+      const response = await fetch(`/api/talents`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -116,11 +115,10 @@ function UploadVideoDetails({ data }) {
       console.log("Response Status:", response.status);
 
       const responseData = await response.json();
-      console.log("API Response:", responseData);
 
       if (response.ok) {
         toast.success("Talent Uploaded Successfully!");
-        push(`/watch/${responseData.$id}`);
+        push(`/watch/${responseData._id}`);
         localStorage.removeItem("videoInfo");
       } else {
         console.error("Upload Error:", responseData);
@@ -137,7 +135,10 @@ function UploadVideoDetails({ data }) {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <section className="flex flex-col gap-5 pb-3">
+    <section className="flex flex-col  pb-3">
+      <div className="py-3 flex items-center justify-center">
+        <h1 className="text-xl md:text-3xl font-semibold tracking-wider text-gray-600">Video Details</h1>
+      </div>
       {isModelOpen && (
         <FinalVideoUploadModel
           createTalent={handleField}
@@ -149,9 +150,9 @@ function UploadVideoDetails({ data }) {
         <VideoUploadOverlay onClose={() => setModelOpen(false)} />
       )}
 
-      <div className="grid grid-cols-1   gap-2 md:gap-5 w-full py-4 px-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2  gap-8 md:gap-5 w-full py-4 px-2">
         {/* Description area */}
-        <div className="flex flex-col gap-6  w-full  ">
+        <div className="flex flex-col gap-6  w-full  lg:row-start-1 ">
           {/* Title Element */}
           <div
             className={`group rounded  w-full border  flex flex-col px-2 py-2 ${
@@ -373,7 +374,7 @@ function UploadVideoDetails({ data }) {
         </div>
       </div>
       {/* Upload button */}
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center mt-5">
         <button
           onClick={() => setModelOpen(true)}
           className="px-12 py-2 bg-secondary text-white rounded text-xl tracking-wide font-semibold"

@@ -9,13 +9,13 @@ import { NextResponse } from "next/server";
 export async function GET(req, segmentData) {
   try {
     //TODO; Get User from the current session
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { status: "failed", message: "Unauthorized Access" },
-        { status: 401 }
-      );
-    }
+    // const { userId } = await auth();
+    // if (!userId) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "Unauthorized Access" },
+    //     { status: 401 }
+    //   );
+    // }
     const { talentID } = await segmentData.params;
     if (!talentID && !Types.ObjectId.isValid(talentID)) {
       return NextResponse.json(
