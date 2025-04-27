@@ -12,13 +12,13 @@ export async function GET(req) {
     await connectDB();
     // TODO get currently logged in user
     // GEt currently Logged in User
-    const { userId } = await auth();
-    if (!userId) {
-      return NextResponse.json(
-        { status: "failed", message: "Unauthorized Access" },
-        { status: 401 }
-      );
-    }
+    // const { userId } = await auth();
+    // if (!userId) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "Unauthorized Access" },
+    //     { status: 401 }
+    //   );
+    // }
     const categories = await Category.find().sort({ createdAt: -1 });
     return NextResponse.json(
       { status: "success", data: categories },

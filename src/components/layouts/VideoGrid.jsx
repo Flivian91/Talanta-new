@@ -4,19 +4,24 @@ import useFilteredTalents from "@/hooks/useFilteredTalents";
 import { useState } from "react";
 import CartegorySection from "../sections/CartegorySection";
 import { allTalents } from "../data/talents";
-import { categories } from "../data/categories";
 import VideoCard from "../cards/VideoCard";
 import { FaFilter } from "react-icons/fa";
 import { useUser } from "@clerk/nextjs";
 import CategoriesModel from "../models/CategoriesModel";
-import TransparentOverlay from "../overlays/TransparentOverlay";
+import { useTalents } from "@/hooks/useTalents";
+import { useCategories } from "@/hooks/useCategories";
 
 export default function VideoGrid() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [isModelOpen, setModelOpen] = useState(false);
-  const filteredTalents = useFilteredTalents(allTalents, selectedCategory);
   const { user, isSignedIn } = useUser();
   const fakeName = user?.primaryEmailAddress?.emailAddress.split("@").at(0);
+  const {
+    data: categories,
+    error: categoriesError,
+    isLoading: loadingCategories,
+  } = useCategories();
+  const filteredTalents = useFilteredTalents(allTalents, selectedCategory);
 
   return (
     <div className="px-4  flex flex-col gap-4">
@@ -36,7 +41,7 @@ export default function VideoGrid() {
       <div className="hidden md:block">
         <CartegorySection
           selectedCategory={selectedCategory}
-          categories={categories}
+          categories={categories?.data}
           onSelectCategory={setSelectedCategory}
         />
       </div>
@@ -52,12 +57,13 @@ export default function VideoGrid() {
           <span>Filter</span>
         </button>
         {isModelOpen && (
-          <CategoriesModel
-            onSelectCategory={setSelectedCategory}
-            selectedCategory={selectedCategory}
-            categories={categories}
-            onClose={() => setModelOpen(false)}
-          />
+          <></>
+          // <CategoriesModel
+          //   onSelectCategory={setSelectedCategory}
+          //   selectedCategory={selectedCategory}
+          //   categories={categories?.data}
+          //   onClose={() => setModelOpen(false)}
+          // />
         )}
       </div>
       <div>

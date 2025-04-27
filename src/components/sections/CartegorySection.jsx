@@ -19,8 +19,8 @@ function CartegorySection({ onSelectCategory, selectedCategory, categories }) {
       {/* Individual Categories */}
       {categories.map((cat) => (
         <button
-          key={cat}
-          onClick={() => onSelectCategory(cat)}
+          key={cat._id}
+          onClick={() => onSelectCategory(cat.title)}
           className={`px-4 py-2 rounded-full border transition
           ${
             selectedCategory === cat
@@ -28,7 +28,7 @@ function CartegorySection({ onSelectCategory, selectedCategory, categories }) {
               : "bg-white text-gray-700 border-gray-300 hover:bg-gray-200"
           }`}
         >
-          {cat}
+          {cat.title}
         </button>
       ))}
     </div>
