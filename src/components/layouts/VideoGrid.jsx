@@ -10,6 +10,7 @@ import { useUser } from "@clerk/nextjs";
 import CategoriesModel from "../models/CategoriesModel";
 import { useTalents } from "@/hooks/useTalents";
 import { useCategories } from "@/hooks/useCategories";
+import { toast } from "react-toastify";
 
 export default function VideoGrid() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -21,7 +22,12 @@ export default function VideoGrid() {
     error: categoriesError,
     isLoading: loadingCategories,
   } = useCategories();
+  const {data:talents, error:talentsError, isLoading:loading} = useTalents()
   const filteredTalents = useFilteredTalents(allTalents, selectedCategory);
+  // Error Handling
+  if (categoriesError) {
+    console.log("Error loading categories");
+  }
 
   return (
     <div className="px-4  flex flex-col gap-4">
@@ -39,11 +45,19 @@ export default function VideoGrid() {
       </div>
       {/* Category Selection */}
       <div className="hidden md:block">
-        <CartegorySection
-          selectedCategory={selectedCategory}
-          categories={categories?.data}
-          onSelectCategory={setSelectedCategory}
-        />
+        {loadingCategories ? (
+          <div className="flex items-center gap-4">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div className="w-32 h-8 rounded-full bg-gray-200 animate-pulse"></div>
+            ))}
+          </div>
+        ) : (
+          <CartegorySection
+            selectedCategory={selectedCategory}
+            categories={categories?.data}
+            onSelectCategory={setSelectedCategory}
+          />
+        )}
       </div>
       <div className="relative transition-all duration-300 flex items-center justify-between md:hidden">
         <span className="text-xs sm:text-sm md:text-base tracking-wide font-medium">
