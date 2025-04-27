@@ -27,6 +27,9 @@ function AdminReportUserPerMonth({ filter, userPerMonth, loading }) {
           )}
         </div>
       ) : null}
+
+
+
     </div>
   );
 }

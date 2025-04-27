@@ -16,7 +16,7 @@ import MobileSidebar from "./MobileSidebar";
 export default function Header() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isInputOpen, setIsInputOpen] = useState(false);
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, user, isLoaded } = useUser();
   const role = user?.publicMetadata?.role;
   return (
     <div>
@@ -58,16 +58,16 @@ export default function Header() {
             <SignedOut>
               <div className="flex items-center gap-2 transition-all duration-300">
                 <Link
-                  href="/auth/signup"
-                  className="md:inline-block hidden ml-2 px-4 py-2 rounded bg-secondary hover:bg-secondary/90 text-white  text-xs md:text-sm font-bold tracking-wider "
-                >
-                  Sign Up
-                </Link>
-                <Link
                   href="/auth/signin"
                   className="inline-block ml-2 px-4 py-2 rounded border text-xs sm:text-sm font-bold tracking-wider border-surface/30 "
                 >
                   Sign In
+                </Link>
+                <Link
+                  href="/auth/signup"
+                  className="md:inline-block hidden ml-2 px-4 py-2 rounded bg-secondary hover:bg-secondary/90 text-white  text-xs md:text-sm font-bold tracking-wider "
+                >
+                  Sign Up
                 </Link>
               </div>
             </SignedOut>
