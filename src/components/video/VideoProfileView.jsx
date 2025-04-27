@@ -21,7 +21,6 @@ function VideoProfileView({ data }) {
     isLoading,
     error: userError,
   } = useSingleUser(token, data?.userID);
-  console.log(user);
   return (
     <div className="flex flex-row gap-1 items-center justify-between w-full">
       <div className="flex flex-col gap-1">
@@ -37,7 +36,7 @@ function VideoProfileView({ data }) {
           <div className="flex flex-row gap-2">
             <div className="w-8 h-8 bg-gray-300 rounded-full">
               <Image
-                src={user?.imageUrl}
+                src={user?.data?.imageUrl}
                 height={100}
                 width={100}
                 alt={data?.description}
@@ -46,9 +45,7 @@ function VideoProfileView({ data }) {
             </div>
             <div className="flex flex-col gap-1 text-sm">
               <h2 className="font-semibold tracking-wider text-base">
-                {user?.firstName ||
-                  user?.lastName ||
-                  user?.emailAddresses.at(0).emailAddress.split("@").at(0)}
+                {user?.data?.firstName || user?.data?.lastName}
               </h2>
               <span className="text-xs">20 Subscribers</span>
             </div>
@@ -56,7 +53,7 @@ function VideoProfileView({ data }) {
         )}
       </div>
       <div className="flex flex-row gap-1">
-        <SubscribeButton />
+        <SubscribeButton targetUserId={user?.data?.id} />
       </div>
     </div>
   );
