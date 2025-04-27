@@ -18,7 +18,7 @@ function MobileSidebar({ onClose }) {
   }
   return (
     <div className="fixed top-0 z-50 w-64 bg-primary md:hidden">
-      <div className="flex flex-col gap-0 min-h-screen ">
+      <div className="flex flex-col gap-0 h-screen scrollbar-hide">
         {/* Header part of Mobile */}
         <div className="flex justify-between items-center shadow px-4 py-1">
           {/* logo */}
@@ -81,8 +81,8 @@ function MobileSidebar({ onClose }) {
           {isSignedIn &&
             (role === "admin" ? (
               <DashboardButton link="admin" />
-            ) : role === "sponser" ? (
-              <DashboardButton link="sponser" />
+            ) : role === "sponsor" ? (
+              <DashboardButton link="sponsor" />
             ) : (
               <UploadButton />
             ))}

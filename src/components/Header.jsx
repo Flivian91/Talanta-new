@@ -39,22 +39,22 @@ export default function Header() {
         <div className="flex items-center space-x-6">
           {/* Navigation Links (Hidden on Mobile) */}
           {isSignedIn && (
-            <nav className="hidden md:flex space-x-4">
-              {role === "admin" ? (
-                <DashboardButton link="admin" />
-              ) : role === "sponser" ? (
-                <DashboardButton link="sponsor" />
-              ) : (
-                <UploadButton />
-              )}
-            </nav>
+            isLoaded ?<nav className="hidden md:flex space-x-4">
+            {role === "admin" ? (
+              <DashboardButton link="admin" />
+            ) : role === "sponser" ? (
+              <DashboardButton link="sponsor" />
+            ) : (
+              <UploadButton />
+            )}
+          </nav> : <div className="w-40 h-10 bg-gray-200 animate-pulse rounded"></div>
+            
           )}
           {/* User Profile (Clerk User Button) */}
           <div>
             <SignedIn>
               <UserButton />
             </SignedIn>
-
             <SignedOut>
               <div className="flex items-center gap-2 transition-all duration-300">
                 <Link
