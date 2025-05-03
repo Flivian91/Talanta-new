@@ -29,7 +29,7 @@ export const useFollowUser = () => {
     mutationFn: followUser,
     onSuccess: () => {
       toast.success("✅ Subscribed successfully!");
-      queryClient.invalidateQueries(["Followers"]); // If you have a followers query
+      queryClient.invalidateQueries(["Followers"]); // \ you have a followers query
     },
     onError: (error) => {
       toast.error(`❌ ${error.message}`);
