@@ -5,6 +5,8 @@ const useFilteredTalents = (allTalents, selectedCategory) => {
     if (selectedCategory === "All") {
       return allTalents;
     }
+    console.log(allTalents);
+    
     return allTalents.filter((talent) => talent.category.includes(selectedCategory));
   }, [allTalents, selectedCategory]);
 
