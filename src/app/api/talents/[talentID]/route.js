@@ -80,7 +80,7 @@ export async function PATCH(req, segmentData) {
     const role = await sessionClaims?.metadata?.role;
 
     // TODO: Ensure only admin and owner of the Talent can Delete
-    if (talent.clerkID.toString() !== userId && role !== "admin") {
+    if (talent.clerkID !== userId && role !== "admin") {
       console.log("I am here");
 
       return NextResponse.json(
@@ -144,10 +144,13 @@ export async function DELETE(req, segmentData) {
         { status: 400 }
       );
     }
+    console.log(talent.clerkID);
+    console.log(userId)
+
     const role = await sessionClaims?.metadata?.role;
 
     // TODO: Ensure only admin and owner of the Talent can Delete
-    if (talent.clerkID.toString() !== userId && role !== "admin") {
+    if (talent?.clerkID !== userId && role !== "admin") {
       return NextResponse.json(
         { status: "failed", message: "Permission denied" },
         { status: 403 }
