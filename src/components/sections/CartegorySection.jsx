@@ -1,7 +1,6 @@
 "use client";
 
 function CartegorySection({ onSelectCategory, selectedCategory, categories }) {
-  console.log(categories);
   
   return (
     <div className="flex flex-wrap gap-2 mb-6">

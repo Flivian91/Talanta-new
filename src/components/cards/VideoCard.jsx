@@ -1,30 +1,12 @@
 // src/Components/VideoCard.jsx
 "use client";
 import { formatedDate } from "@/helpers/formatedDate";
-import { useSingleUser } from "@/hooks/useSingleUser";
-import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function VideoCard({ video }) {
   const [hovered, setHovered] = useState(false);
-  const [token, setToken] = useState(null);
-  const { getToken } = useAuth();
-  useEffect(() => {
-    async function getToken() {
-      const t = await getToken();
-      setToken(t);
-    }
-    getToken();
-  }, [token]);
-  const {data:user, isLoading:loadingUser,error:userError } = useSingleUser(token, video.clerkID);
-  console.log(user);
-  
-  if(userError){
-    console.log("Error getting the user Data");
-    
-  }
 
   return (
     <section className="block">
@@ -79,12 +61,12 @@ export default function VideoCard({ video }) {
                 className="h-8 w-8 rounded-full"
               />
             </Link>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex flex-col gap-2">
               <Link
-                href={`/${video.channel}`}
+                href={`/${video?.userInfo?.userName}`}
                 className="text-[10px] font-medium tracking-wide"
               >
-                {video.channel}
+                {video?.userInfo?.userName}
               </Link>
               <p className="text-xs text-gray-500">
                 {video.likesCount} likes • {formatedDate(video.createdAt)}

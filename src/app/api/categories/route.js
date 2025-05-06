@@ -57,14 +57,14 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-    // Check if the category exists
-    const extstingCategory = await Category.find({ title });
-    if (extstingCategory) {
-      return NextResponse.json(
-        { status: "failed", message: "Category already Exists!!" },
-        { status: 400 }
-      );
-    }
+    // // Check if the category exists
+    // const extstingCategory = await Category.find({ title });
+    // if (extstingCategory) {
+    //   return NextResponse.json(
+    //     { status: "failed", message: "Category already Exists!!" },
+    //     { status: 400 }
+    //   );
+    // }
 
     const newCategory = await Category.insertOne({ title });
     return NextResponse.json(

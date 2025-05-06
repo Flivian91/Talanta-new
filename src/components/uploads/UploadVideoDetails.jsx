@@ -87,7 +87,7 @@ function UploadVideoDetails({ data }) {
   }
 
   // Upload video on the backend.
-  
+
   async function createTalent() {
     try {
       setLoading(true);
@@ -103,8 +103,7 @@ function UploadVideoDetails({ data }) {
         userInfo: {
           userID: user?.id,
           userName:
-            user?.firstName ||
-            user?.lastName ||
+            `${user?.firstName + " " + user?.lastName}` ||
             user?.emailAddresses.at(0).emailAddress.split("@").at(0),
         },
         role: user?.publicMetadata.role,
@@ -125,7 +124,7 @@ function UploadVideoDetails({ data }) {
 
       if (response.ok) {
         console.log(responseData);
-        
+
         toast.success("Talent Uploaded Successfully!");
         push(`/watch/${responseData?.data._id}`);
         localStorage.removeItem("videoInfo");
