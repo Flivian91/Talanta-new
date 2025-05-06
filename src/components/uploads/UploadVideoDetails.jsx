@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import LoadingSpinner from "../common/LoadingSpinner";
 import FinalVideoUploadModel from "../models/FinalVideoUploadModel";
 import VideoUploadOverlay from "../overlays/VideoUploadOverlay";
+import { useCategories } from "@/hooks/useCategories";
 
 function UploadVideoDetails({ data }) {
   const [categories, setCategories] = useState([]);
@@ -27,7 +28,15 @@ function UploadVideoDetails({ data }) {
   const { getToken } = useAuth();
   const { user } = useUser();
   const { push } = useRouter();
+  const {
+    data: adminCategories,
+    isLoading: loadingCategories,
+    isError: categoriesError,
+  } = useCategories();
 
+  if (categoriesError) {
+    console.log("Error Loading Categories");
+  }
   const inputRef = useRef(null);
 
   function handleSubmit(e) {
@@ -278,64 +287,63 @@ function UploadVideoDetails({ data }) {
             </div>
           </div>
           {/* Categories section */}
-          <div
-            className={`group rounded  w-full border  flex flex-col px-2 py-2 ${
-              categories.length === 3
-                ? "border-green-600 hover:green-red-900"
-                : " hover:border-gray-900 border-gray-400"
-            }: `}
-          >
+          <div className="flex flex-col gap-2">
             <label
-              htmlFor="category"
-              className={`text-sm font-medium tracking-wide  ${
+              htmlFor="categories"
+              className={`text-sm font-medium tracking-wide ${
                 categories.length === 3 ? "text-green-600" : "text-gray-600"
               }`}
             >
-              {categories.length === 3 ? (
-                <span className="mb-2 inline-block">
-                  Maximum categories Reached
-                </span>
-              ) : (
-                <span className="mb-2 inline-block">
-                  Category(Maximum of 3)
-                </span>
-              )}
+              {categories.length === 3
+                ? "Maximum categories reached"
+                : "Select Categories (Max 3)"}
             </label>
-            <div className="flex flex-col gap-2">
-              <form
-                onSubmit={(e) => handleSubmit(e)}
-                className="flex items-center gap-2"
-              >
-                <input
-                  type="text"
-                  id="category"
-                  placeholder="Add a category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      setCategories(e.target.value);
-                      setCategory("");
+
+            <div className="flex flex-wrap gap-2">
+              {adminCategories?.data.map((cat) => (
+                <button
+                  key={cat._id}
+                  type="button"
+                  disabled={
+                    categories.includes(cat.title) || categories.length >= 3
+                  }
+                  onClick={() => {
+                    if (
+                      !categories.includes(cat.title) &&
+                      categories.length < 3
+                    ) {
+                      setCategories([...categories, cat.title]);
                     }
                   }}
-                  required
-                  className="border outline-none focus:outline-none border-gray-300 rounded px-2 py-1 font-medium w-full"
-                />
-                <button
-                  type="submit"
-                  className="bg-secondary text-white rounded px-2 py-1 text-sm font-medium tracking-wider"
+                  className={`px-3 py-1 rounded-full border text-sm ${
+                    categories.includes(cat.title)
+                      ? "bg-green-500 text-white"
+                      : "border-gray-400 text-gray-600"
+                  }`}
                 >
-                  Add
+                  {cat.title}
                 </button>
-              </form>
-              <div className="flex items-center gap-3 text-sm font-medium text-gray-500 list-disc list-inside">
-                {categories.length === 0
-                  ? null
-                  : categories.map((cat, index) => (
-                      <CategoryListCard key={index} text={cat} index={index} />
-                    ))}
-              </div>
+              ))}
+            </div>
+
+            <div className="flex gap-2 mt-2 flex-wrap">
+              {categories.map((cat, index) => (
+                <div
+                  key={index}
+                  className="bg-gray-200 px-2 py-1 rounded-full text-sm flex items-center gap-2"
+                >
+                  {cat}
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setCategories(categories.filter((c) => c !== cat))
+                    }
+                    className="text-red-600 font-bold"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>
