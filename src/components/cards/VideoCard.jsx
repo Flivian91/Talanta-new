@@ -1,11 +1,30 @@
 // src/Components/VideoCard.jsx
 "use client";
+import { formatedDate } from "@/helpers/formatedDate";
+import { useSingleUser } from "@/hooks/useSingleUser";
+import { useAuth } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function VideoCard({ video }) {
   const [hovered, setHovered] = useState(false);
+  const [token, setToken] = useState(null);
+  const { getToken } = useAuth();
+  useEffect(() => {
+    async function getToken() {
+      const t = await getToken();
+      setToken(t);
+    }
+    getToken();
+  }, [token]);
+  const {data:user, isLoading:loadingUser,error:userError } = useSingleUser(token, video.clerkID);
+  console.log(user);
+  
+  if(userError){
+    console.log("Error getting the user Data");
+    
+  }
 
   return (
     <section className="block">
@@ -17,7 +36,7 @@ export default function VideoCard({ video }) {
         {/* Video Thumbnail */}
         <Link href={`/watch/${video._id}`} className="relative">
           <img
-            src={hovered ? video.thumbnail : video.thumbnail}
+            src={hovered ? video.thumbnailUrl : video.thumbnailUrl}
             alt={video.title}
             className="w-full h-48 object-cover"
           />
@@ -46,7 +65,7 @@ export default function VideoCard({ video }) {
         <div className="p-3 flex flex-col gap-2">
           <Link
             href={`/watch/${video._id}`}
-            className="text-lg font-semibold text-gray-900"
+            className="text-lg font-semibold text-gray-900 truncate"
           >
             {video.title}
           </Link>
@@ -61,11 +80,14 @@ export default function VideoCard({ video }) {
               />
             </Link>
             <div className="flex items-center justify-between gap-2">
-              <Link href={`/${video.channel}`} className="text-[10px] font-medium tracking-wide">
+              <Link
+                href={`/${video.channel}`}
+                className="text-[10px] font-medium tracking-wide"
+              >
                 {video.channel}
               </Link>
               <p className="text-xs text-gray-500">
-                {video.views} • {video.published}
+                {video.likesCount} likes • {formatedDate(video.createdAt)}
               </p>
             </div>
           </div>

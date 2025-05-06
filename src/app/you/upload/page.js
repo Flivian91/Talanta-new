@@ -2,6 +2,7 @@
 
 import UploadVideoModel from "@/components/models/UploadVideoModel";
 import VideoUploadOverlay from "@/components/overlays/VideoUploadOverlay";
+import { useUser } from "@clerk/nextjs";
 import { CldUploadWidget } from "next-cloudinary";
 import Link from "next/link";
 import { useRouter } from "next/navigation";

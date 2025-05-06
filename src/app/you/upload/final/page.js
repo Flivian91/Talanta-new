@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import UploadVideoDetails from "@/components/uploads/UploadVideoDetails";
 import VideoNotFound from "@/components/uploads/VideoNotFound";
+import { useUser } from "@clerk/nextjs";
 
 function FinalVideoUploadPage() {
   const [mediaData, setMediaData] = useState(null);
+
 
   useEffect(() => {
     // Retrieve video data from LocalStorage

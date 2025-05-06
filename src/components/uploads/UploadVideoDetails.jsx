@@ -9,7 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import { FaCopy, FaUpload } from "react-icons/fa";
 import { toast } from "react-toastify";
 import CategoryListCard from "./CategoryListCard";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "../common/LoadingSpinner";
 import FinalVideoUploadModel from "../models/FinalVideoUploadModel";
@@ -24,7 +24,8 @@ function UploadVideoDetails({ data }) {
   const [videoId, setVideoId] = useState("");
   const [loading, setLoading] = useState(false);
   const [isModelOpen, setModelOpen] = useState(false);
-  const { userId: userID, getToken } = useAuth();
+  const { getToken } = useAuth();
+  const { user } = useUser();
   const { push } = useRouter();
 
   const inputRef = useRef(null);
@@ -86,6 +87,7 @@ function UploadVideoDetails({ data }) {
   }
 
   // Upload video on the backend.
+  
   async function createTalent() {
     try {
       setLoading(true);
@@ -98,9 +100,16 @@ function UploadVideoDetails({ data }) {
         videoUrl: data?.url, // Ensure data exists before accessing url
         thumbnailUrl: thumbnail || data?.thumbnail_url, // Ensure correct thumbnail
         categories: categories.map((category) => category.toLowerCase()),
+        userInfo: {
+          userID: user?.id,
+          userName:
+            user?.firstName ||
+            user?.lastName ||
+            user?.emailAddresses.at(0).emailAddress.split("@").at(0),
+        },
+        role: user?.publicMetadata.role,
+        userProfileUrl: user?.imageUrl,
       };
-
-      console.log("Request Payload:", payload);
       const token = await getToken();
 
       const response = await fetch(`/api/talents`, {
@@ -112,13 +121,13 @@ function UploadVideoDetails({ data }) {
         body: JSON.stringify(payload),
       });
 
-      console.log("Response Status:", response.status);
-
       const responseData = await response.json();
 
       if (response.ok) {
+        console.log(responseData);
+        
         toast.success("Talent Uploaded Successfully!");
-        push(`/watch/${responseData._id}`);
+        push(`/watch/${responseData?.data._id}`);
         localStorage.removeItem("videoInfo");
       } else {
         console.error("Upload Error:", responseData);
@@ -137,7 +146,9 @@ function UploadVideoDetails({ data }) {
   return (
     <section className="flex flex-col  pb-3">
       <div className="py-3 flex items-center justify-center">
-        <h1 className="text-xl md:text-3xl font-semibold tracking-wider text-gray-600">Video Details</h1>
+        <h1 className="text-xl md:text-3xl font-semibold tracking-wider text-gray-600">
+          Video Details
+        </h1>
       </div>
       {isModelOpen && (
         <FinalVideoUploadModel

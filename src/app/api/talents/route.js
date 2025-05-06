@@ -71,17 +71,12 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     await connectDB();
-
-    const { searchParams } = new URL(req.url);
-    const userID = "user_2w3QjYFrcdezo8DClMHrJamNNjR";
     // TODO: get currently logged user
     // Validate Talent data
     const body = await req.json();
 
-    // const {userId} = await auth()
     // This clerk ID
-    const data = { ...body, userID };
-    const validatedData = talentSchema.parse(data);
+    const validatedData = talentSchema.parse(body);
     // Validate talent Title
     const existingTalent = await Talent.findOne({ title: validatedData.title });
 
