@@ -114,8 +114,9 @@ function UploadVideoDetails({ data }) {
           userName:
             `${user?.firstName + " " + user?.lastName}` ||
             user?.emailAddresses.at(0).emailAddress.split("@").at(0),
+          role: user?.publicMetadata.role,
         },
-        role: user?.publicMetadata.role,
+
         userProfileUrl: user?.imageUrl,
       };
       const token = await getToken();

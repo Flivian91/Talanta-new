@@ -20,7 +20,7 @@ export const talentSchema = z.object({
   userInfo: z.object({
     userID: z.string().min(1, { message: "User ID is required" }),
     userName: z.string().min(1, { message: "User name is required" }),
-    role: z.string().min(1, { message: "User role is required" }).default("user"),
+    role: z.string().min(1, { message: "User role is required" }),
     userProfileUrl: z.string().url({ message: "Invalid profile URL" }).optional(),
   }),
 

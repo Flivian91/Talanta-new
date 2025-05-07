@@ -2,7 +2,7 @@ import { useMemo } from "react";
 
 const useFilteredTalents = (allTalents, selectedCategory) => {
   const filteredTalents = useMemo(() => {
-    if (selectedCategory === "All") {
+    if (selectedCategory === "all") {
       return allTalents;
     }
     return allTalents.filter((talent) => talent.categories.includes(selectedCategory));

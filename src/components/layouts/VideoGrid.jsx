@@ -3,15 +3,14 @@
 import useFilteredTalents from "@/hooks/useFilteredTalents";
 import { useState } from "react";
 import CartegorySection from "../sections/CartegorySection";
-import { allTalents } from "../data/talents";
 import VideoCard from "../cards/VideoCard";
 import { FaFilter } from "react-icons/fa";
 import { useUser } from "@clerk/nextjs";
 import CategoriesModel from "../models/CategoriesModel";
 import { useTalents } from "@/hooks/useTalents";
 import { useCategories } from "@/hooks/useCategories";
-import { toast } from "react-toastify";
 import HomeTalentsSkeleton from "../common/HomeTalentsSkeleton";
+import Pagination from "../common/Pagination";
 
 export default function VideoGrid() {
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -32,7 +31,8 @@ export default function VideoGrid() {
     isLoading: loadingTalents,
   } = useTalents({ limit, page });
 
-  const filteredTalents = useFilteredTalents(talents?.data, selectedCategory);
+  const filteredTalents = useFilteredTalents(talents?.data, selectedCategory.toLocaleLowerCase());
+
   // Error Handling
   if (categoriesError) {
     console.log("Error loading categories");
@@ -42,7 +42,7 @@ export default function VideoGrid() {
   }
 
   return (
-    <div className="px-4  flex flex-col gap-4">
+    <div className="px-4 flex flex-col gap-4">
       <div className="text-base sm:text-xl md:text-3xl font-bold ">
         {isSignedIn ? (
           <h1 className="tracking-wide">
@@ -112,6 +112,13 @@ export default function VideoGrid() {
           <p className="text-gray-600">No talents found in this category.</p>
         )}
       </div>
+      <Pagination
+        limit={limit}
+        setLimit={setLimit}
+        page={page}
+        setPage={setPage}
+        total={talents?.count}
+      />
     </div>
   );
 }

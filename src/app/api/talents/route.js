@@ -3,6 +3,7 @@ import Talent from "@/models/talent";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
 import { talentSchema } from "@/validator/talents/talentSchema";
+import { auth } from "@clerk/nextjs/server";
 // import { auth } from "@clerk/nextjs/server";
 // import { Types } from "mongoose";
 import { NextResponse } from "next/server";
@@ -70,8 +71,16 @@ export async function GET(req) {
 // POST request to create a new talent
 export async function POST(req) {
   try {
-    await connectDB();
     // TODO: get currently logged user
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json(
+        { status: "failed", message: "Unauthorized Access" },
+        { status: 401 }
+      );
+    }
+    // Connect to database
+    await connectDB();
     // Validate Talent data
     const body = await req.json();
 
