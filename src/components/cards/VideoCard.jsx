@@ -62,12 +62,17 @@ export default function VideoCard({ video }) {
               />
             </Link>
             <div className="flex flex-col gap-2">
-              <Link
-                href={`/${video?.userInfo?.userName}`}
-                className="text-[10px] font-medium tracking-wide"
-              >
-                {video?.userInfo?.userName}
-              </Link>
+              <div className="flex items-center justify-between gap-4 w-full">
+                <Link
+                  href={`/${video?.userInfo?.userName}`}
+                  className="text-[10px] font-medium tracking-wide"
+                >
+                  {video?.userInfo?.userName}
+                </Link>
+                <button className="text-xs px-2 border border-gray-300 rounded-full">
+                  {video?.userInfo?.role}
+                </button>
+              </div>
               <p className="text-xs text-gray-500">
                 {video.likesCount} likes • {formatedDate(video.createdAt)}
               </p>
