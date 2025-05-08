@@ -1,6 +1,6 @@
 import React from "react";
 import VideoProfileView from "./VideoProfileView";
-import VideoActions from "./VideoActions";
+import LikeButton from "../buttons/LikeButton";
 
 function VideoInfo({ data }) {
   return (
@@ -10,9 +10,9 @@ function VideoInfo({ data }) {
           {data.title}
         </h1>
       </div>
-      <div className="flex items-center flex-col md:flex-row justify-between w-full gap-6 md:gap-4">
+      <div className="flex items-center flex-row justify-between w-full gap-6 md:gap-4 ">
         <VideoProfileView data={data} />
-        <VideoActions />
+        <LikeButton data={data} />
       </div>
     </div>
   );
