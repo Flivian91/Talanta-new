@@ -28,7 +28,7 @@ function LikeButton({ data }) {
         <p className="w-2 h-2 rounded-full border-t border-b border-white animate-spin"></p>
       )}
       <AiOutlineLike />
-      <span>{data.likesCount > 0 ? data.likesCount : ""}</span>
+      <span className="font-mono">{data.likesCount > 0 ? data.likesCount : ""}</span>
     </button>
   );
 }

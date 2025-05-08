@@ -84,6 +84,8 @@ export async function POST(req) {
     await connectDB();
     // Validate Talent data
     const body = await req.json();
+    console.log(body);
+    
 
     // This clerk ID
     const validatedData = talentSchema.parse(body);

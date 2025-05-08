@@ -57,6 +57,7 @@ export async function POST(req) {
         { status: 400 }
       );
     }
+
     // Toogle Mechanism
     // Check if user has already liked the target
     const existingLike = await Like.findOne({ userID, talentID });

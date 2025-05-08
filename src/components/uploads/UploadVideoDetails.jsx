@@ -111,14 +111,17 @@ function UploadVideoDetails({ data }) {
         categories: categories.map((category) => category.toLowerCase()),
         userInfo: {
           userID: user?.id,
+          role: user?.publicMetadata.role,
           userName:
             `${user?.firstName + " " + user?.lastName}` ||
             user?.emailAddresses.at(0).emailAddress.split("@").at(0),
-          role: user?.publicMetadata.role,
+          
         },
 
         userProfileUrl: user?.imageUrl,
       };
+      console.log(user);
+      
       const token = await getToken();
 
       const response = await fetch(`/api/talents`, {

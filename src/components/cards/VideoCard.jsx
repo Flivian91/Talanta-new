@@ -73,7 +73,7 @@ export default function VideoCard({ video }) {
                   {video?.userInfo?.role}
                 </button>
               </div>
-              <p className="text-xs text-gray-500">
+              <p className="text-xs text-gray-500 tracking-wider font-mono">
                 {video.likesCount} likes • {formatedDate(video.createdAt)}
               </p>
             </div>
