@@ -19,13 +19,13 @@ export default function DiscoverPage() {
       <h1 className="text-3xl font-bold mb-6">Discover Talents</h1>
 
       {/* Category Selection */}
-      <div className="hidden md:block">
-        {/* <CartegorySection
+      {/* <div className="hidden md:block">
+        <CartegorySection
           selectedCategory={selectedCategory}
           categories={categories}
           onSelectCategory={setSelectedCategory}
-        /> */}
-      </div>
+        />
+      </div> */}
       <div className="relative transition-all duration-300 flex items-center justify-between md:hidden mb-5">
         <span className="text-xs sm:text-sm md:text-base tracking-wide font-medium">
           Filter talent by:
@@ -44,8 +44,8 @@ export default function DiscoverPage() {
             categories={categories}
             onClose={() => setModelOpen(false)}
           />
-        )}
-      </div> */}
+        )} */}
+      </div>
 
       {/* Grid of Talents */}
       {filteredTalents.length > 0 ? (
