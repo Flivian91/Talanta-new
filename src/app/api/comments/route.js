@@ -1,6 +1,8 @@
+import { handleApiError } from "@/middleware/errorHandler";
 import Comment from "@/models/comment";
 import Talent from "@/models/talent";
 import connectDB from "@/utils/db";
+import { auth } from "@clerk/nextjs/server";
 import { Types } from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -11,7 +13,6 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const talentID = searchParams.get("talentID");
     const userID = searchParams.get("userID");
-    const clerkID = searchParams.get("clerkID");
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
     const skip = ((page || 1) - 1) * (limit || 10);
@@ -24,20 +25,11 @@ export async function GET(req) {
         { status: 400 }
       );
     }
-    if (!userID || !Types.ObjectId.isValid(userID)) {
+    if (!userID) {
       return NextResponse.json(
         {
           status: "failed",
-          message: "Invalid or Missing User ID",
-        },
-        { status: 400 }
-      );
-    }
-    if (!clerkID) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Invalid or Missing Clerk ID",
+          message: "Invalid or Missing user ID",
         },
         { status: 400 }
       );
@@ -68,16 +60,15 @@ export async function POST(req) {
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);
-    const userID = searchParams.get("userID");
+    const {userId:userID} = await auth()
     const talentID = searchParams.get("talentID");
-    const clerkID = searchParams.get("clerkID");
-    if (!userID || !Types.ObjectId.isValid(userID)) {
+    if (!userID) {
       return NextResponse.json(
         {
           status: "failed",
-          message: "Invalid or Missing User ID",
+          message: "unauthorized Access",
         },
-        { status: 400 }
+        { status: 401 }
       );
     }
     if (!talentID || !Types.ObjectId.isValid(talentID)) {
@@ -89,22 +80,14 @@ export async function POST(req) {
         { status: 400 }
       );
     }
-    if (!clerkID) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Invalid or Missing Clerk ID",
-        },
-        { status: 400 }
-      );
-    }
+
     // Create a new comment
-    const { text, likesCount } = await req.json();
+    const { text } = await req.json();
+    console.log(text);
     const comment = await Comment.insertOne({
       userID,
       talentID,
-      text,
-      likesCount,
+      text
     });
     // Update the comments count in the talent
     await Talent.findByIdAndUpdate(talentID, {
@@ -116,13 +99,6 @@ export async function POST(req) {
       data: comment,
     });
   } catch (error) {
-    console.log("Error Creating Comment", error);
-    return NextResponse.json(
-      {
-        status: "failed",
-        message: "Error Creating Comment",
-      },
-      { status: 500 }
-    );
+    return handleApiError(error)
   }
 }

@@ -7,9 +7,19 @@ import CommentCard from "../cards/CommentCard";
 import CommentPagination from "./CommentPagination";
 import CommentFilter from "../models/CommentFilter";
 import CommentInput from "./CommentInput";
+import { useCreateComment } from "@/libs/react-query/mutations/useCreateComment";
+import { useAuth } from "@clerk/nextjs";
 
-function CommentSection() {
+function CommentSection({ data }) {
+  const { getToken } = useAuth();
   const [isOpen, setOpen] = useState(false);
+  const [text, setText] = useState("");
+  const { mutateAsync: createComment, isPending } = useCreateComment();
+  async function handleCreateComment(e) {
+    e.preventDefault();
+    const token = await getToken();
+    await createComment({ talentID: data?._id, token, text });
+  }
   return (
     <div className="rounded shadow border border-gray-200 py-2 ">
       <div className="flex flex-col gap-2">
@@ -17,11 +27,10 @@ function CommentSection() {
           <div className="relative flex items-center justify-between ">
             <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600">
               <span className=" font-mono tracking-wide font-semibold ">
-                10
+                {data.commentsCount}
               </span>
               <h1 className="tracking-wide font-semibold ">Comments</h1>
             </div>
-
             <button
               onClick={() => setOpen((prev) => !prev)}
               className="p-1 hover:bg-gray-200 rounded-sm transition-all duration-300 hover:text-black "
@@ -30,7 +39,12 @@ function CommentSection() {
             </button>
             {isOpen && <CommentFilter />}
           </div>
-          <CommentInput />
+          <CommentInput
+            onCreateComment={handleCreateComment}
+            text={text}
+            setText={setText}
+            isPending={isPending}
+          />
         </div>
 
         {/* Comment Card */}

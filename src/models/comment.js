@@ -3,8 +3,7 @@ import mongoose from "mongoose";
 const CommentSchema = new mongoose.Schema(
   {
     userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
       required: true,
     },
     talentID: {
@@ -12,8 +11,7 @@ const CommentSchema = new mongoose.Schema(
       ref: "Talent",
       required: true,
     },
-    text: { type: String, required: true, maxlength: 300 },
-    likesCount: { type: Number, default: 0 },
+    text: { type: String, required: true, maxlength: 300 }
   },
   { timestamps: true }
 );

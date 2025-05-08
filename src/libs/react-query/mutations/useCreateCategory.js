@@ -20,8 +20,8 @@ export const useCreateCategory = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: createCategory,
-    onSuccess: () => {
-      toast.success("✅ Category created successfully!");
+    onSuccess: (mes) => {
+      toast.success(mes.message);
       queryClient.invalidateQueries(["Categories"]); // This will refetch users
     },
     onError: (error) => {

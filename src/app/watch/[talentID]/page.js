@@ -50,11 +50,11 @@ function WatchPage() {
             </div>
 
             <div className="hidden md:block">
-              <CommentSection />
+              <CommentSection data={talent?.data} />
             </div>
           </div>
           <div className="block md:hidden">
-            <CommentSection />
+            <CommentSection data={talent?.data} />
           </div>
         </>
       )}
