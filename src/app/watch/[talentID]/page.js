@@ -1,4 +1,6 @@
 "use client";
+import VideoCard from "@/components/cards/VideoCard";
+import HomeTalentsSkeleton from "@/components/common/HomeTalentsSkeleton";
 import LoadingWatchSkeleton from "@/components/common/LoadingWatchSkeleton";
 import CommentSection from "@/components/video/CommentSection";
 import RelatedVideos from "@/components/video/RelatedVideos";
@@ -7,8 +9,9 @@ import VideoDescription from "@/components/video/VideoDescription";
 import VideoInfo from "@/components/video/VideoInfo";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import { useSingleTalent } from "@/hooks/useGetSingleTalent";
+import { useTalents } from "@/hooks/useTalents";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 
 function WatchPage() {
   const { talentID } = useParams();
@@ -19,6 +22,20 @@ function WatchPage() {
     isLoading: loadingTalent,
   } = useSingleTalent(talentID);
 
+  const {
+    data: talents,
+    error: talentsError,
+    isLoading: loadingTalents,
+  } = useTalents({ limit: 10 });
+
+  const category = talent?.data?.categories.at(0);
+  const relatedTalents = talents?.data.filter((t) =>
+    t.categories.includes(category)
+  );
+
+  if (talentError) {
+    console.log("Error Fetcing Talent data", talentError);
+  }
   return (
     <div className="flex flex-col gap-4 md:px-2 md:py-4">
       {loadingTalent ? (
@@ -41,7 +58,18 @@ function WatchPage() {
           </div>
         </>
       )}
-      <RelatedVideos />
+      {/* Grid of Talents */}
+      {loadingTalents ? (
+        <HomeTalentsSkeleton />
+      ) : relatedTalents?.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {relatedTalents?.map((talent) => (
+            <VideoCard key={talent.id} video={talent} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-gray-600">No talents found in this category.</p>
+      )}
     </div>
   );
 }

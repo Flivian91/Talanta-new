@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 const followUser = async ({ targetUserId, token }) => {
 
-  const res = await fetch(`/api/follow`, {
+  const res = await fetch(`/api/follow?userID=user_2w2uuZeTFdZ7VWynWtPXBj3oKOF`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -27,8 +27,8 @@ export const useFollowUser = () => {
   
   return useMutation({
     mutationFn: followUser,
-    onSuccess: () => {
-      toast.success("✅ Subscribed successfully!");
+    onSuccess: (mes) => {
+      toast.success(mes);
       queryClient.invalidateQueries(["Followers"]); //  you have a followers query
     },
     onError: (error) => {

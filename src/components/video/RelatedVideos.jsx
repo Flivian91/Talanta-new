@@ -2,7 +2,7 @@ import React from "react";
 import { allTalents } from "../data/talents";
 import VideoCard from "../cards/VideoCard";
 
-function RelatedVideos() {
+function RelatedVideos({relatedTalents}) {
   return (
     <div className="flex flex-col gap-3 px-2 py-2">
       <div>
@@ -12,9 +12,9 @@ function RelatedVideos() {
       </div>
       <div>
         {/* Grid of Talents */}
-        {allTalents.length > 0 ? (
+        {relatedTalents?.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {allTalents.map((talent) => (
+            {relatedTalents?.map((talent) => (
               <VideoCard key={talent.id} video={talent} />
             ))}
           </div>

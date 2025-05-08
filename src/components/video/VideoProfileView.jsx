@@ -20,7 +20,8 @@ function VideoProfileView({ data }) {
     data: user,
     isLoading,
     error: userError,
-  } = useSingleUser(token, data?.userID);
+  } = useSingleUser(token, data?.userInfo.userID);
+  
   return (
     <div className="flex flex-row gap-1 items-center justify-between w-full">
       <div className="flex flex-col gap-1">
@@ -34,13 +35,13 @@ function VideoProfileView({ data }) {
           </div>
         ) : (
           <div className="flex flex-row gap-2">
-            <div className="w-8 h-8 bg-gray-300 rounded-full">
+            <div className="">
               <Image
                 src={user?.data?.imageUrl}
+                alt="User Profile Image"
                 height={100}
                 width={100}
-                alt={data?.description}
-                className="object-cover rounded-full"
+                className="w-8 sm:w-10 h-8 sm:h-10 rounded-full"
               />
             </div>
             <div className="flex flex-col gap-1 text-sm">

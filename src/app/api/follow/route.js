@@ -1,5 +1,5 @@
+import { handleApiError } from "@/middleware/errorHandler";
 import Follow from "@/models/following";
-import User from "@/models/user";
 import connectDB from "@/utils/db";
 import { auth } from "@clerk/nextjs/server";
 import { Types } from "mongoose";
@@ -9,7 +9,7 @@ export async function POST(req) {
   try {
     await connectDB();
     const { userId: userID } = await auth();
-    
+
     if (!userID)
       return NextResponse.json(
         { status: "failed", message: "Unauthorized Access" },
@@ -28,8 +28,6 @@ export async function POST(req) {
         { status: "failed", error: "You cannot follow yourself" },
         { status: 400 }
       );
-      
-      
 
     // Check if already following
     const existingFollow = await Follow.findOne({
@@ -37,7 +35,6 @@ export async function POST(req) {
       followingID,
     });
     console.log("I am here");
-    
 
     if (existingFollow) {
       // Unfollow (Remove follow)
@@ -74,10 +71,7 @@ export async function POST(req) {
       { status: 201 }
     );
   } catch (error) {
-    return NextResponse.json(
-      { status: "failed", message: "Error following/unfollowing", error },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 export async function GET(req) {

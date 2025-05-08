@@ -19,6 +19,7 @@ export async function GET(req) {
     const status = searchParams.get("status");
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
+    const categories = searchParams.get("categories");
     // Search by Keywords
     if (searchKeyword) {
       filter.$or = [

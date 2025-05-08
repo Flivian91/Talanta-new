@@ -31,7 +31,10 @@ export default function VideoGrid() {
     isLoading: loadingTalents,
   } = useTalents({ limit, page });
 
-  const filteredTalents = useFilteredTalents(talents?.data, selectedCategory.toLocaleLowerCase());
+  const filteredTalents = useFilteredTalents(
+    talents?.data,
+    selectedCategory.toLocaleLowerCase()
+  );
 
   // Error Handling
   if (categoriesError) {

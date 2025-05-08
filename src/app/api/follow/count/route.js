@@ -1,3 +1,4 @@
+import { handleApiError } from "@/middleware/errorHandler";
 import Follow from "@/models/following";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
@@ -57,13 +58,6 @@ export async function GET(req) {
       { status: 200 }
     );
   } catch (error) {
-    return NextResponse.json(
-      {
-        status: "failed",
-        message: "Failed to Fetch Following Count",
-        error,
-      },
-      { status: 500 }
-    );
+    return handleApiError(error)
   }
 }

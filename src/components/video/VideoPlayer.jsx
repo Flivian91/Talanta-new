@@ -9,8 +9,8 @@ function VideoPlayer({ videoUrl }) {
         id={Date.now()}
         controls={true}
         autoplay={false}
-        width="1920"
-        height="780"
+        // width="1920"
+        // height="780"
         preload="metadata"
         className="w-full rounded "
         pictureInPictureToggle
