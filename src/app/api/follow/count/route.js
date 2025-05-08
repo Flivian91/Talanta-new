@@ -1,4 +1,3 @@
-import { handleApiError } from "@/middleware/errorHandler";
 import Follow from "@/models/following";
 import User from "@/models/user";
 import connectDB from "@/utils/db";
@@ -10,46 +9,27 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const followingID = searchParams.get("followingID");
     const followerID = searchParams.get("followerID");
-    if (!followerID || !Types.ObjectId.isValid(followerID)) {
+    // if (!followerID) {
+    //   return NextResponse.json(
+    //     {
+    //       status: "failed",
+    //       message: "Missing Follower ID",
+    //     },
+    //     { status: 400 }
+    //   );
+    // }
+    if (!followingID) {
       return NextResponse.json(
         {
           status: "failed",
-          message: "Invalid Follower ID",
-        },
-        { status: 400 }
-      );
-    }
-    if (!followingID || !Types.ObjectId.isValid(followingID)) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Invalid Following ID",
+          message: "Missing Following ID",
         },
         { status: 400 }
       );
     }
     await connectDB();
-    const follower = await User.findById(followerID);
-    const following = await User.findById(followingID);
-    if (!follower) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Follower Not Found",
-        },
-        { status: 404 }
-      );
-    }
-    if (!following) {
-      return NextResponse.json(
-        {
-          status: "failed",
-          message: "Following Not Found",
-        },
-        { status: 404 }
-      );
-    }
-    const followerCount = await Follow.countDocuments({ followerID });
+
+    const followerCount = await Follow.countDocuments({followingID});
     return NextResponse.json(
       {
         status: "success",
@@ -58,6 +38,6 @@ export async function GET(req) {
       { status: 200 }
     );
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error);
   }
 }

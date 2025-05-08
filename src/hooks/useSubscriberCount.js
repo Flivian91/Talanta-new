@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 
 const fetchSubscriberCount = async () => {
-  const res = await fetch("/api/talents/count");
+  const res = await fetch("/api/follow/count");
 
   if (!res.ok) throw new Error("Failed to fetch Subscriber Count");
 
