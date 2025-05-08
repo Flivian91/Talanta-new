@@ -48,13 +48,13 @@ function VideoProfileView({ data }) {
               <h2 className="font-semibold tracking-wider text-base">
                 {user?.data?.firstName || user?.data?.lastName}
               </h2>
-              <span className="text-xs">20 Subscribers</span>
+              <span className="text-xs">{user?.data.emailAddresses.at(0).emailAddress}</span>
             </div>
           </div>
         )}
       </div>
       <div className="flex flex-row gap-1">
-        <SubscribeButton targetUserId={user?.data?.id} />
+        {/* <SubscribeButton targetUserId={user?.data?.id} /> */}
       </div>
     </div>
   );
