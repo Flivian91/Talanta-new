@@ -20,11 +20,11 @@ export default function DiscoverPage() {
 
       {/* Category Selection */}
       <div className="hidden md:block">
-        <CartegorySection
+        {/* <CartegorySection
           selectedCategory={selectedCategory}
           categories={categories}
           onSelectCategory={setSelectedCategory}
-        />
+        /> */}
       </div>
       <div className="relative transition-all duration-300 flex items-center justify-between md:hidden mb-5">
         <span className="text-xs sm:text-sm md:text-base tracking-wide font-medium">
@@ -37,7 +37,7 @@ export default function DiscoverPage() {
           <FaFilter />
           <span>Filter</span>
         </button>
-        {isModelOpen && (
+        {/* {isModelOpen && (
           <CategoriesModel
             onSelectCategory={setSelectedCategory}
             selectedCategory={selectedCategory}
@@ -45,7 +45,7 @@ export default function DiscoverPage() {
             onClose={() => setModelOpen(false)}
           />
         )}
-      </div>
+      </div> */}
 
       {/* Grid of Talents */}
       {filteredTalents.length > 0 ? (

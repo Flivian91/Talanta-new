@@ -12,10 +12,10 @@ export async function GET(req) {
     await connectDB();
     const { searchParams } = new URL(req.url);
     const talentID = searchParams.get("talentID");
-    const userID = searchParams.get("userID");
     const page = Number(searchParams.get("page"));
     const limit = Number(searchParams.get("limit"));
     const skip = ((page || 1) - 1) * (limit || 10);
+    const { userId: userID } = await auth();
     if (!talentID || !Types.ObjectId.isValid(talentID)) {
       return NextResponse.json(
         {
@@ -29,9 +29,9 @@ export async function GET(req) {
       return NextResponse.json(
         {
           status: "failed",
-          message: "Invalid or Missing user ID",
+          message: "Unauthorized Access",
         },
-        { status: 400 }
+        { status: 401 }
       );
     }
     // Fetch all comments for a talent
@@ -60,13 +60,13 @@ export async function POST(req) {
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);
-    const {userId:userID} = await auth()
+    const { userId: userID } = await auth();
     const talentID = searchParams.get("talentID");
     if (!userID) {
       return NextResponse.json(
         {
           status: "failed",
-          message: "unauthorized Access",
+          message: "Unauthorized Access",
         },
         { status: 401 }
       );
@@ -82,12 +82,13 @@ export async function POST(req) {
     }
 
     // Create a new comment
-    const { text } = await req.json();
-    console.log(text);
+    const { text, user } = await req.json();
+    
     const comment = await Comment.insertOne({
       userID,
       talentID,
-      text
+      text,
+      user,
     });
     // Update the comments count in the talent
     await Talent.findByIdAndUpdate(talentID, {
@@ -99,6 +100,6 @@ export async function POST(req) {
       data: comment,
     });
   } catch (error) {
-    return handleApiError(error)
+    return handleApiError(error);
   }
 }
