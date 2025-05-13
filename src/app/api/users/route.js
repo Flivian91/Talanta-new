@@ -37,6 +37,7 @@ export async function POST(req) {
     const body = await req.json();
     // Validate User Data
     const validatedData = userSchema.parse(body);
+    console.log(validatedData)
     const { firstName, lastName, email, password, role } = validatedData;
     const newUser = await (
       await clerkClient()
@@ -48,6 +49,7 @@ export async function POST(req) {
       password,
       publicMetadata: { role },
     });
+    console.log(newUser)
     // Create new user on MongoDB
     await connectDB();
     await User.insertOne({

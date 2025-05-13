@@ -18,6 +18,7 @@ export default function Header() {
   const [isInputOpen, setIsInputOpen] = useState(false);
   const { isSignedIn, user, isLoaded } = useUser();
   const role = user?.publicMetadata?.role;
+  console.log(role)
   return (
     <div>
       <header className="flex items-center justify-between bg-white shadow px-2 sm:px-4 py-3 sticky top-0 z-20">
@@ -42,7 +43,7 @@ export default function Header() {
             isLoaded ?<nav className="hidden md:flex space-x-4">
             {role === "admin" ? (
               <DashboardButton link="admin" />
-            ) : role === "sponser" ? (
+            ) : role === "sponsor" ? (
               <DashboardButton link="sponsor" />
             ) : (
               <UploadButton />

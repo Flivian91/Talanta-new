@@ -8,12 +8,13 @@ import CommentPagination from "./CommentPagination";
 import CommentFilter from "../models/CommentFilter";
 import CommentInput from "./CommentInput";
 import { useCreateComment } from "@/libs/react-query/mutations/useCreateComment";
-import { useAuth } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { useComments } from "@/hooks/useComments";
 import { useSingleUser } from "@/hooks/useSingleUser";
 
 function CommentSection({ data }) {
   const { getToken } = useAuth();
+  const { user:userData, isSignedIn } = useUser();
   const [isOpen, setOpen] = useState(false);
   const [limit, setLimit] = useState();
   const [page, setPage] = useState();
@@ -62,6 +63,8 @@ function CommentSection({ data }) {
   if (userError) {
     console.error("Failed to fetch user data", userError);
   }
+  console.log(userData?.publicMetadata);
+  
 
   return (
     <div className="rounded shadow border border-gray-200 py-2 ">
@@ -82,12 +85,16 @@ function CommentSection({ data }) {
             </button>
             {isOpen && <CommentFilter />}
           </div>
-          <CommentInput
-            onCreateComment={handleCreateComment}
-            text={text}
-            setText={setText}
-            isPending={isPending}
-          />
+          {userData?.publicMetadata?.role !== "user" ? (
+            <p className="text-xs">Comment Not allowed.</p>
+          ) : (
+            <CommentInput
+              onCreateComment={handleCreateComment}
+              text={text}
+              setText={setText}
+              isPending={isPending}
+            />
+          )}
         </div>
 
         {/* Comment Card */}

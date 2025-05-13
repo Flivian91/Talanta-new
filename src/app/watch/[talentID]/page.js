@@ -10,11 +10,13 @@ import VideoInfo from "@/components/video/VideoInfo";
 import VideoPlayer from "@/components/video/VideoPlayer";
 import { useSingleTalent } from "@/hooks/useGetSingleTalent";
 import { useTalents } from "@/hooks/useTalents";
+import { useUser } from "@clerk/nextjs";
 import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
 
 function WatchPage() {
   const { talentID } = useParams();
+  const {user, isSignedIn} = useUser()
   // Get current talent by talentID
   const {
     data: talent,

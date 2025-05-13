@@ -65,8 +65,9 @@ export default function PendingApprovalsPage() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
-        Pending Approvals
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 flex gap-3">
+        <span className="font-mono">{filteredTalents?.length}</span>
+        <spam>Pending Approvals</spam>
       </h1>
 
       {/* 🔍 Search Bar */}
