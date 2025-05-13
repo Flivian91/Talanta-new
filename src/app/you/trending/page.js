@@ -1,6 +1,7 @@
 "use client";
 
 import VideoCard from "@/components/cards/VideoCard";
+import HomeTalentsSkeleton from "@/components/common/HomeTalentsSkeleton";
 import { useTopLikedTalents } from "@/hooks/useTopLikedTalents";
 
 export default function TrendingPage() {
@@ -63,15 +64,22 @@ export default function TrendingPage() {
     error: tredingTalentError,
     isLoading: loadingTreadingTalents,
   } = useTopLikedTalents();
+  if (tredingTalentError) {
+    console.error("Error Loading top liked Talents", tredingTalentError);
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-6">Trending Videos</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {trendingTalents?.data.map((video) => (
-          <VideoCard key={video.id} video={video} />
-        ))}
-      </div>
+      {loadingTreadingTalents ? (
+        <HomeTalentsSkeleton />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {trendingTalents?.data.map((video) => (
+            <VideoCard key={video.id} video={video} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
