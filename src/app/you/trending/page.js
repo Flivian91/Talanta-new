@@ -1,6 +1,7 @@
 "use client";
 
 import VideoCard from "@/components/cards/VideoCard";
+import { useTopLikedTalents } from "@/hooks/useTopLikedTalents";
 
 export default function TrendingPage() {
   // Dummy trending video data (replace with API data later)
@@ -56,12 +57,18 @@ export default function TrendingPage() {
       published: "1 day ago",
     },
   ];
+  // Fetch top liked talents
+  const {
+    data: trendingTalents,
+    error: tredingTalentError,
+    isLoading: loadingTreadingTalents,
+  } = useTopLikedTalents();
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
       <h1 className="text-3xl font-bold mb-6">Trending Videos</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {trendingVideos.map((video) => (
+        {trendingTalents?.data.map((video) => (
           <VideoCard key={video.id} video={video} />
         ))}
       </div>

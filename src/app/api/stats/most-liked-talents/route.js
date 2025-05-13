@@ -14,13 +14,14 @@ export async function GET(req) {
       {
         $limit: 10,
       },
-      {
-        $project: {
-          _id: 1,
-          title: 1,
-          likesCount: 1,
-        },
-      },
+      // {
+      //   $project: {
+      //     _id: 1,
+      //     title: 1,
+      //     userInfo: 1,
+      //     likesCount: 1,
+      //   },
+      // },
     ]);
     return NextResponse.json(
       { status: "success", data: topLikedTalents },
