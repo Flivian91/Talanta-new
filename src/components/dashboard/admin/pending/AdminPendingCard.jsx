@@ -17,9 +17,9 @@ function AdminPendingCard({ filteredTalents, openModal }) {
           >
             {/* Thumbnail & Details */}
             <img
-              src={talent.thumbnail}
+              src={talent.thumbnailUrl}
               alt={talent.title}
-              className="rounded-lg mb-3 w-full h-32 object-cover cursor-pointer"
+              className="rounded mb-3 w-full h-40 object-cover cursor-pointer"
               onClick={() => openModal(talent)}
             />
             <h2 className="text-lg font-semibold">{talent.title}</h2>
@@ -29,9 +29,9 @@ function AdminPendingCard({ filteredTalents, openModal }) {
                   <li
                     li
                     key={cat}
-                    className="text-blue-500 text-xs font-medium tracking-wide"
+                    className="text-blue-500 px-1 py-0.5 border rounded text-xs font-medium tracking-wide"
                   >
-                    {cat}
+                    {cat.at(0).toUpperCase() + cat.slice(1)}
                   </li>
                 ))}
               </ul>

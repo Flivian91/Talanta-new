@@ -12,12 +12,12 @@ export const links = [
 ];
 
 export const authnticatedLinks = [
-  {
-    name: "Subscriptions",
-    href: "/you/subscriptions",
-    icon: <MdSubscriptions size={24} />,
-  },
-  { name: "Me", href: "/you/profile", icon: <AiOutlineUser size={24} /> },
+  // {
+  //   name: "Subscriptions",
+  //   href: "/you/subscriptions",
+  //   icon: <MdSubscriptions size={24} />,
+  // },
+  // { name: "Me", href: "/you/profile", icon: <AiOutlineUser size={24} /> },
   {
     name: "Saved Videos",
     href: "/you/saved",

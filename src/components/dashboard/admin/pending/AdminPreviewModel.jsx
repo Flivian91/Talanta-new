@@ -20,11 +20,11 @@ function AdminPreviewModel({
     >
       <h2 className="text-2xl font-semibold mb-2">{selectedTalent.title}</h2>
       <p className="text-gray-500 mb-4">
-        {selectedTalent.user} -{" "}
-        <span className="text-blue-500">{selectedTalent.category}</span>
+        {selectedTalent.userInfo.userName} -{" "}
+        <span className="text-blue-500">{selectedTalent.categories}</span>
       </p>
       <img
-        src={selectedTalent.thumbnail}
+        src={selectedTalent.thumbnailUrl}
         alt="Preview"
         className="w-full h-40 object-cover rounded-md mb-4"
       />
