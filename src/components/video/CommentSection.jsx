@@ -85,16 +85,14 @@ function CommentSection({ data }) {
             </button>
             {isOpen && <CommentFilter />}
           </div>
-          {userData?.publicMetadata?.role !== "user" ? (
-            <p className="text-xs">Comment Not allowed.</p>
-          ) : (
+          
             <CommentInput
               onCreateComment={handleCreateComment}
               text={text}
               setText={setText}
               isPending={isPending}
             />
-          )}
+          
         </div>
 
         {/* Comment Card */}
