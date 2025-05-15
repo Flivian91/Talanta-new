@@ -1,6 +1,4 @@
 "use client";
-import Image from "next/image";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { GoFilter } from "react-icons/go";
 import CommentCard from "../cards/CommentCard";
@@ -14,7 +12,7 @@ import { useSingleUser } from "@/hooks/useSingleUser";
 
 function CommentSection({ data }) {
   const { getToken } = useAuth();
-  const { user:userData, isSignedIn } = useUser();
+  const { user:userData } = useUser();
   const [isOpen, setOpen] = useState(false);
   const [limit, setLimit] = useState();
   const [page, setPage] = useState();
