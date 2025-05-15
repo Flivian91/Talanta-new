@@ -21,7 +21,7 @@ function CommentSection({ data }) {
   const [token, setToken] = useState(null);
   const [text, setText] = useState("");
   const { mutateAsync: createComment, isPending } = useCreateComment();
-  // function to fetch token
+  // function to fetch token that comes
   useEffect(() => {
     const loadToken = async () => {
       const t = await getToken();
@@ -85,7 +85,6 @@ function CommentSection({ data }) {
             </button>
             {isOpen && <CommentFilter />}
           </div>
-          
             <CommentInput
               onCreateComment={handleCreateComment}
               text={text}
