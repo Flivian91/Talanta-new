@@ -17,6 +17,7 @@ function HomeLayoutGrid() {
             sidebarOpen ? "ml-0 md:ml-64" : "ml-0 md:ml-20 "
           }`}
         >
+          {/* This is the new release for today */}
           <VideoGrid />
         </main>
       </div>
