@@ -13,7 +13,7 @@ function HomeLayoutGrid() {
           sidebarOpen={sidebarOpen}
         />
         <main
-          className={`min-h-min  w-full mt-20 ${
+          className={`min-h-min bg-gray-50  w-full mt-20 ${
             sidebarOpen ? "ml-0 md:ml-64" : "ml-0 md:ml-20 "
           }`}
         >
